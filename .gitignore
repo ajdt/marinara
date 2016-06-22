@@ -1,0 +1,14 @@
+
+###### Android studio files
+/local.properties
+.gradle
+/build
+.idea/
+# /.idea/workspace.xml
+# /.idea/libraries
+.DS_Store
+/captures
+Marinara.iml
+
+###### java specific
+*.class
