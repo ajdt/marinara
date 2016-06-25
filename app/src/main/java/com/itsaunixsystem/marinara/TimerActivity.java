@@ -5,7 +5,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class TimerActivity extends AppCompatActivity {
+
+public class TimerActivity extends AppCompatActivity implements TimerCallback {
+
+    private PomodoroTimer   _timer = null ;
+    private TimerState      _timer_state ;
+
+    // temporary variables (use until user preferences are implemented)
+    private long _duration = 15 * 1000 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,4 +41,32 @@ public class TimerActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    /****************************** TIMER AND UI CALLBACKS ******************************/
+
+    public void onTimerButtonClicked() {
+
+    }
+
+    public void onTimerTick(long millisec_remaining) {
+
+    }
+
+    public void onTimerFinish() {
+
+    }
+
+
+    /****************************** UI UPDATING ******************************/
+
+    private void updateTimerDisplay(long millisec_remaining) {
+
+    }
+
+    private void updateTimerImage() {
+
+    }
+
+
+
 }
