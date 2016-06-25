@@ -23,8 +23,9 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:onClick="onTimerButtonClicked"
 
-        android:src="@drawable/running_600_200"
+        android:src="@drawable/ready_600_200"
         />
 
     <TextView

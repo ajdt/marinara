@@ -37,10 +37,10 @@ public class PomodoroTimer {
 
         _timer = new CountDownTimer(duration, _INTERVAL_MILLISEC) {
             @Override
-            public void onTick(long millis_until_finished) { this.onTick(millis_until_finished) ; }
+            public void onTick(long millis_until_finished) { PomodoroTimer.this.onTick(millis_until_finished) ; }
 
             @Override
-            public void onFinish() { this.onFinish() ; }
+            public void onFinish() { PomodoroTimer.this.onFinish() ; }
         } ;
 
     }
