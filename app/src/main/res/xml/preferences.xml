@@ -1,4 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/break_preferences_title"
+        >
+        <CheckBoxPreference
+            android:key="auto_start_break"
+            android:title="@string/auto_start_break_title"
+            android:summary="@string/auto_start_break_summary"
+            android:defaultValue="false"
+            />
+        <CheckBoxPreference
+            android:key="skip_break"
+            android:title="@string/skip_break_title"
+            android:summary="@string/skip_break_summary"
+            android:defaultValue="false"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pomodoro_session_preferences_title">
+
+        <CheckBoxPreference
+            android:key="pause_pomodoro_session"
+            android:title="@string/pausing_pomodoro_session_title"
+            android:summary="@string/pausing_pomodoro_session_summary"
+            android:defaultValue="false"
+            />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

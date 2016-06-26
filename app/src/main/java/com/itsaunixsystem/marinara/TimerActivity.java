@@ -1,5 +1,6 @@
 package com.itsaunixsystem.marinara;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -51,6 +52,14 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
 
     /****************************** TIMER AND UI CALLBACKS ******************************/
 
+    /**
+     * callback for "Settings" option in options menu. Launches SettingsActivity
+     * @param item
+     */
+    public void onSettingsMenuClicked(MenuItem item) {
+        Intent intent = new Intent(this, SettingsActivity.class) ;
+        startActivity(intent) ;
+    }
     /**
      * handle click event from timer image button used to start, pause, resume & restart
      * @param clicked_view
