@@ -56,7 +56,8 @@ public class MinuteSecondPreferenceDialog extends DialogPreference {
         minutes_np.setValue((int) minutes) ;
         seconds_np.setMinValue(0) ;
         seconds_np.setMaxValue(59) ;
-        seconds_np.setMaxValue((int) seconds) ;
+        seconds_np.setValue((int) seconds) ;
+
 
         // set value changed listeners
         minutes_np.setOnValueChangedListener(

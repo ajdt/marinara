@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- default values -->
     <integer name="default_timer_millisec">900000</integer> <!-- equiv to 15 minutes -->
     <integer name="default_break_millisec">300000</integer> <!-- equiv to 5 minutes -->
+
+    <bool name="default_auto_start_break">false</bool>
+    <bool name="default_skip_break">false</bool>
+    <bool name="default_pause_pomodoro">false</bool>
+
 </resources>
