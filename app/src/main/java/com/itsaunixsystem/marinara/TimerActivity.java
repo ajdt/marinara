@@ -27,6 +27,7 @@ public class TimerActivity extends AppCompatActivity
     private String _AUTO_START_BREAK_PREF_KEY ;
     private boolean _SKIP_BREAK_DEFAULT ;
     private boolean _AUTO_START_BREAK_DEFAULT ;
+    private int _TIMER_CALLBACK_INTERVAL ;
 
 
 
@@ -39,8 +40,9 @@ public class TimerActivity extends AppCompatActivity
         _POMODORO_MILLISEC_PREF_KEY    = getResources().getString(R.string.pomodoro_session_millisec) ;
         _SKIP_BREAK_PREF_KEY           = getResources().getString(R.string.skip_break) ;
         _AUTO_START_BREAK_PREF_KEY     = getResources().getString(R.string.auto_start_break) ;
-        _SKIP_BREAK_DEFAULT           = getResources().getBoolean(R.bool.default_skip_break) ;
-        _AUTO_START_BREAK_DEFAULT     = getResources().getBoolean(R.bool.default_auto_start_break) ;
+        _SKIP_BREAK_DEFAULT            = getResources().getBoolean(R.bool.default_skip_break) ;
+        _AUTO_START_BREAK_DEFAULT      = getResources().getBoolean(R.bool.default_auto_start_break) ;
+        _TIMER_CALLBACK_INTERVAL       = getResources().getInteger(R.integer.timer_callback_interval) ;
 
         // XXX: initSharedPreferences() initializes timer duration, so it must be called first
         this.initSharedPreferences() ;
@@ -170,8 +172,16 @@ public class TimerActivity extends AppCompatActivity
     }
 
     /****************************** SHARED PREFERENCES ******************************/
-    public void onSharedPreferenceChanged(SharedPreferences shared_prefs, String key) {
 
+    public void onSharedPreferenceChanged(SharedPreferences shared_prefs, String key) {
+        if (key.equals(_POMODORO_MILLISEC_PREF_KEY))
+            _timer_millisec = shared_prefs.getLong(_POMODORO_MILLISEC_PREF_KEY, R.integer.default_timer_millisec) ;
+        else if (key.equals(_AUTO_START_BREAK_PREF_KEY))
+            _auto_start_break = shared_prefs.getBoolean(_AUTO_START_BREAK_PREF_KEY, _AUTO_START_BREAK_DEFAULT) ;
+        else if (key.equals(_SKIP_BREAK_PREF_KEY))
+            _skip_break = shared_prefs.getBoolean(_SKIP_BREAK_PREF_KEY, _SKIP_BREAK_DEFAULT) ;
+        else
+            return ;
     }
 
     private void initSharedPreferences() {
@@ -180,6 +190,9 @@ public class TimerActivity extends AppCompatActivity
         _timer_millisec = shared_prefs.getLong(_POMODORO_MILLISEC_PREF_KEY, R.integer.default_timer_millisec) ;
         _auto_start_break = shared_prefs.getBoolean(_AUTO_START_BREAK_PREF_KEY, _AUTO_START_BREAK_DEFAULT) ;
         _skip_break = shared_prefs.getBoolean(_SKIP_BREAK_PREF_KEY, _SKIP_BREAK_DEFAULT) ;
+
+        // register callback for when shared preferences change
+        shared_prefs.registerOnSharedPreferenceChangeListener(this) ;
 
     }
 
@@ -204,6 +217,6 @@ public class TimerActivity extends AppCompatActivity
      */
     public void initTimer() {
         _timer_state = TimerState.READY ;
-        _timer = new PomodoroTimer(this, _timer_millisec, 1000) ;
+        _timer = new PomodoroTimer(this, _timer_millisec, _TIMER_CALLBACK_INTERVAL) ;
     }
 }
