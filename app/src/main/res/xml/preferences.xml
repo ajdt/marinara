@@ -3,6 +3,12 @@
     <PreferenceCategory
         android:title="@string/break_preferences_title"
         >
+
+        <com.itsaunixsystem.marinara.MinuteSecondPreferenceDialog
+            android:key="break_session_millisec"
+            android:title="@string/break_duration_title"
+            android:defaultValue="@integer/default_break_millisec"
+            />
         <CheckBoxPreference
             android:key="auto_start_break"
             android:title="@string/auto_start_break_title"
@@ -20,6 +26,12 @@
 
     <PreferenceCategory
         android:title="@string/pomodoro_session_preferences_title">
+
+        <com.itsaunixsystem.marinara.MinuteSecondPreferenceDialog
+            android:key="pomodoro_session_millisec"
+            android:defaultValue="@integer/default_timer_millisec"
+            android:title="@string/pomodoro_duration_title"
+            />
 
         <CheckBoxPreference
             android:key="pause_pomodoro_session"

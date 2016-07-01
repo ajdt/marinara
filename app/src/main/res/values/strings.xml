@@ -13,12 +13,16 @@
     <!--###################### Preferences strings ############################-->
     <string name="break_preferences_title">Breaks</string>
     <string name="auto_start_break_title">Start Break Automatically</string>
-    <string name="auto_start_break_summary">initiate break countdown as soon as pomodoro session ends</string>
     <string name="skip_break_title">Skip Breaks</string>
+    <string name="break_duration_title">Break Session Duration</string>
+    <string name="auto_start_break_summary">initiate break countdown as soon as pomodoro session ends</string>
     <string name="skip_break_summary">reset pomodoro session when current session ends </string>
+
 
     <string name="pomodoro_session_preferences_title">Pomodoro Sessions</string>
     <string name="pausing_pomodoro_session_title">Allow Pausing Pomodoro Sessions </string>
+    <string name="pomodoro_duration_title">Pomodoro Session Duration</string>
     <string name="pausing_pomodoro_session_summary">pause current pomodoro session indefinitely</string>
+
 
 </resources>

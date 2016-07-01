@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="default_timer_millisec">900000</integer> <!-- equiv to 15 minutes -->
+    <integer name="default_break_millisec">300000</integer> <!-- equiv to 5 minutes -->
+</resources>
