@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/break_preferences_title"
+        >
+
+        <com.itsaunixsystem.marinara.MinuteSecondPreferenceDialog
+            android:key="@string/break_session_millisec"
+            android:title="@string/break_duration_title"
+            android:defaultValue="@integer/default_break_millisec"
+            />
+        <CheckBoxPreference
+            android:key="@string/auto_start_break"
+            android:title="@string/auto_start_break_title"
+            android:summary="@string/auto_start_break_summary"
+            android:defaultValue="@bool/default_auto_start_break"
+            />
+        <CheckBoxPreference
+            android:key="@string/skip_break"
+            android:title="@string/skip_break_title"
+            android:summary="@string/skip_break_summary"
+            android:defaultValue="@bool/default_skip_break"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pomodoro_session_preferences_title">
+
+        <com.itsaunixsystem.marinara.MinuteSecondPreferenceDialog
+            android:key="@string/pomodoro_session_millisec"
+            android:defaultValue="@integer/default_timer_millisec"
+            android:title="@string/pomodoro_duration_title"
+            />
+
+        <CheckBoxPreference
+            android:key="@string/pause_pomodoro_session"
+            android:title="@string/pausing_pomodoro_session_title"
+            android:summary="@string/pausing_pomodoro_session_summary"
+            android:defaultValue="@bool/default_pause_pomodoro"
+            />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

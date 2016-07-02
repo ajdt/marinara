@@ -1,5 +1,6 @@
 package com.itsaunixsystem.marinara;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,12 +15,10 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
     private PomodoroTimer   _timer = null ;
     private TimerState      _timer_state ;
 
-    // temporary variables (use until user preferences are implemented)
-    private long _duration = 15 * 1000 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState) ;
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer) ;
 
         this.initTimer() ;
@@ -51,6 +50,14 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
 
     /****************************** TIMER AND UI CALLBACKS ******************************/
 
+    /**
+     * callback for "Settings" option in options menu. Launches SettingsActivity
+     * @param item
+     */
+    public void onSettingsMenuClicked(MenuItem item) {
+        Intent intent = new Intent(this, SettingsActivity.class) ;
+        startActivity(intent) ;
+    }
     /**
      * handle click event from timer image button used to start, pause, resume & restart
      * @param clicked_view
@@ -139,6 +146,7 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
         }
     }
 
+
     /****************************** HELPERS ******************************/
 
     /**
@@ -158,7 +166,9 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
      * Should only be called from onCreate(). Sets initial timer state and instantiates timer.
      */
     public void initTimer() {
+        MarinaraPreferences prefs = MarinaraPreferences.getPrefs(this) ;
+
         _timer_state = TimerState.READY ;
-        _timer = new PomodoroTimer(this, _duration, 1000) ;
+        _timer = new PomodoroTimer(this, prefs.timerMillisec(), prefs._TIMER_CALLBACK_INTERVAL) ;
     }
 }

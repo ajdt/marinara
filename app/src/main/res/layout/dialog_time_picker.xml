@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <NumberPicker
+        android:id="@+id/minutes_np"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        />
+    <TextView
+        android:id="@+id/minutes_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/minutes_np"
+        android:layout_centerVertical="true"
+
+        android:text="minutes"
+        />
+    <NumberPicker
+        android:id="@+id/seconds_np"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/minutes_tv"
+        android:layout_centerVertical="true"
+        />
+    <TextView
+        android:id="@+id/seconds_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/seconds_np"
+        android:layout_centerVertical="true"
+
+        android:text="seconds"
+        />
+</RelativeLayout>
