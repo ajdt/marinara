@@ -24,7 +24,7 @@ public class MarinaraPreferences implements SharedPreferences.OnSharedPreference
 
     private static MarinaraPreferences prefs = null ;
 
-    public MarinaraPreferences getPrefs(Context ctx) {
+    public static MarinaraPreferences getPrefs(Context ctx) {
         if (prefs == null) {
             prefs = new MarinaraPreferences(ctx) ;
         }

@@ -1,11 +1,8 @@
 package com.itsaunixsystem.marinara;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,22 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-public class TimerActivity extends AppCompatActivity
-        implements TimerCallback, SharedPreferences.OnSharedPreferenceChangeListener {
+public class TimerActivity extends AppCompatActivity implements TimerCallback {
 
     private PomodoroTimer   _timer = null ;
     private TimerState      _timer_state ;
-
-    // preference member variables
-    private long _timer_millisec ; // TODO: make these final??
-    private boolean _skip_break, _auto_start_break ;
-    private String _POMODORO_MILLISEC_PREF_KEY ;
-    private String _SKIP_BREAK_PREF_KEY ;
-    private String _AUTO_START_BREAK_PREF_KEY ;
-    private boolean _SKIP_BREAK_DEFAULT ;
-    private boolean _AUTO_START_BREAK_DEFAULT ;
-    private int _TIMER_CALLBACK_INTERVAL ;
-
 
 
     @Override
@@ -36,16 +21,6 @@ public class TimerActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer) ;
 
-        // init key and default values for preferences
-        _POMODORO_MILLISEC_PREF_KEY    = getResources().getString(R.string.pomodoro_session_millisec) ;
-        _SKIP_BREAK_PREF_KEY           = getResources().getString(R.string.skip_break) ;
-        _AUTO_START_BREAK_PREF_KEY     = getResources().getString(R.string.auto_start_break) ;
-        _SKIP_BREAK_DEFAULT            = getResources().getBoolean(R.bool.default_skip_break) ;
-        _AUTO_START_BREAK_DEFAULT      = getResources().getBoolean(R.bool.default_auto_start_break) ;
-        _TIMER_CALLBACK_INTERVAL       = getResources().getInteger(R.integer.timer_callback_interval) ;
-
-        // XXX: initSharedPreferences() initializes timer duration, so it must be called first
-        this.initSharedPreferences() ;
         this.initTimer() ;
     }
 
@@ -171,31 +146,6 @@ public class TimerActivity extends AppCompatActivity
         }
     }
 
-    /****************************** SHARED PREFERENCES ******************************/
-
-    public void onSharedPreferenceChanged(SharedPreferences shared_prefs, String key) {
-        if (key.equals(_POMODORO_MILLISEC_PREF_KEY))
-            _timer_millisec = shared_prefs.getLong(_POMODORO_MILLISEC_PREF_KEY, R.integer.default_timer_millisec) ;
-        else if (key.equals(_AUTO_START_BREAK_PREF_KEY))
-            _auto_start_break = shared_prefs.getBoolean(_AUTO_START_BREAK_PREF_KEY, _AUTO_START_BREAK_DEFAULT) ;
-        else if (key.equals(_SKIP_BREAK_PREF_KEY))
-            _skip_break = shared_prefs.getBoolean(_SKIP_BREAK_PREF_KEY, _SKIP_BREAK_DEFAULT) ;
-        else
-            return ;
-    }
-
-    private void initSharedPreferences() {
-        SharedPreferences shared_prefs = PreferenceManager.getDefaultSharedPreferences(this) ;
-
-        _timer_millisec = shared_prefs.getLong(_POMODORO_MILLISEC_PREF_KEY, R.integer.default_timer_millisec) ;
-        _auto_start_break = shared_prefs.getBoolean(_AUTO_START_BREAK_PREF_KEY, _AUTO_START_BREAK_DEFAULT) ;
-        _skip_break = shared_prefs.getBoolean(_SKIP_BREAK_PREF_KEY, _SKIP_BREAK_DEFAULT) ;
-
-        // register callback for when shared preferences change
-        shared_prefs.registerOnSharedPreferenceChangeListener(this) ;
-
-    }
-
 
     /****************************** HELPERS ******************************/
 
@@ -216,7 +166,9 @@ public class TimerActivity extends AppCompatActivity
      * Should only be called from onCreate(). Sets initial timer state and instantiates timer.
      */
     public void initTimer() {
+        MarinaraPreferences prefs = MarinaraPreferences.getPrefs(this) ;
+
         _timer_state = TimerState.READY ;
-        _timer = new PomodoroTimer(this, _timer_millisec, _TIMER_CALLBACK_INTERVAL) ;
+        _timer = new PomodoroTimer(this, prefs.timerMillisec(), prefs._TIMER_CALLBACK_INTERVAL) ;
     }
 }
