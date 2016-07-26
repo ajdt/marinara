@@ -3,6 +3,7 @@ package com.itsaunixsystem.marinara;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,6 +65,7 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
      */
     public void onTimerButtonClicked(View clicked_view) {
         // update internal state and timer
+        // TODO: move state to inside of timer. Makes more sense than keeping it here.
         switch (_timer_state) {
 
             case READY:
@@ -71,6 +73,8 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
                 _timer_state = TimerState.RUNNING ;
                 break ;
             case RUNNING:
+                if (!this.allowPause())
+                    return ;
                 _timer.pause() ;
                 _timer_state = TimerState.PAUSED ;
                 break ;
@@ -101,12 +105,18 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
      * callback updates UI and changes timer_state to done
      */
     public void onTimerFinish() {
+        // update internal state and UI
         _timer_state = TimerState.DONE ;
-        this.updateTimerCountdownDisplay(0);
+        this.updateTimerImage() ;
+        this.updateTimerCountdownDisplay(0) ;
 
-        this.updateTimerImage() ; // have ImageView use 'DONE' image
-
+        // break time?
+        if (!this.skipBreaks()) {
+            launchBreak();
+        }
     }
+
+
 
 
     /****************************** UI UPDATING ******************************/
@@ -149,6 +159,10 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
 
     /****************************** HELPERS ******************************/
 
+    private void launchBreak() {
+        Intent intent = new Intent(this, BreakActivity.class) ;
+        this.startActivity(intent) ;
+    }
     /**
      *
      * @param millisec
@@ -168,7 +182,23 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
     public void initTimer() {
         MarinaraPreferences prefs = MarinaraPreferences.getPrefs(this) ;
 
-        _timer_state = TimerState.READY ;
-        _timer = new PomodoroTimer(this, prefs.timerMillisec(), prefs._TIMER_CALLBACK_INTERVAL) ;
+        _timer_state = this.initialState() ;
+        _timer = new PomodoroTimer(this, this.getTimerDuration(), this.getTimerCallbackInterval()) ;
+
+        // timer is to be initialized in running state state
+        if (_timer_state == TimerState.RUNNING)
+            _timer.start() ;
     }
+
+
+    /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
+
+    public long getTimerDuration() { return MarinaraPreferences.getPrefs(this).timerMillisec() ;}
+    public long getTimerCallbackInterval() {
+        return MarinaraPreferences.getPrefs(this)._TIMER_CALLBACK_INTERVAL_DEFAULT;
+    }
+    public boolean skipBreaks() { return MarinaraPreferences.getPrefs(this).skipBreak() ; }
+    public boolean allowPause() { return MarinaraPreferences.getPrefs(this).allowPauseSessions() ; }
+    public TimerState initialState() { return TimerState.READY ; }
+
 }

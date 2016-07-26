@@ -20,6 +20,10 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+        <activity
+            android:name=".BreakActivity"
+            android:label="@string/title_activity_break" >
+        </activity>
     </application>
 
 </manifest>

@@ -171,7 +171,7 @@ public class MinuteSecondPreferenceDialog extends DialogPreference {
         public SavedMinSecDialogState(Parcel source) {
             super(source) ;
 
-            _saved_value = source.readLong() ; // TODO: read differences between Parcel and Parcelable
+            _saved_value = source.readLong() ;
         }
 
         @Override
