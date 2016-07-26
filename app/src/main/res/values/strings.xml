@@ -30,7 +30,12 @@
     <string name="auto_start_break">auto_start_break</string>
     <string name="skip_break">skip_break</string>
     <string name="pomodoro_session_millisec">pomodoro_session_millisec</string>
-    <string name="pause_pomodoro_session">pause_pomodoro_session</string>
+    <string name="allow_pause_session">pause_pomodoro_session</string>
+
+
+
+
+    <string name="title_activity_break">BreakActivity</string>
 
 
 </resources>

@@ -34,7 +34,7 @@
             />
 
         <CheckBoxPreference
-            android:key="@string/pause_pomodoro_session"
+            android:key="@string/allow_pause_session"
             android:title="@string/pausing_pomodoro_session_title"
             android:summary="@string/pausing_pomodoro_session_summary"
             android:defaultValue="@bool/default_pause_pomodoro"
