@@ -27,7 +27,7 @@ public class BreakActivity extends TimerActivity {
 
     // NOTE: this is a break, don't need another
     @Override
-    public boolean skipBreaks() { return false ; }
+    public boolean skipBreaks() { return true ; }
 
     // NOTE: App should not allow breaks to be paused. After break ends,
     // next pomodoro session won't start automatically anyway, so there's

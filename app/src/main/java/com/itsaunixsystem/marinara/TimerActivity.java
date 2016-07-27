@@ -83,8 +83,9 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
                 _timer_state = TimerState.RUNNING ;
                 break ;
             case DONE:
-                _timer.reset() ;
-                _timer_state = TimerState.READY ;
+                // create a new timer. We do this instead of resetting existing timer in case
+                // timer duration preference has been changed by user
+                this.initTimer() ;
                 break ;
 
         }
@@ -112,7 +113,7 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
 
         // break time?
         if (!this.skipBreaks()) {
-            launchBreak();
+            launchBreak() ;
         }
     }
 
@@ -182,12 +183,24 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
     public void initTimer() {
         MarinaraPreferences prefs = MarinaraPreferences.getPrefs(this) ;
 
-        _timer_state = this.initialState() ;
-        _timer = new PomodoroTimer(this, this.getTimerDuration(), this.getTimerCallbackInterval()) ;
+        _timer_state    = this.initialState() ;
+        _timer          = new PomodoroTimer(this, this.getTimerDuration(), this.getTimerCallbackInterval()) ;
+
+        // NOTE: if UI not initialized here, timer will appear to countdown one second less than
+        // desired duration
+        this.initTimerUI() ;
 
         // timer is to be initialized in running state state
         if (_timer_state == TimerState.RUNNING)
             _timer.start() ;
+    }
+
+    /**
+     * when a new timer is initialized we need to initialize the counter and image being used too
+     */
+    public void initTimerUI() {
+        this.updateTimerImage() ;
+        this.updateTimerCountdownDisplay(this.getTimerDuration()) ;
     }
 
 
