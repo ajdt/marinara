@@ -9,33 +9,33 @@ import android.os.CountDownTimer;
 public class PomodoroTimer {
 
 
-    private TimerCallback       _callback_obj   = null;
-    private CountDownTimer      _timer          = null;
+    private TimerCallback       _callback_obj       = null;
+    private CountDownTimer      _countdown_timer    = null;
 
-    private final long      _DURATION_MILLISEC, _INTERVAL_MILLISEC ;
-    private long            _remaining_millisec ;
+    private long            _duration_millisec, _remaining_millisec ;
+    private final long      _CALLBACK_INTERVAL_MILLISEC ;
+
+    private TimerState _state ;
 
 
 
-    public PomodoroTimer(TimerCallback callback, long duration_millisec, long interval_millisec) {
-        _DURATION_MILLISEC = duration_millisec ;
-        _INTERVAL_MILLISEC = interval_millisec ;
+    public PomodoroTimer(TimerCallback callback, long duration_millis, long interval_millis) {
+        _duration_millisec          = duration_millis ;
+        _CALLBACK_INTERVAL_MILLISEC = interval_millis ;
+        _callback_obj               = callback ;
 
-        _callback_obj = callback ;
-
-        this.initNewTimer(_DURATION_MILLISEC);
+        this.initCountDownTimerWithSavedDuration();
     }
 
-    /****************************** TIMER CREATION/DESTRUCTION ******************************/
+    /****************************** CountDownTimer CREATION/DESTRUCTION ******************************/
 
     /**
      * create a new CoundDownTimer object with given duration and set remaining time
-     * @param duration millisec duration of timer
+     * @param duration_millisec duration for CountDownTimer that will be created
      */
-    private void initNewTimer(long duration) {
-        _remaining_millisec = duration ;
-
-        _timer = new CountDownTimer(duration, _INTERVAL_MILLISEC) {
+    private void initNewCountDownTimer(long duration_millisec) {
+        _remaining_millisec = duration_millisec ;
+        _countdown_timer    = new CountDownTimer(duration_millisec, _CALLBACK_INTERVAL_MILLISEC) {
             @Override
             public void onTick(long millis_until_finished) { PomodoroTimer.this.onTick(millis_until_finished) ; }
 
@@ -43,16 +43,25 @@ public class PomodoroTimer {
             public void onFinish() { PomodoroTimer.this.onFinish() ; }
         } ;
 
+        _state = TimerState.READY ;
+    }
+
+    /**
+     * create a new CoundDownTimer object with _duration_millisec remaining
+     */
+    private void initCountDownTimerWithSavedDuration() {
+        this.initNewCountDownTimer(_duration_millisec) ;
     }
 
     /**
      * cancel the current timer and release our reference to it
      */
-    private void deleteTimer() {
-        if (_timer == null)
+    private void deleteCountDownTimer() {
+        if (_countdown_timer == null)
             return ;
-        _timer.cancel() ;
-        _timer = null ;
+        _countdown_timer.cancel() ;
+        _countdown_timer    = null ;
+        _state              = TimerState.STOPPED ;
     }
 
     /****************************** CALLBACKS ******************************/
@@ -64,7 +73,6 @@ public class PomodoroTimer {
     public void onTick(long millisec_remaining) {
         _remaining_millisec = millisec_remaining ;
         _callback_obj.onTimerTick(millisec_remaining) ;
-
     }
 
     /**
@@ -73,13 +81,15 @@ public class PomodoroTimer {
      */
     public void onFinish() {
         _remaining_millisec = 0 ;
+        _state              = TimerState.DONE ;
         _callback_obj.onTimerFinish() ;
     }
 
     /****************************** TIME KEEPING METHODS ******************************/
 
     public void start() {
-        _timer.start() ;
+        _countdown_timer.start() ;
+        _state = TimerState.RUNNING ;
     }
 
     /**
@@ -87,20 +97,33 @@ public class PomodoroTimer {
      * '_remaining_millisec' time on the clock. New timer isn't started.
      */
     public void pause() {
-        this.deleteTimer() ;
-        this.initNewTimer(_remaining_millisec);
+        this.deleteCountDownTimer() ;
+        this.initNewCountDownTimer(_remaining_millisec) ;
+
+        // NOTE: state must be set after initCountDownTimerWithSavedDuration() because new timers are set to READY state
+        _state = TimerState.PAUSED ;
     }
 
     public void resume() {
         this.start() ;
+        _state = TimerState.RUNNING ;
     }
 
     /**
-     * start a new timer with base duration of this instance (_DURATION_MILLISEC)
+     * start a new timer with base duration of this instance (_duration_millisec)
      */
     public void reset() {
-        this.deleteTimer() ;
-        this.initNewTimer(_DURATION_MILLISEC) ;
+        this.deleteCountDownTimer() ;
+        this.initCountDownTimerWithSavedDuration() ;
     }
+
+
+    /****************************** SETTERS/GETTERS ******************************/
+
+    public void setDuration(long new_duration_millisec) {
+        _duration_millisec = new_duration_millisec ;
+    }
+
+    public TimerState state() { return _state ; }
 
 }

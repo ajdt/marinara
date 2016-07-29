@@ -14,7 +14,6 @@ import android.widget.TextView;
 public class TimerActivity extends AppCompatActivity implements TimerCallback {
 
     private PomodoroTimer   _timer = null ;
-    private TimerState      _timer_state ;
 
 
     @Override
@@ -66,26 +65,24 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
     public void onTimerButtonClicked(View clicked_view) {
         // update internal state and timer
         // TODO: move state to inside of timer. Makes more sense than keeping it here.
-        switch (_timer_state) {
+        switch (_timer.state()) {
 
             case READY:
                 _timer.start() ;
-                _timer_state = TimerState.RUNNING ;
                 break ;
             case RUNNING:
                 if (!this.allowPause())
                     return ;
                 _timer.pause() ;
-                _timer_state = TimerState.PAUSED ;
                 break ;
             case PAUSED:
                 _timer.resume() ;
-                _timer_state = TimerState.RUNNING ;
                 break ;
             case DONE:
-                // create a new timer. We do this instead of resetting existing timer in case
-                // timer duration preference has been changed by user
-                this.initTimer() ;
+                // set duration in case it's changed since last session
+                // TODO: move this to READY case so that timer can be changed any time before starting it again
+                _timer.setDuration(this.getTimerDuration()) ;
+                _timer.reset() ;
                 break ;
 
         }
@@ -107,7 +104,6 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
      */
     public void onTimerFinish() {
         // update internal state and UI
-        _timer_state = TimerState.DONE ;
         this.updateTimerImage() ;
         this.updateTimerCountdownDisplay(0) ;
 
@@ -141,7 +137,7 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
     private void updateTimerImage() {
         ImageView timer_iv = (ImageView)findViewById(R.id.timer_iv) ;
 
-        switch (_timer_state) {
+        switch (_timer.state()) {
             case READY:
                 timer_iv.setImageResource(R.drawable.ready_600_200) ;
                 break ;
@@ -182,16 +178,15 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
      */
     public void initTimer() {
         MarinaraPreferences prefs = MarinaraPreferences.getPrefs(this) ;
-
-        _timer_state    = this.initialState() ;
         _timer          = new PomodoroTimer(this, this.getTimerDuration(), this.getTimerCallbackInterval()) ;
 
         // NOTE: if UI not initialized here, timer will appear to countdown one second less than
         // desired duration
         this.initTimerUI() ;
 
+        // TODO: refactor initialState to a boolean that asks whether timer should autorun??
         // timer is to be initialized in running state state
-        if (_timer_state == TimerState.RUNNING)
+        if (this.initialState() == TimerState.RUNNING)
             _timer.start() ;
     }
 
