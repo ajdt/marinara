@@ -78,12 +78,12 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
                 _timer.resume() ;
                 break ;
             case DONE:
-                // set duration in case it's changed since last session
-                // TODO: move this to READY case so that timer can be changed any time before starting it again
-                _timer.setDuration(this.getTimerDuration()) ;
+                // set duration in case preferences changed since last session
+                long new_duration = this.getTimerDuration() ;
+                _timer.setDuration(new_duration) ;
                 _timer.reset() ;
+                updateTimerDisplay(new_duration) ;
                 break ;
-
         }
 
         // update timer image view to reflect changes in state
