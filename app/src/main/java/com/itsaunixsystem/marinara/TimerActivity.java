@@ -3,7 +3,6 @@ package com.itsaunixsystem.marinara;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -88,7 +87,7 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
         }
 
         // update timer image view to reflect changes in state
-        this.updateTimerImage() ;
+        this.updateTimerButtonImage() ;
     }
 
     /**
@@ -96,16 +95,14 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
      * @param millisec_remaining
      */
     public void onTimerTick(long millisec_remaining) {
-        this.updateTimerCountdownDisplay(millisec_remaining);
+        this.updateTimerCountdown(millisec_remaining);
     }
 
     /**
      * callback updates UI and changes timer_state to done
      */
     public void onTimerFinish() {
-        // update internal state and UI
-        this.updateTimerImage() ;
-        this.updateTimerCountdownDisplay(0) ;
+        this.updateTimerDisplay(0) ;
 
         // break time?
         if (!this.skipBreaks()) {
@@ -118,23 +115,24 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
 
     /****************************** UI UPDATING ******************************/
 
+    private void updateTimerDisplay(long millisec_remaining) {
+        updateTimerCountdown(millisec_remaining) ;
+        updateTimerButtonImage() ;
+    }
     /**
-     * update UI to display number of millisec remaining
+     * update countdown display with remaining time
      * @param millisec_remaining
      */
-    private void updateTimerCountdownDisplay(long millisec_remaining) {
-
-        // update time remaining display
+    private void updateTimerCountdown(long millisec_remaining) {
         TextView timer_tv = (TextView)findViewById(R.id.timer_tv) ;
         timer_tv.setText(this.millisecToTimeString(millisec_remaining));
-
     }
 
 
     /**
-     * update the ImageView image depending on the state of the timer
+     * update timer button image depending on timer's state
      */
-    private void updateTimerImage() {
+    private void updateTimerButtonImage() {
         ImageView timer_iv = (ImageView)findViewById(R.id.timer_iv) ;
 
         switch (_timer.state()) {
@@ -180,9 +178,9 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
         MarinaraPreferences prefs = MarinaraPreferences.getPrefs(this) ;
         _timer          = new PomodoroTimer(this, this.getTimerDuration(), this.getTimerCallbackInterval()) ;
 
-        // NOTE: if UI not initialized here, timer will appear to countdown one second less than
+        // NOTE: if display not updated here, timer will appear to countdown one second less than
         // desired duration
-        this.initTimerUI() ;
+        this.updateTimerDisplay(this.getTimerDuration()) ;
 
         // TODO: refactor initialState to a boolean that asks whether timer should autorun??
         // timer is to be initialized in running state state
@@ -190,13 +188,6 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
             _timer.start() ;
     }
 
-    /**
-     * when a new timer is initialized we need to initialize the counter and image being used too
-     */
-    public void initTimerUI() {
-        this.updateTimerImage() ;
-        this.updateTimerCountdownDisplay(this.getTimerDuration()) ;
-    }
 
 
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
