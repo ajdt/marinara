@@ -1,6 +1,8 @@
 package com.itsaunixsystem.marinara;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,7 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-public class TimerActivity extends AppCompatActivity implements TimerCallback {
+public class TimerActivity extends AppCompatActivity
+        implements TimerCallback, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private PomodoroTimer   _timer = null ;
 
@@ -19,6 +22,10 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer) ;
+
+        // TimerActivity uses callback to update countdown when duration preference changes
+        PreferenceManager.getDefaultSharedPreferences(this).
+                registerOnSharedPreferenceChangeListener(this) ;
 
         this.initTimer() ;
     }
@@ -45,8 +52,6 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
         return super.onOptionsItemSelected(item) ;
     }
 
-
-
     /****************************** TIMER AND UI CALLBACKS ******************************/
 
     /**
@@ -57,15 +62,13 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
         Intent intent = new Intent(this, SettingsActivity.class) ;
         startActivity(intent) ;
     }
+
     /**
      * handle click event from timer image button used to start, pause, resume & restart
      * @param clicked_view
      */
     public void onTimerButtonClicked(View clicked_view) {
-        // update internal state and timer
-        // TODO: move state to inside of timer. Makes more sense than keeping it here.
         switch (_timer.state()) {
-
             case READY:
                 _timer.start() ;
                 break ;
@@ -78,11 +81,7 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
                 _timer.resume() ;
                 break ;
             case DONE:
-                // set duration in case preferences changed since last session
-                long new_duration = this.getTimerDuration() ;
-                _timer.setDuration(new_duration) ;
-                _timer.reset() ;
-                updateTimerDisplay(new_duration) ;
+                resetTimerAndUpdateDisplay();
                 break ;
         }
 
@@ -110,8 +109,18 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
         }
     }
 
-
-
+    /**
+     * callback implemented to listen for changes to session duration preference. That
+     * way we can update timer countdown display as soon as duration preference is changed.
+     *
+     * @param prefs
+     * @param key
+     */
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        if ( key.equals(getResources().getString(R.string.pomodoro_session_millisec)) ) {
+            this.resetTimerAndUpdateDisplay() ;
+        }
+    }
 
     /****************************** UI UPDATING ******************************/
 
@@ -127,7 +136,6 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
         TextView timer_tv = (TextView)findViewById(R.id.timer_tv) ;
         timer_tv.setText(this.millisecToTimeString(millisec_remaining));
     }
-
 
     /**
      * update timer button image depending on timer's state
@@ -151,6 +159,16 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
         }
     }
 
+    /**
+     * call getTimerDuration() to get the latest duration value (preferences may have changed),
+     * reset the timer with this (possibly) new duration and update the display to show the new duration
+     */
+    private void resetTimerAndUpdateDisplay() {
+        long new_duration = this.getTimerDuration() ;
+        _timer.setDuration(new_duration) ;
+        _timer.reset() ;
+        updateTimerDisplay(new_duration) ;
+    }
 
     /****************************** HELPERS ******************************/
 
@@ -188,9 +206,10 @@ public class TimerActivity extends AppCompatActivity implements TimerCallback {
             _timer.start() ;
     }
 
-
-
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
+    // NOTE: MarinaraPreferences is called every time a preference is needed. This guarantees
+    // we are always using the latest value, and saves the trouble of having to save local copies
+    // of the preference values (and implementing onSharedPreferenceChangeListener in this class too).
 
     public long getTimerDuration() { return MarinaraPreferences.getPrefs(this).timerMillisec() ;}
     public long getTimerCallbackInterval() {
