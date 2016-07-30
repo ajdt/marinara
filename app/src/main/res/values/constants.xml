@@ -10,6 +10,6 @@
     <bool name="default_pause_pomodoro">false</bool>
     <bool name="default_allow_pause_sessions">false</bool>
 
-    <integer name="timer_callback_interval">1000</integer> <!-- callback every 1 sec -->
+    <integer name="timer_callback_interval">200</integer> <!-- callback every 200 millisec -->
 
 </resources>
