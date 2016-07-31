@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.itsaunixsystem.marinara"
-        minSdkVersion 15
+        minSdkVersion 18 // changed from 15 to 18 due to espresso conflict
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -25,6 +25,9 @@ android {
         resolutionStrategy {
             force 'com.android.support:support-annotations:23.0.1'
         }
+    }
+    packagingOptions {
+        exclude 'LICENSE.txt' // workaround for bug that tries to package two separate LICENSE.txt files
     }
 }
 
