@@ -9,6 +9,8 @@ import org.junit.runner.RunWith;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -46,5 +48,6 @@ public class TimerButtonTest {
         // ensure app displays READY image
         //onView(withId(R.id.timer_iv)).check(matches(withContentDescription(R.drawable.ready_600_200))) ;
         onView(withId(R.id.timer_iv)).check(matches(isDisplayed())) ;
+        onView(withId(R.id.timer_iv)).check(matches(MyMatchers.IsUsingDrawable(R.drawable.ready_600_200))) ;
     }
 }
