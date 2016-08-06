@@ -37,5 +37,10 @@
 
     <string name="title_activity_break">BreakActivity</string>
 
+    <!-- AddTaskActivity -->
+    <string name="title_activity_add_task">AddTaskActivity</string>
+    <string name="add_task_button_text">Add Task </string>
+
+
 
 </resources>
