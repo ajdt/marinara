@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.raizlabs.android.dbflow.config.FlowManager;
+
 
 public class TimerActivity extends AppCompatActivity
         implements TimerCallback, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -28,6 +30,9 @@ public class TimerActivity extends AppCompatActivity
                 registerOnSharedPreferenceChangeListener(this) ;
 
         this.initTimer() ;
+
+        // initialize database
+        FlowManager.init(this) ;
     }
 
     @Override
