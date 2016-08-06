@@ -1,9 +1,10 @@
 package com.itsaunixsystem.marinara;
 
 import com.raizlabs.android.dbflow.annotation.Column;
-import com.raizlabs.android.dbflow.annotation.Database;
+import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.annotation.Unique;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 /**
@@ -18,8 +19,11 @@ public class Task extends BaseModel {
     public long id ;
 
     @Column
+    @Unique
+    @NotNull
     public String name ;
 
     @Column
+    @NotNull
     public TaskStatus status ;
 }

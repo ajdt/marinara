@@ -3,6 +3,7 @@ package com.itsaunixsystem.marinara;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
+import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -22,9 +23,13 @@ public class PomodoroSession extends BaseModel {
     public long id ;
 
     @Column
+    @NotNull
     public Timestamp started_at ;
+
+    @NotNull
     public long duration ;
 
+    @NotNull
     @Column
     @ForeignKey(saveForeignKeyModel = false,
             references = {@ForeignKeyReference(columnType = Task.class,
@@ -32,6 +37,12 @@ public class PomodoroSession extends BaseModel {
                                                     foreignColumnName = "id"
                                                 )})
     public ForeignKeyContainer<Task> task ;
+
+    // TODO: this is incorrect. Why would you need it anyway? Documentation unclear
+    public void associateTask(Task some_task) {
+        this.task = new ForeignKeyContainer<Task>(Task.class) ;
+
+    }
 
 
 }
