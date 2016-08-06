@@ -19,7 +19,21 @@ android {
     }
 }
 
+// dependencies for dbFlow
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:support-v4:22.2.1'
 }
+
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.raizlabs.griddle'
+
+def dbflow_version="2.1.0"
+def dbflow_version2="1.4.5"
+
+dependencies {
+    apt "com.raizlabs.android:DBFlow-Compiler:${dbflow_version}"
+    mod "com.raizlabs.android:{DBFlow-Core, DBFlow}:${dbflow_version}"
+}
+

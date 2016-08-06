@@ -17,3 +17,28 @@ allprojects {
         jcenter()
     }
 }
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+// dependencies for dbFlow
+buildscript {
+    repositories {
+        maven { url "https://raw.github.com/Raizlabs/maven-releases/master/releases"}
+    }
+
+    dependencies {
+        classpath 'com.raizlabs:Griddle:1.0.2'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+    }
+
+}
+
+allprojects {
+    repositories {
+        maven { url "https://raw.github.com/Raizlabs/maven-releases/master/releases" }
+    }
+}
