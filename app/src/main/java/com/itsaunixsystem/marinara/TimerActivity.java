@@ -23,11 +23,8 @@ public class TimerActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer) ;
 
-        // TimerActivity uses callback to update countdown when duration preference changes
-        PreferenceManager.getDefaultSharedPreferences(this).
-                registerOnSharedPreferenceChangeListener(this) ;
-
         this.initTimer() ;
+        this.initCallbacks() ;
     }
 
     @Override
@@ -54,6 +51,15 @@ public class TimerActivity extends AppCompatActivity
 
     /****************************** TIMER AND UI CALLBACKS ******************************/
 
+    private void initCallbacks() {
+        // TimerActivity uses callback to update countdown when duration preference changes
+        PreferenceManager.getDefaultSharedPreferences(this).
+                registerOnSharedPreferenceChangeListener(this) ;
+
+        this.setLongPressListenerForTaskTextView() ;
+
+        // NOTE: remaining callbacks are registered via xml layouts
+    }
     /**
      * callback for "Settings" option in options menu. Launches SettingsActivity
      * @param item
@@ -129,6 +135,28 @@ public class TimerActivity extends AppCompatActivity
         if ( key.equals(getResources().getString(R.string.pomodoro_session_millisec)) ) {
             this.resetTimerAndUpdateDisplay() ;
         }
+    }
+
+    /**
+     * enable long-clicking and set a listener on text view that displays current active task name
+     */
+    public void setLongPressListenerForTaskTextView() {
+
+        // get textview, enable long-clicking and set long-click listener
+        TextView text_view = (TextView)findViewById(R.id.task_tv) ;
+        text_view.setLongClickable(true) ;
+        text_view.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                // launch AddTaskActivity
+                Intent intent = new Intent(TimerActivity.this, AddTaskActivity.class) ;
+                TimerActivity.this.startActivity(intent) ;
+
+                return true ; // return true to indicate long click is consumed
+            }
+
+        });
     }
 
     /****************************** UI UPDATING ******************************/
