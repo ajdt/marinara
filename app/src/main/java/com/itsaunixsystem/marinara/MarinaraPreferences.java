@@ -19,6 +19,7 @@ public class MarinaraPreferences implements SharedPreferences.OnSharedPreference
     private long _timer_millisec ;
     private long _break_millisec ;
     private boolean _skip_break, _auto_start_break, _allow_pause_sessions ;
+    private long _selected_task_id ;
 
     // keys to store/access from SharedPreferences
     public final String _POMODORO_MILLISEC_PREF_KEY ;
@@ -26,6 +27,7 @@ public class MarinaraPreferences implements SharedPreferences.OnSharedPreference
     public final String _SKIP_BREAK_PREF_KEY ;
     public final String _AUTO_START_BREAK_PREF_KEY ;
     public final String _ALLOW_PAUSE_SESSIONS_PREF_KEY ;
+    public final String _SELECTED_TASK_ID_KEY ;
 
     // constants to reference default values
     public final boolean _SKIP_BREAK_DEFAULT ;
@@ -34,6 +36,7 @@ public class MarinaraPreferences implements SharedPreferences.OnSharedPreference
     public final int _TIMER_CALLBACK_INTERVAL_DEFAULT;
     public final int _SESSION_DURATION_MILLISEC_DEFAULT ;
     public final int _BREAK_DURATION_MILLISEC_DEFAULT ;
+    public final long _SELECTED_TASK_ID_DEFAULT = -1 ; // XXX: TODO: make sure this flag value is ok to use
 
 
 
@@ -59,6 +62,7 @@ public class MarinaraPreferences implements SharedPreferences.OnSharedPreference
         _SKIP_BREAK_PREF_KEY            = resources.getString(R.string.skip_break) ;
         _AUTO_START_BREAK_PREF_KEY      = resources.getString(R.string.auto_start_break) ;
         _ALLOW_PAUSE_SESSIONS_PREF_KEY  = resources.getString(R.string.allow_pause_session) ;
+        _SELECTED_TASK_ID_KEY           = resources.getString(R.string.selected_task_id) ;
 
         _SKIP_BREAK_DEFAULT             = resources.getBoolean(R.bool.default_skip_break) ;
         _AUTO_START_BREAK_DEFAULT       = resources.getBoolean(R.bool.default_auto_start_break) ;
@@ -97,6 +101,8 @@ public class MarinaraPreferences implements SharedPreferences.OnSharedPreference
             _skip_break = shared_prefs.getBoolean(_SKIP_BREAK_PREF_KEY, _SKIP_BREAK_DEFAULT) ;
         else if (key.equals(_ALLOW_PAUSE_SESSIONS_PREF_KEY))
             _allow_pause_sessions = shared_prefs.getBoolean(_ALLOW_PAUSE_SESSIONS_PREF_KEY, _ALLOW_PAUSE_SESSIONS_DEFAULT) ;
+        else if (key.equals(_SELECTED_TASK_ID_KEY))
+            _selected_task_id = shared_prefs.getLong(_SELECTED_TASK_ID_KEY, _SELECTED_TASK_ID_DEFAULT) ;
 
         else
             return ;
@@ -109,6 +115,14 @@ public class MarinaraPreferences implements SharedPreferences.OnSharedPreference
     public boolean skipBreak() { return _skip_break ; }
     public boolean autoStartBreak() { return _auto_start_break ; }
     public boolean allowPauseSessions() { return _allow_pause_sessions ; }
+    public long selectedTaskId() { return _selected_task_id ; }
+
+    public void setSelectedTaskId(Context ctx, Long new_id) {
+        SharedPreferences shared_prefs = PreferenceManager.getDefaultSharedPreferences(ctx) ;
+        SharedPreferences.Editor editor = shared_prefs.edit() ;
+        editor.putLong(_SELECTED_TASK_ID_KEY, new_id) ;
+        editor.commit() ;
+    }
 
 
 
