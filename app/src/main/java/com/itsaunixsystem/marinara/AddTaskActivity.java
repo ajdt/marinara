@@ -1,10 +1,17 @@
 package com.itsaunixsystem.marinara;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import com.itsaunixsystem.marinara.orm.Task;
+
+import java.util.ArrayList;
 
 public class AddTaskActivity extends AppCompatActivity {
 
@@ -12,6 +19,12 @@ public class AddTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume() ;
+        setListViewAdapter() ;
     }
 
     @Override
@@ -37,7 +50,18 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
 
-    public void onAddTaskButtonClicked(View view) throws Exception {
-        throw new Exception() ;
+    public void onAddTaskButtonClicked(View view)  {
+        Intent intent = new Intent(this, NewTaskDialogActivity.class) ;
+        startActivity(intent) ;
+    }
+
+    private void setListViewAdapter() {
+        ListView list_view = (ListView)findViewById(R.id.add_task_list_view) ;
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, this.getTasks()) ;
+    }
+
+    // TODO: create a DB utility function that does this???
+    private ArrayList<Task> getTasks() {
+        return new ArrayList(Task.listAll(Task.class)) ;
     }
 }

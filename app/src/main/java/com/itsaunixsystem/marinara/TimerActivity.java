@@ -64,6 +64,15 @@ public class TimerActivity extends AppCompatActivity
     }
 
     /**
+     * callback for "Manage Tasks" option in options menu. Launches AddTaskActivity
+     * @param item
+     */
+    public void onManageTasksClicked(MenuItem item) {
+        Intent intent = new Intent(this, AddTaskActivity.class) ;
+        startActivity(intent) ;
+    }
+
+    /**
      * handle click event from timer image button used to start, pause, resume & restart
      * @param clicked_view
      */

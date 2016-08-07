@@ -42,6 +42,10 @@
             android:name=".AddTaskActivity"
             android:label="@string/title_activity_add_task" >
         </activity>
+        <activity
+            android:name=".NewTaskDialogActivity"
+            android:label="@string/title_activity_new_task_dialog" >
+        </activity>
     </application>
 
 </manifest>
