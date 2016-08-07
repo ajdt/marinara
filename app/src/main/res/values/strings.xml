@@ -32,6 +32,7 @@
     <string name="skip_break">skip_break</string>
     <string name="pomodoro_session_millisec">pomodoro_session_millisec</string>
     <string name="allow_pause_session">pause_pomodoro_session</string>
+    <string name="selected_task_id">selected_task_id</string>
 
 
 

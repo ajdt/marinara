@@ -1,10 +1,12 @@
 package com.itsaunixsystem.marinara.orm;
 
+
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 import com.orm.dsl.NotNull;
 import com.orm.dsl.Unique;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,6 +47,11 @@ public class Task extends SugarRecord {
         return Task.getByName(name_to_check) != null ;
     }
 
+    public static ArrayList<Task> getTasks() { return new ArrayList(Task.listAll(Task.class)) ;}
+    public static Task getById(long id) {
+        return Task.findById(Task.class, id) ;
+    }
+
     public static Task getByName(String name) {
         List<Task> results = Task.find(Task.class, "name = ?", name) ;
         if (results.isEmpty())
@@ -52,6 +59,15 @@ public class Task extends SugarRecord {
         else
             return results.get(0) ;
     }
+
+    public static ArrayList<String> getTaskNames() {
+        ArrayList<String> names = new ArrayList<String>() ;
+        for (Task t : Task.getTasks())
+            names.add(t.getName()) ;
+        return names ;
+    }
+
+
 
     public static boolean isActiveTask(String name) {
         Task the_task = Task.getByName(name) ;
@@ -64,6 +80,9 @@ public class Task extends SugarRecord {
     public static boolean isDeletedTask(String name) {
         return Task.taskNameAlreadyExists(name) && !Task.isActiveTask(name) ;
     }
+
+
+    public String getName() { return this.name ;}
 
 
 }
