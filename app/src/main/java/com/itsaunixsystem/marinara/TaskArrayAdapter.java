@@ -27,6 +27,8 @@ public class TaskArrayAdapter extends BaseAdapter implements ListAdapter {
         _context    = ctx ;
     }
 
+    /****************************** ListAdapter Interface Methods ******************************/
+
     @Override
     public int getCount() { return _items.size() ; }
 
@@ -52,6 +54,7 @@ public class TaskArrayAdapter extends BaseAdapter implements ListAdapter {
         TextView task_name_tv   = (TextView)new_view.findViewById(R.id.task_name_tv) ;
         task_name_tv.setText(the_task.getName());
 
+        /*
         // set onClick callback for delete button
         ImageButton delete_task_button = (ImageButton)new_view.findViewById(R.id.delete_task_ib) ;
         delete_task_button.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +67,12 @@ public class TaskArrayAdapter extends BaseAdapter implements ListAdapter {
                 TaskArrayAdapter.this.notifyDataSetChanged() ;
             }
         });
+        */
 
         return new_view ;
     }
+
+    /****************************** Misc ******************************/
+
+    public int getPosition(Task task) { return _items.indexOf(task) ; }
 }

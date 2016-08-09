@@ -85,7 +85,7 @@ public class AddTaskActivity extends AppCompatActivity {
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                _last_clicked_list_item = (String) list_view.getAdapter().getItem(position);
+                _last_clicked_list_item = ((Task) list_view.getAdapter().getItem(position)).getName() ;
             }
         });
     }
@@ -122,9 +122,8 @@ public class AddTaskActivity extends AppCompatActivity {
 
         // find position in adapter
         ListView list_view              = (ListView)findViewById(R.id.add_task_list_view) ;
-        ArrayAdapter<String> adapter    = (ArrayAdapter<String>)list_view.getAdapter() ;
-        String task_name                = task.getName() ;
-        int position                    = adapter.getPosition(task_name) ;
+        TaskArrayAdapter adapter        = (TaskArrayAdapter)list_view.getAdapter() ;
+        int position                    = adapter.getPosition(task) ;
 
         // set corresponding item to checked
         list_view.setItemChecked(position, true) ;
@@ -135,9 +134,7 @@ public class AddTaskActivity extends AppCompatActivity {
      */
     private void setAdapterForTaskNamesListView() {
         ListView list_view = (ListView)findViewById(R.id.add_task_list_view) ;
-        ArrayAdapter adapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_activated_1,
-                Task.getActiveTaskNames()) ;
+        TaskArrayAdapter adapter = new TaskArrayAdapter(Task.getActiveTasks(), this) ;
         list_view.setAdapter(adapter) ;
     }
 }

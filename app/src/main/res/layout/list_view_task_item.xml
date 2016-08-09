@@ -11,11 +11,12 @@
         android:background="?android:attr/activatedBackgroundIndicator"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:layout_alignParentLeft="true"/>
+    <!--
     <ImageButton
         android:id="@+id/delete_task_ib"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="right"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"/> -->
 
 </RelativeLayout>
