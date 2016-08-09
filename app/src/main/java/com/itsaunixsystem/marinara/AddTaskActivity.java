@@ -110,22 +110,22 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     private void displayLastUsedTaskAsSelected() {
+        // get Task obj for task_id in preferences and get listView
+        long task_id        = MarinaraPreferences.getPrefs(this).selectedTaskId() ;
+        Task task           = Task.getById(task_id) ;
+        ListView list_view  = (ListView)findViewById(R.id.add_task_list_view) ;
 
-        // get Task obj of selected id saved in preferences
-        long task_id = MarinaraPreferences.getPrefs(this).selectedTaskId() ;
-        Task task = Task.getById(task_id) ;
-
-        // don't highlight anything if task_id is unmatched in DB
+        // if can't find task in DB, then highlight first item in listview
         if (task == null) {
+            list_view.setItemChecked(0, true) ;
             return ;
         }
 
-        // find position in adapter
-        ListView list_view              = (ListView)findViewById(R.id.add_task_list_view) ;
+        // otherwise, find task name's position in adapter...
         TaskArrayAdapter adapter        = (TaskArrayAdapter)list_view.getAdapter() ;
         int position                    = adapter.getPosition(task) ;
 
-        // set corresponding item to checked
+        // ...and set corresponding item in listview to checked
         list_view.setItemChecked(position, true) ;
     }
 
