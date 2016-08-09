@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -54,9 +54,9 @@ public class TaskArrayAdapter extends BaseAdapter implements ListAdapter {
         TextView task_name_tv   = (TextView)new_view.findViewById(R.id.task_name_tv) ;
         task_name_tv.setText(the_task.getName());
 
-        /*
+
         // set onClick callback for delete button
-        ImageButton delete_task_button = (ImageButton)new_view.findViewById(R.id.delete_task_ib) ;
+        ImageView delete_task_button = (ImageView)new_view.findViewById(R.id.delete_task_ib) ;
         delete_task_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +67,7 @@ public class TaskArrayAdapter extends BaseAdapter implements ListAdapter {
                 TaskArrayAdapter.this.notifyDataSetChanged() ;
             }
         });
-        */
+
 
         return new_view ;
     }
