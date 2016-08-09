@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/task_name_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:background="?android:attr/activatedBackgroundIndicator"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:layout_alignParentLeft="true"/>
+    <ImageButton
+        android:id="@+id/delete_task_ib"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="right"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>
