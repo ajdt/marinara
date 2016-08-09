@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.itsaunixsystem.marinara.orm.Task;
+
 
 public class TimerActivity extends AppCompatActivity
         implements TimerCallback, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -25,6 +27,12 @@ public class TimerActivity extends AppCompatActivity
 
         this.initTimer() ;
         this.initCallbacks() ;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume() ;
+        this.setTaskNameInTaskTextView() ;
     }
 
     @Override
@@ -207,12 +215,21 @@ public class TimerActivity extends AppCompatActivity
         updateTimerDisplay(new_duration) ;
     }
 
+    /**
+     * set the text of task_tv to the currently selected task's name
+     */
+    public void setTaskNameInTaskTextView() {
+        TextView task_text_view = (TextView)findViewById(R.id.task_tv) ;
+        task_text_view.setText(this.getSelectedTaskName()) ;
+    }
+
     /****************************** HELPERS ******************************/
 
     private void launchBreak() {
         Intent intent = new Intent(this, BreakActivity.class) ;
         this.startActivity(intent) ;
     }
+
     /**
      *
      * @param millisec
@@ -242,7 +259,6 @@ public class TimerActivity extends AppCompatActivity
         if (this.initialState() == TimerState.RUNNING)
             _timer.start() ;
     }
-
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
     // NOTE: MarinaraPreferences is called every time a preference is needed. This guarantees
     // we are always using the latest value, and saves the trouble of having to save local copies
@@ -254,6 +270,25 @@ public class TimerActivity extends AppCompatActivity
     }
     public boolean skipBreaks() { return MarinaraPreferences.getPrefs(this).skipBreak() ; }
     public boolean allowPause() { return MarinaraPreferences.getPrefs(this).allowPauseSessions() ; }
+
+
     public TimerState initialState() { return TimerState.READY ; }
+
+    /**
+     *
+     * @return task name of the currently selected task
+     */
+    public String getSelectedTaskName() {
+        long id     = MarinaraPreferences.getPrefs(this).selectedTaskId() ;
+        Task task   = Task.getById(id) ;
+
+        // if task not found, use first available task. External code will guarantee that
+        // at least one task is in the Task table
+        // TODO: change to return first task from Active Tasks set!! Otherwise deleted task might be returned
+        if (task == null)
+            task = Task.first(Task.class) ;
+
+        return task.getName() ;
+    }
 
 }
