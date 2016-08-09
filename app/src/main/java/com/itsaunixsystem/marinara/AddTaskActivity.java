@@ -137,7 +137,7 @@ public class AddTaskActivity extends AppCompatActivity {
         ListView list_view = (ListView)findViewById(R.id.add_task_list_view) ;
         ArrayAdapter adapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_activated_1,
-                Task.getTaskNames()) ;
+                Task.getActiveTaskNames()) ;
         list_view.setAdapter(adapter) ;
     }
 }

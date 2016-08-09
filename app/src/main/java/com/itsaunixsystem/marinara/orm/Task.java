@@ -9,6 +9,7 @@ import com.orm.dsl.Unique;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * @author: ajdt on 8/6/16.
  * @description: an orm class to facilitate DB access of tasks users create/delete
@@ -47,10 +48,11 @@ public class Task extends SugarRecord {
         return Task.getByName(name_to_check) != null ;
     }
 
-    public static ArrayList<Task> getTasks() { return new ArrayList(Task.listAll(Task.class)) ;}
-    public static Task getById(long id) {
-        return Task.findById(Task.class, id) ;
+    public static ArrayList<Task> getTasks() { return new ArrayList(Task.listAll(Task.class)) ; }
+    public static ArrayList<Task> getActiveTasks() {
+        return new ArrayList(Task.find(Task.class, "status = ?", ACTIVE_STATUS)) ;
     }
+    public static Task getById(long id) { return Task.findById(Task.class, id) ; }
 
     public static Task getByName(String name) {
         List<Task> results = Task.find(Task.class, "name = ?", name) ;
@@ -60,9 +62,9 @@ public class Task extends SugarRecord {
             return results.get(0) ;
     }
 
-    public static ArrayList<String> getTaskNames() {
+    public static ArrayList<String> getActiveTaskNames() {
         ArrayList<String> names = new ArrayList<String>() ;
-        for (Task t : Task.getTasks())
+        for (Task t : Task.getActiveTasks())
             names.add(t.getName()) ;
         return names ;
     }
