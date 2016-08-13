@@ -30,7 +30,7 @@ public class MarinaraPreferences {
     public final int _TIMER_CALLBACK_INTERVAL_DEFAULT;
     public final int _SESSION_DURATION_MILLISEC_DEFAULT ;
     public final int _BREAK_DURATION_MILLISEC_DEFAULT ;
-    public final long _SELECTED_TASK_ID_DEFAULT = -1 ; // XXX: TODO: make sure this flag value is ok to use
+    public final long _SELECTED_TASK_ID_DEFAULT = -1 ; // flag, SQLiteDatabase will use non-negative ids
 
     // class is just a layer of indirection to using sharedPreferences, so it
     // requires a handle to default shared preferences

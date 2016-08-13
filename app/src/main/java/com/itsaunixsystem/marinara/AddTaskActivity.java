@@ -14,8 +14,8 @@ import com.itsaunixsystem.marinara.util.TaskArrayAdapter;
 
 public class AddTaskActivity extends AppCompatActivity {
 
-    // name of last clicked list item, corresponds to name of Task in DB
-    private String _last_clicked_list_item = "" ;
+    // stores Task.name of last clicked item (saved in preferences)
+    private String _last_clicked_name = "" ;
 
     /****************************** OVERRIDDEN METHODS  ******************************/
 
@@ -37,6 +37,8 @@ public class AddTaskActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        // NOTE: we save the task on pause() b/c onDestroy() may run after successor
+        // Activity's onCreate() or onResume() methods
         super.onPause() ;
         this.saveLastClickedTaskToPreferences() ;
     }
@@ -62,7 +64,8 @@ public class AddTaskActivity extends AppCompatActivity {
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                _last_clicked_list_item = ((Task) list_view.getAdapter().getItem(position)).getName() ;
+                // when item is clicked, save its name
+                _last_clicked_name = ((Task) list_view.getAdapter().getItem(position)).getName() ;
             }
         });
     }
@@ -72,15 +75,15 @@ public class AddTaskActivity extends AppCompatActivity {
     private void saveLastClickedTaskToPreferences() {
 
         // no item has been clicked
-        if (_last_clicked_list_item.equals(""))
+        if (_last_clicked_name.equals(""))
             return ;
 
         // get Task object matching saved name String and save it's task id
-        Task selected_task = Task.getByName(_last_clicked_list_item) ;
+        Task selected_task = Task.getByName(_last_clicked_name) ;
 
         if (selected_task == null) {// TODO: this should not happen
             Log.d(this.getClass().getSimpleName(), "error: last clicked 'name' is not in database:"
-                    + _last_clicked_list_item) ;
+                    + _last_clicked_name) ;
         } else { // save selected task's id value
             MarinaraPreferences.getPrefs(this).setSelectedTaskId(selected_task.getId()) ;
         }
