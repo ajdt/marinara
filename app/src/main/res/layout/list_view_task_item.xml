@@ -14,7 +14,7 @@
 
     <ImageView
         android:background="@drawable/delete"
-        android:id="@+id/delete_task_ib"
+        android:id="@+id/delete_task_iv"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="right"

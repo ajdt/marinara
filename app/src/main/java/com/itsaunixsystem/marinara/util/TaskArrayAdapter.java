@@ -51,14 +51,14 @@ public class TaskArrayAdapter extends BaseAdapter implements ListAdapter {
         }
 
         // set text of layout
-        final Task the_task     = (Task)this.getItem(position) ;
+        final Task the_task     = (Task)this.getItem(position) ; // NOTE: final so delete_task_iv.setOnClickListener() can use it
         TextView task_name_tv   = (TextView)new_view.findViewById(R.id.task_name_tv) ;
         task_name_tv.setText(the_task.getName());
 
 
-        // set onClick callback for delete button
-        ImageView delete_task_button = (ImageView)new_view.findViewById(R.id.delete_task_ib) ;
-        delete_task_button.setOnClickListener(new View.OnClickListener() {
+        // set onClick callback for delete image view
+        ImageView delete_task_iv = (ImageView)new_view.findViewById(R.id.delete_task_iv) ;
+        delete_task_iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // call Task deletion and remove the item locally too
