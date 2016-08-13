@@ -82,7 +82,7 @@ public class AddTaskActivity extends AppCompatActivity {
             Log.d(this.getClass().getSimpleName(), "error: last clicked 'name' is not in database:"
                     + _last_clicked_list_item) ;
         } else { // save selected task's id value
-            MarinaraPreferences.getPrefs(this).setSelectedTaskId(this, selected_task.getId()) ;
+            MarinaraPreferences.getPrefs(this).setSelectedTaskId(selected_task.getId()) ;
         }
     }
 
