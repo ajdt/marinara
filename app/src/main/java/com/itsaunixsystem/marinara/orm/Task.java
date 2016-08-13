@@ -115,14 +115,6 @@ public class Task extends SugarRecord {
             return results.get(0) ;
     }
 
-    public static ArrayList<String> getActiveTaskNames() {
-        ArrayList<String> names = new ArrayList<String>() ;
-        for (Task t : Task.getActiveTasks())
-            names.add(t.getName()) ;
-        return names ;
-    }
-
-
     /****************************** BOOLEAN HELPERS ******************************/
 
     public static boolean isActiveTask(String name) {

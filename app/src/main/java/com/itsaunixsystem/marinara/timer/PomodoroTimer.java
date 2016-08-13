@@ -9,8 +9,8 @@ import android.os.CountDownTimer;
 public class PomodoroTimer {
 
 
-    private TimerCallback _callback_obj       = null;
-    private CountDownTimer      _countdown_timer    = null;
+    private TimerCallback _callback_obj             = null;
+    private CountDownTimer _countdown_timer         = null;
 
     private long            _duration_millisec, _remaining_millisec ;
     private final long      _CALLBACK_INTERVAL_MILLISEC ;
@@ -34,6 +34,7 @@ public class PomodoroTimer {
      * @param duration_millisec duration for CountDownTimer that will be created
      */
     private void initNewCountDownTimer(long duration_millisec) {
+        // set time remaining, create new countdown object and set state to READY
         _remaining_millisec = duration_millisec ;
         _countdown_timer    = new CountDownTimer(duration_millisec, _CALLBACK_INTERVAL_MILLISEC) {
             @Override
