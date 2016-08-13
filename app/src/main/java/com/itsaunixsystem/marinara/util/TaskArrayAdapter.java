@@ -36,6 +36,11 @@ public class TaskArrayAdapter extends BaseAdapter implements ListAdapter {
     @Override
     public Object getItem(int position) { return _items.get(position) ; }
 
+    /**
+     *
+     * @param position position in ListView (corresponds to position in internal ArrayList
+     * @return the value of id field for Task corresponding to item
+     */
     @Override
     public long getItemId(int position) { return _items.get(position).getId() ; }
 

@@ -3,7 +3,6 @@ package com.itsaunixsystem.marinara;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -14,8 +13,9 @@ import com.itsaunixsystem.marinara.util.TaskArrayAdapter;
 
 public class ManageTasksActivity extends AppCompatActivity {
 
-    // stores Task.name of last clicked item (saved in preferences)
-    private String _last_clicked_name = "" ;
+    // stores Task.id of last clicked item (to be saved in preferences)
+    // NOTE: -1 will never be used as legitimate Task id, safe to use as flag
+    private long _last_clicked_task_id = -1 ;
 
     /****************************** OVERRIDDEN METHODS  ******************************/
 
@@ -65,7 +65,7 @@ public class ManageTasksActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // when item is clicked, save its name
-                _last_clicked_name = ((Task) list_view.getAdapter().getItem(position)).getName() ;
+                _last_clicked_task_id = list_view.getAdapter().getItemId(position) ;
             }
         });
     }
@@ -75,18 +75,10 @@ public class ManageTasksActivity extends AppCompatActivity {
     private void saveLastClickedTaskToPreferences() {
 
         // no item has been clicked
-        if (_last_clicked_name.equals(""))
+        if (_last_clicked_task_id == -1)
             return ;
 
-        // get Task object matching saved name String and save it's task id
-        Task selected_task = Task.getByName(_last_clicked_name) ;
-
-        if (selected_task == null) {// TODO: this should not happen
-            Log.d(this.getClass().getSimpleName(), "error: last clicked 'name' is not in database:"
-                    + _last_clicked_name) ;
-        } else { // save selected task's id value
-            MarinaraPreferences.getPrefs(this).setSelectedTaskId(selected_task.getId()) ;
-        }
+        MarinaraPreferences.getPrefs(this).setSelectedTaskId(_last_clicked_task_id) ;
     }
 
     private void displayLastUsedTaskAsSelected() {
