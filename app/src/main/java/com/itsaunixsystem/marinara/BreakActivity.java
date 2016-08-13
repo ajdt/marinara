@@ -1,9 +1,9 @@
 package com.itsaunixsystem.marinara;
 
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+
+import com.itsaunixsystem.marinara.timer.TimerState;
+import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 
 public class BreakActivity extends TimerActivity {
 

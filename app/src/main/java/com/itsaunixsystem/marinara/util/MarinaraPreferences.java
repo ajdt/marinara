@@ -1,9 +1,11 @@
-package com.itsaunixsystem.marinara;
+package com.itsaunixsystem.marinara.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
+
+import com.itsaunixsystem.marinara.R;
 
 // TODO: code is this file is too 'wordy'. Try simplifying before adding statistics settings. Maybe extract Preference() ADT?
 

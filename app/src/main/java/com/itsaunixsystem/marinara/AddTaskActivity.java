@@ -4,14 +4,13 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.itsaunixsystem.marinara.orm.Task;
+import com.itsaunixsystem.marinara.util.MarinaraPreferences;
+import com.itsaunixsystem.marinara.util.TaskArrayAdapter;
 
 public class AddTaskActivity extends AppCompatActivity {
 

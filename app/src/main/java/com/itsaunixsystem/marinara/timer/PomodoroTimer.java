@@ -1,4 +1,4 @@
-package com.itsaunixsystem.marinara;
+package com.itsaunixsystem.marinara.timer;
 
 import android.os.CountDownTimer;
 
@@ -9,7 +9,7 @@ import android.os.CountDownTimer;
 public class PomodoroTimer {
 
 
-    private TimerCallback       _callback_obj       = null;
+    private TimerCallback _callback_obj       = null;
     private CountDownTimer      _countdown_timer    = null;
 
     private long            _duration_millisec, _remaining_millisec ;

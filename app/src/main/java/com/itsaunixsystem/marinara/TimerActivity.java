@@ -12,12 +12,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.itsaunixsystem.marinara.orm.Task;
+import com.itsaunixsystem.marinara.timer.PomodoroTimer;
+import com.itsaunixsystem.marinara.timer.TimerCallback;
+import com.itsaunixsystem.marinara.timer.TimerState;
+import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 
 
 public class TimerActivity extends AppCompatActivity
         implements TimerCallback, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private PomodoroTimer   _timer = null ;
+    private PomodoroTimer _timer = null ;
 
 
     @Override

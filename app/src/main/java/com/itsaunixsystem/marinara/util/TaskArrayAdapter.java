@@ -1,4 +1,4 @@
-package com.itsaunixsystem.marinara;
+package com.itsaunixsystem.marinara.util;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.itsaunixsystem.marinara.R;
 import com.itsaunixsystem.marinara.orm.Task;
 
 import java.util.ArrayList;
