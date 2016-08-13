@@ -12,7 +12,7 @@ import com.itsaunixsystem.marinara.orm.Task;
 import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 import com.itsaunixsystem.marinara.util.TaskArrayAdapter;
 
-public class AddTaskActivity extends AppCompatActivity {
+public class ManageTasksActivity extends AppCompatActivity {
 
     // stores Task.name of last clicked item (saved in preferences)
     private String _last_clicked_name = "" ;
@@ -22,7 +22,7 @@ public class AddTaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_task) ;
+        setContentView(R.layout.activity_manage_tasks) ;
         setListViewOnItemClickListener() ;
     }
 

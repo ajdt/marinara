@@ -82,11 +82,11 @@ public class TimerActivity extends AppCompatActivity
     }
 
     /**
-     * callback for "Manage Tasks" option in options menu. Launches AddTaskActivity
+     * callback for "Manage Tasks" option in options menu. Launches ManageTasksActivity
      * @param item
      */
     public void onManageTasksClicked(MenuItem item) {
-        Intent intent = new Intent(this, AddTaskActivity.class) ;
+        Intent intent = new Intent(this, ManageTasksActivity.class) ;
         startActivity(intent) ;
     }
 
@@ -161,8 +161,8 @@ public class TimerActivity extends AppCompatActivity
 
             @Override
             public boolean onLongClick(View v) {
-                // launch AddTaskActivity
-                Intent intent = new Intent(TimerActivity.this, AddTaskActivity.class) ;
+                // launch ManageTasksActivity
+                Intent intent = new Intent(TimerActivity.this, ManageTasksActivity.class) ;
                 TimerActivity.this.startActivity(intent) ;
 
                 return true ; // return true to indicate long click is consumed

@@ -9,7 +9,7 @@
     <string name="hello_world">Hello world!</string>
 
     <!-- TimerActivity strings -->
-    <string name="add_task_menu_item_title">Manage Tasks</string>
+    <string name="manage_tasks_menu_item_title">Manage Tasks</string>
 
     <!--###################### Preferences strings ############################-->
     <!-- titles & summaries -->
@@ -39,8 +39,8 @@
 
     <string name="title_activity_break">BreakActivity</string>
 
-    <!-- AddTaskActivity -->
-    <string name="title_activity_add_task">AddTaskActivity</string>
+    <!-- ManageTasksActivity -->
+    <string name="title_activity_manage_tasks">ManageTasksActivity</string>
     <string name="add_task_button_text">Add Task </string>
 
     <!-- NewTaskDialogActivity -->

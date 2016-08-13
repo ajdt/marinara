@@ -39,8 +39,8 @@
             android:label="@string/title_activity_break" >
         </activity>
         <activity
-            android:name=".AddTaskActivity"
-            android:label="@string/title_activity_add_task" >
+            android:name=".ManageTasksActivity"
+            android:label="@string/title_activity_manage_tasks" >
         </activity>
         <activity
             android:name=".NewTaskDialogActivity"
