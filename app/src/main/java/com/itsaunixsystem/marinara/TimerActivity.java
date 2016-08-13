@@ -29,6 +29,8 @@ public class TimerActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer) ;
 
+        // load preferences and initialize timer/callbacks
+        MarinaraPreferences prefs = MarinaraPreferences.getPrefs(this) ;
         this.initTimer() ;
         this.initCallbacks() ;
     }
@@ -36,6 +38,7 @@ public class TimerActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume() ;
+        // set task name again, in case a new task was selected
         this.setTaskNameInTaskTextView() ;
     }
 
@@ -68,6 +71,7 @@ public class TimerActivity extends AppCompatActivity
         PreferenceManager.getDefaultSharedPreferences(this).
                 registerOnSharedPreferenceChangeListener(this) ;
 
+        // long-pressing text view displaying task will launch ManageTasksActivity
         this.setLongPressListenerForTaskTextView() ;
 
         // NOTE: remaining callbacks are registered via xml layouts
@@ -251,8 +255,7 @@ public class TimerActivity extends AppCompatActivity
      * Should only be called from onCreate(). Sets initial timer state and instantiates timer.
      */
     public void initTimer() {
-        MarinaraPreferences prefs = MarinaraPreferences.getPrefs(this) ;
-        _timer          = new PomodoroTimer(this, this.getTimerDuration(), this.getTimerCallbackInterval()) ;
+        _timer = new PomodoroTimer(this, this.getTimerDuration(), this.getTimerCallbackInterval()) ;
 
         // NOTE: if display not updated here, timer will appear to countdown one second less than
         // desired duration
