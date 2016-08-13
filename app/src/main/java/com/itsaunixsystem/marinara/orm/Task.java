@@ -1,6 +1,8 @@
 package com.itsaunixsystem.marinara.orm;
 
 
+import android.util.Log;
+
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 import com.orm.dsl.NotNull;
@@ -59,6 +61,30 @@ public class Task extends SugarRecord {
             return false ;
         } else
             return super.delete() ;
+    }
+
+    /**
+     * NOTE: required so TaskArrayAdapter is able to locate Tasks using
+     * ArrayList<Task>::indexOf()
+     * @param obj
+     * @return true if argument is a Task and all its fields are the same
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj.getClass() == Task.class))
+            return false ;
+
+        // cast to Task and compare fields
+        Task other_task = (Task) obj ;
+        return other_task.name.equals(this.name) &&
+                other_task.status.equals(this.status) &&
+                other_task.getId() == this.getId() ;
+
+    }
+
+    @Override
+    public String toString() {
+        return "Task[" + Long.toString(getId()) + ", " + name + ", " + status + "]" ;
     }
 
     /****************************** GETTERS ******************************/
