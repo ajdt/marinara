@@ -214,8 +214,7 @@ public class TimerActivity extends AppCompatActivity
      */
     private void resetTimerAndUpdateDisplay() {
         long new_duration = this.getTimerDuration() ;
-        _timer.setDuration(new_duration) ;
-        _timer.reset() ;
+        _timer.reset(new_duration) ;
         updateTimerDisplay(new_duration) ;
     }
 

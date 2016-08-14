@@ -12,7 +12,7 @@ public class PomodoroTimer {
     private TimerCallback _callback_obj             = null;
     private CountDownTimer _countdown_timer         = null;
 
-    private long            _duration_millisec, _remaining_millisec ;
+    private long            _remaining_millisec ;
     private final long      _CALLBACK_INTERVAL_MILLISEC ;
 
     private TimerState _state ;
@@ -20,11 +20,10 @@ public class PomodoroTimer {
 
 
     public PomodoroTimer(TimerCallback callback, long duration_millis, long interval_millis) {
-        _duration_millisec          = duration_millis ;
         _CALLBACK_INTERVAL_MILLISEC = interval_millis ;
         _callback_obj               = callback ;
 
-        this.initCountDownTimerWithSavedDuration();
+        this.initNewCountDownTimer(duration_millis);
     }
 
     /****************************** CountDownTimer CREATION/DESTRUCTION ******************************/
@@ -45,13 +44,6 @@ public class PomodoroTimer {
         } ;
 
         _state = TimerState.READY ;
-    }
-
-    /**
-     * create a new CoundDownTimer object with _duration_millisec remaining
-     */
-    private void initCountDownTimerWithSavedDuration() {
-        this.initNewCountDownTimer(_duration_millisec) ;
     }
 
     /**
@@ -101,7 +93,6 @@ public class PomodoroTimer {
         this.deleteCountDownTimer() ;
         this.initNewCountDownTimer(_remaining_millisec) ;
 
-        // NOTE: state must be set after initCountDownTimerWithSavedDuration() because new timers are set to READY state
         _state = TimerState.PAUSED ;
     }
 
@@ -111,19 +102,15 @@ public class PomodoroTimer {
     }
 
     /**
-     * start a new timer with base duration of this instance (_duration_millisec)
+     *
+     * @param millis time to reset clock to in milliseconds
      */
-    public void reset() {
+    public void reset(long millis) {
         this.deleteCountDownTimer() ;
-        this.initCountDownTimerWithSavedDuration() ;
+        this.initNewCountDownTimer(millis) ;
     }
-
 
     /****************************** SETTERS/GETTERS ******************************/
-
-    public void setDuration(long new_duration_millisec) {
-        _duration_millisec = new_duration_millisec ;
-    }
 
     public TimerState state() { return _state ; }
 
