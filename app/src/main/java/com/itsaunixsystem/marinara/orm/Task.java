@@ -18,7 +18,9 @@ import java.util.List;
  */
 public class Task extends SugarRecord {
 
-    // TODO: not sure what this does, if anything
+    // IMPORTANT: unique conflicts are handled by sugarORM with a replacement strategy.
+    // For this application, replacement might break foreign key dependencies.
+    // To avoid this use Task.create() instead of Task.save()
     @Unique
     @NotNull
     private String name ;
@@ -32,6 +34,9 @@ public class Task extends SugarRecord {
     public static final String ACTIVE_STATUS = "ACTIVE" ;
     @Ignore
     public static final String DELETED_STATUS = "DELETED" ;
+
+    @Ignore
+    public static final long INVALID_TASK_ID_FLAG = -1 ;
 
 
 
@@ -63,6 +68,23 @@ public class Task extends SugarRecord {
             return super.delete() ;
     }
 
+    /**
+     * check if another task exists in DB with same name as this task, if so
+     * ensure other task is set to Active. If not, then save this task.
+     * @return the id of created task or -1 if the task could not be saved to DB
+     */
+    public long create() {
+        if (Task.isActiveTask(this.name)) { // task name already in use
+            return Task.INVALID_TASK_ID_FLAG ;
+        } else if (Task.isDeletedTask(this.name)) {
+            // task existed previously, but was deleted. Restore it instead of saving this task
+            Task existing_task      = Task.getByName(this.name);
+            existing_task.status    = Task.ACTIVE_STATUS;
+            return existing_task.save();
+        } else {
+            return this.save() ;
+        }
+    }
     /**
      * NOTE: required so TaskArrayAdapter is able to locate Tasks using
      * ArrayList<Task>::indexOf()

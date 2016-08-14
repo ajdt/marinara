@@ -29,18 +29,10 @@ public class NewTaskDialogActivity extends AppCompatActivity {
         } else if (Task.isActiveTask(new_task_name)) {
             // existing task name
             Toast.makeText(NewTaskDialogActivity.this, "task name already exists", Toast.LENGTH_SHORT).show() ;
-        } else if (Task.isDeletedTask(new_task_name)) {
-            // task existed previously, but was deleted. Restore its status
-            Task the_task = Task.getByName(new_task_name) ;
-            the_task.status = Task.ACTIVE_STATUS ;
-            the_task.save() ;
-            this.finish() ;
-
-        }
-        else {
+        } else {
             // new task name that's valid
             Task new_task = new Task(new_task_name, Task.ACTIVE_STATUS) ;
-            new_task.save() ;
+            new_task.create() ;
             this.finish() ;
         }
     }
