@@ -1,6 +1,5 @@
 package com.itsaunixsystem.marinara;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.itsaunixsystem.marinara.orm.Task;
+import com.itsaunixsystem.marinara.util.AndroidHelper;
 import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 import com.itsaunixsystem.marinara.util.TaskArrayAdapter;
 
@@ -50,8 +50,7 @@ public class ManageTasksActivity extends AppCompatActivity {
      * @param view a handle to view that was clicked
      */
     public void onAddTaskButtonClicked(View view)  {
-        Intent intent = new Intent(this, NewTaskDialogActivity.class) ;
-        startActivity(intent) ;
+        AndroidHelper.launchActivity(this, NewTaskDialogActivity.class) ;
     }
 
     /**

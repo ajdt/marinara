@@ -1,6 +1,5 @@
 package com.itsaunixsystem.marinara;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +14,7 @@ import com.itsaunixsystem.marinara.orm.Task;
 import com.itsaunixsystem.marinara.timer.PomodoroTimer;
 import com.itsaunixsystem.marinara.timer.TimerCallback;
 import com.itsaunixsystem.marinara.timer.TimerState;
+import com.itsaunixsystem.marinara.util.AndroidHelper;
 import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 
 
@@ -81,8 +81,7 @@ public class TimerActivity extends AppCompatActivity
      * @param item
      */
     public void onSettingsMenuClicked(MenuItem item) {
-        Intent intent = new Intent(this, SettingsActivity.class) ;
-        startActivity(intent) ;
+        AndroidHelper.launchActivity(this, SettingsActivity.class) ;
     }
 
     /**
@@ -90,8 +89,7 @@ public class TimerActivity extends AppCompatActivity
      * @param item
      */
     public void onManageTasksClicked(MenuItem item) {
-        Intent intent = new Intent(this, ManageTasksActivity.class) ;
-        startActivity(intent) ;
+        AndroidHelper.launchActivity(this, ManageTasksActivity.class) ;
     }
 
     /**
@@ -165,10 +163,7 @@ public class TimerActivity extends AppCompatActivity
 
             @Override
             public boolean onLongClick(View v) {
-                // launch ManageTasksActivity
-                Intent intent = new Intent(TimerActivity.this, ManageTasksActivity.class) ;
-                TimerActivity.this.startActivity(intent) ;
-
+                AndroidHelper.launchActivity(TimerActivity.this, ManageTasksActivity.class) ;
                 return true ; // return true to indicate long click is consumed
             }
 
@@ -234,8 +229,7 @@ public class TimerActivity extends AppCompatActivity
     /****************************** HELPERS ******************************/
 
     private void launchBreak() {
-        Intent intent = new Intent(this, BreakActivity.class) ;
-        this.startActivity(intent) ;
+        AndroidHelper.launchActivity(this, BreakActivity.class) ;
     }
 
     /**
