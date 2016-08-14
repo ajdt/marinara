@@ -51,8 +51,8 @@ public class Task extends SugarRecord {
     @Override
     public boolean delete() {
 
-        // don't delete task if it's the last one in the Task table
-        if (Task.getTasks().size() <= 1)
+        // don't delete task if it's the last one in the Task table that's active
+        if (Task.getActiveTasks().size() <= 1)
             return false ;
         // don't delete task if its id is a foreign key to a pomodoro session
         else if (referencedBySavedPomodoroSessions()) {

@@ -261,8 +261,7 @@ public class TimerActivity extends AppCompatActivity
         // desired duration
         this.updateTimerDisplay(this.getTimerDuration()) ;
 
-        // TODO: refactor initialState to a boolean that asks whether timer should autorun??
-        // timer is to be initialized in running state state
+        // check if timer is to be initialized in running state and start it if so
         if (this.initialState() == TimerState.RUNNING)
             _timer.start() ;
     }
@@ -289,13 +288,12 @@ public class TimerActivity extends AppCompatActivity
         long id     = MarinaraPreferences.getPrefs(this).selectedTaskId() ;
         Task task   = Task.getById(id) ;
 
-        // if task not found, use first available task. External code will guarantee that
-        // at least one task is in the Task table
-        // TODO: change to return first task from Active Tasks set!! Otherwise deleted task might be returned
-        if (task == null)
-            task = Task.first(Task.class) ;
+        // if task not found, use first available task. Task.delete() ensures
+        // at least one active task is in the Task table
+        if (task == null) {
+            task = Task.getActiveTasks().get(0) ;
+        }
 
         return task.getName() ;
     }
-
 }
