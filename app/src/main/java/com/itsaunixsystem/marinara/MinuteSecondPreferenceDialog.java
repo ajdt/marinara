@@ -10,6 +10,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.NumberPicker;
 
+import static com.itsaunixsystem.marinara.util.TimeConversionHelper.millisecToMinutes ;
+import static com.itsaunixsystem.marinara.util.TimeConversionHelper.secondsRemainder ;
+import static com.itsaunixsystem.marinara.util.TimeConversionHelper.minAndSecToMillisec ;
+
 /**
  * @author: ajdt on 6/26/16.
  * @description: a dialog preference allowing user to select the minutes/seconds for a time range
@@ -47,8 +51,8 @@ public class MinuteSecondPreferenceDialog extends DialogPreference {
         // get the min/sec UI elements and obtain minute/second values from millisec
         NumberPicker minutes_np = (NumberPicker) view.findViewById(R.id.minutes_np) ;
         NumberPicker seconds_np = (NumberPicker) view.findViewById(R.id.seconds_np) ;
-        long minutes = (_persisted_millisec / (1000 * 60)) % 60 ;
-        long seconds = (_persisted_millisec / 1000) % 60 ;
+        long minutes = millisecToMinutes(_persisted_millisec) ;
+        long seconds = secondsRemainder(_persisted_millisec) ;
 
         // set min, max and initial values
         minutes_np.setMinValue(0) ;
@@ -93,7 +97,7 @@ public class MinuteSecondPreferenceDialog extends DialogPreference {
         if (!save_millisec)
             return ;
 
-        _persisted_millisec = _minutes_picker_value * 60 * 1000 + _seconds_picker_value * 1000 ;
+        _persisted_millisec = minAndSecToMillisec(_minutes_picker_value, _seconds_picker_value) ;
         persistLong(_persisted_millisec) ;
     }
 

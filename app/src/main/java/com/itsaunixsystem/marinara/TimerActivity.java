@@ -16,6 +16,7 @@ import com.itsaunixsystem.marinara.timer.TimerCallback;
 import com.itsaunixsystem.marinara.timer.TimerState;
 import com.itsaunixsystem.marinara.util.AndroidHelper;
 import com.itsaunixsystem.marinara.util.MarinaraPreferences;
+import static com.itsaunixsystem.marinara.util.TimeConversionHelper.millisecToTimeString ;
 
 
 public class TimerActivity extends AppCompatActivity
@@ -182,7 +183,7 @@ public class TimerActivity extends AppCompatActivity
      */
     private void updateTimerCountdown(long millisec_remaining) {
         TextView timer_tv = (TextView)findViewById(R.id.timer_tv) ;
-        timer_tv.setText(this.millisecToTimeString(millisec_remaining));
+        timer_tv.setText(millisecToTimeString(millisec_remaining));
     }
 
     /**
@@ -232,18 +233,6 @@ public class TimerActivity extends AppCompatActivity
         AndroidHelper.launchActivity(this, BreakActivity.class) ;
     }
 
-    /**
-     *
-     * @param millisec
-     * @return the time-value as a string of the form "<minutes>:<seconds>"
-     * NOTE: My requirements are simple, so I opted out of using DateFormat or related classes
-     */
-    private String millisecToTimeString(long millisec) {
-        long seconds = (millisec / 1000) % 60 ;
-        long minutes = (millisec / (1000 * 60)) % 60 ;
-
-        return String.format("%02d:%02d", minutes, seconds) ;
-    }
 
     /**
      * Should only be called from onCreate(). Sets initial timer state and instantiates timer.
