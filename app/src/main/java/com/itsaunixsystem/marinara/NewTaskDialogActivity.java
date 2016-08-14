@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.itsaunixsystem.marinara.orm.Task;
+import com.itsaunixsystem.marinara.orm.TaskStatus;
 
 public class NewTaskDialogActivity extends AppCompatActivity {
 
@@ -18,6 +19,12 @@ public class NewTaskDialogActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_task_dialog);
     }
 
+    /**
+     * create a new task with the name in task_dialog_edit_text if a valid, unused
+     * task name is provided. If an existing task name is given, ensure the existing task
+     * has status ACTIVE and not DELETED
+     * @param view handle to view that was clicked
+     */
     public void onOkButtonClicked(View view) {
         // get task name
         String new_task_name = ((EditText)findViewById(R.id.task_dialog_edit_text))
@@ -31,7 +38,7 @@ public class NewTaskDialogActivity extends AppCompatActivity {
             Toast.makeText(NewTaskDialogActivity.this, "task name already exists", Toast.LENGTH_SHORT).show() ;
         } else {
             // new task name that's valid
-            Task new_task = new Task(new_task_name, Task.ACTIVE_STATUS) ;
+            Task new_task = new Task(new_task_name, TaskStatus.ACTIVE) ;
             new_task.create() ;
             this.finish() ;
         }

@@ -26,14 +26,7 @@ public class Task extends SugarRecord {
     private String name ;
 
     @NotNull
-    public String status ; // TODO: change this to an enum. Don't have setters/getters. If such methods don't do any validation then member might as well be public.
-
-
-    // static constants indicate Task status
-    @Ignore
-    public static final String ACTIVE_STATUS = "ACTIVE" ;
-    @Ignore
-    public static final String DELETED_STATUS = "DELETED" ;
+    public TaskStatus status ;
 
     @Ignore
     public static final long INVALID_TASK_ID_FLAG = -1 ;
@@ -44,7 +37,7 @@ public class Task extends SugarRecord {
 
     public Task() { } // required by SugarORM
 
-    public Task(String name, String status) { this.name = name ; this.status = status ;}
+    public Task(String name, TaskStatus status) { this.name = name ; this.status = status ;}
 
     /****************************** OVERRIDDEN ******************************/
 
@@ -61,7 +54,7 @@ public class Task extends SugarRecord {
             return false ;
         // don't delete task if its id is a foreign key to a pomodoro session
         else if (referencedBySavedPomodoroSessions()) {
-            this.status = DELETED_STATUS ;
+            this.status = TaskStatus.DELETED ;
             this.save() ;
             return false ;
         } else
@@ -79,12 +72,13 @@ public class Task extends SugarRecord {
         } else if (Task.isDeletedTask(this.name)) {
             // task existed previously, but was deleted. Restore it instead of saving this task
             Task existing_task      = Task.getByName(this.name);
-            existing_task.status    = Task.ACTIVE_STATUS;
+            existing_task.status    = TaskStatus.ACTIVE ;
             return existing_task.save();
         } else {
             return this.save() ;
         }
     }
+
     /**
      * NOTE: required so TaskArrayAdapter is able to locate Tasks using
      * ArrayList<Task>::indexOf()
@@ -99,14 +93,14 @@ public class Task extends SugarRecord {
         // cast to Task and compare fields
         Task other_task = (Task) obj ;
         return other_task.name.equals(this.name) &&
-                other_task.status.equals(this.status) &&
+                other_task.status == this.status &&
                 other_task.getId() == this.getId() ;
 
     }
 
     @Override
     public String toString() {
-        return "Task[" + Long.toString(getId()) + ", " + name + ", " + status + "]" ;
+        return "Task[" + Long.toString(getId()) + ", " + name + ", " + status.name() + "]" ;
     }
 
     /****************************** GETTERS ******************************/
@@ -124,7 +118,7 @@ public class Task extends SugarRecord {
     public static ArrayList<Task> getTasks() { return new ArrayList(Task.listAll(Task.class)) ; }
 
     public static ArrayList<Task> getActiveTasks() {
-        return new ArrayList(Task.find(Task.class, "status = ?", ACTIVE_STATUS)) ;
+        return new ArrayList(Task.find(Task.class, "status = ?", TaskStatus.ACTIVE.name())) ;
     }
 
     public static Task getById(long id) { return Task.findById(Task.class, id) ; }
@@ -144,7 +138,7 @@ public class Task extends SugarRecord {
         if (the_task == null)
             return false ;
         else
-            return (the_task.status == Task.ACTIVE_STATUS) ;
+            return (the_task.status == TaskStatus.ACTIVE) ;
     }
 
     public static boolean isDeletedTask(String name) {
@@ -159,6 +153,5 @@ public class Task extends SugarRecord {
     public static boolean taskNameAlreadyExists(String name_to_check) {
         return Task.getByName(name_to_check) != null ;
     }
-
 
 }
