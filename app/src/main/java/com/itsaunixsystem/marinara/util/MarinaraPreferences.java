@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 
 import com.itsaunixsystem.marinara.R;
+import com.itsaunixsystem.marinara.orm.Task;
 
 /**
  * @author: ajdt on 7/1/16.
@@ -30,7 +31,7 @@ public class MarinaraPreferences {
     public final int _TIMER_CALLBACK_INTERVAL_DEFAULT;
     public final int _SESSION_DURATION_MILLISEC_DEFAULT ;
     public final int _BREAK_DURATION_MILLISEC_DEFAULT ;
-    public final long _SELECTED_TASK_ID_DEFAULT = -1 ; // flag, SQLiteDatabase will use non-negative ids
+    public final long _SELECTED_TASK_ID_DEFAULT = Task.INVALID_TASK_ID_FLAG ; 
 
     // class is just a layer of indirection to using sharedPreferences, so it
     // requires a handle to default shared preferences

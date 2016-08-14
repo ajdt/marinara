@@ -14,8 +14,7 @@ import com.itsaunixsystem.marinara.util.TaskArrayAdapter;
 public class ManageTasksActivity extends AppCompatActivity {
 
     // stores Task.id of last clicked item (to be saved in preferences)
-    // NOTE: -1 will never be used as legitimate Task id, safe to use as flag
-    private long _last_clicked_task_id = -1 ;
+    private long _last_clicked_task_id = Task.INVALID_TASK_ID_FLAG ;
 
     /****************************** OVERRIDDEN METHODS  ******************************/
 
@@ -74,7 +73,7 @@ public class ManageTasksActivity extends AppCompatActivity {
     private void saveLastClickedTaskToPreferences() {
 
         // no item has been clicked
-        if (_last_clicked_task_id == -1)
+        if (_last_clicked_task_id == Task.INVALID_TASK_ID_FLAG)
             return ;
 
         MarinaraPreferences.getPrefs(this).setSelectedTaskId(_last_clicked_task_id) ;
