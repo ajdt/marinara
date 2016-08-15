@@ -2,13 +2,9 @@
     <string name="app_name">Marinara</string>
     <string name="action_settings">Settings</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_settings">SettingsActivity</string>
-
-    <string name="hello_world">Hello world!</string>
 
     <!-- TimerActivity strings -->
+    <string name="manage_tasks_menu_item_title">Manage Tasks</string>
 
     <!--###################### Preferences strings ############################-->
     <!-- titles & summaries -->
@@ -31,11 +27,25 @@
     <string name="skip_break">skip_break</string>
     <string name="pomodoro_session_millisec">pomodoro_session_millisec</string>
     <string name="allow_pause_session">pause_pomodoro_session</string>
+    <string name="selected_task_id">selected_task_id</string>
 
 
 
 
     <string name="title_activity_break">BreakActivity</string>
+
+    <!-- ManageTasksActivity -->
+    <string name="title_activity_manage_tasks">ManageTasksActivity</string>
+    <string name="add_task_button_text">Add Task </string>
+
+    <!-- NewTaskDialogActivity -->
+    <string name="title_activity_new_task_dialog">NewTaskDialogActivity</string>
+    <string name="task_dialog_edit_text_hint">task name</string>
+    <string name="task_dialog_ok_button_text">Ok</string>
+
+    <!-- SettingsActivity -->
+    <string name="title_activity_settings">SettingsActivity</string>
+
 
 
 </resources>
