@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.itsaunixsystem.marinara.timer.TimerState;
 import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 
-public class BreakActivity extends TimerActivity {
+public class BreakActivity extends BaseTimerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,11 @@ public class BreakActivity extends TimerActivity {
      */
     @Override
     public TimerState initialState() { return TimerState.RUNNING ; }
+
+    @Override
+    public long getTimerCallbackInterval() {
+        return MarinaraPreferences.getPrefs(this)._TIMER_CALLBACK_INTERVAL_DEFAULT ;
+    }
 
 
 

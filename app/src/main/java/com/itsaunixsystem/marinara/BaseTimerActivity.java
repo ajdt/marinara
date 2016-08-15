@@ -139,6 +139,7 @@ public abstract class BaseTimerActivity extends AppCompatActivity implements Tim
 
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
 
+    // TODO: remove unnecessary abstract methods (getTimerCallbackInterval() ?)
     public abstract long getTimerDuration() ;
     public abstract long getTimerCallbackInterval() ;
     public abstract boolean skipBreaks() ;
