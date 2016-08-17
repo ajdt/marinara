@@ -152,7 +152,7 @@ public class TimerActivity extends BaseTimerActivity
      * the newly created entry in the PomodoroSession table
      */
     private void saveSessionInfoToDatabase() {
-        PomodoroSession session = new PomodoroSession(new Date(), this.getTimerDuration()) ;
+        PomodoroSession session = new PomodoroSession(new Date(), this.getCurrentSessionDuration()) ;
         session.task            = Task.getByName(this.getSelectedTaskName()) ;
 
         session.save() ;
