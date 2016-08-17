@@ -1,6 +1,8 @@
 package com.itsaunixsystem.marinara;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,7 +19,8 @@ import static com.itsaunixsystem.marinara.util.TimeConversionHelper.millisecToTi
  * @description: abstract class implementing timer functionality used
  * by both BreakActivity and TimerActivity
  */
-public abstract class BaseTimerActivity extends AppCompatActivity implements TimerCallback {
+public abstract class BaseTimerActivity extends AppCompatActivity
+        implements TimerCallback, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private PomodoroTimer _timer = null ;
 
@@ -27,6 +30,10 @@ public abstract class BaseTimerActivity extends AppCompatActivity implements Tim
         // NOTE: we're using the layout for TimerActivity because I didn't want
         // to create a new one, and android doesn't have any sort of 'layout inheritance'
         setContentView(R.layout.activity_timer) ;
+
+        // register callback on shared prefs ( want to update timer display on duration pref change)
+        PreferenceManager.getDefaultSharedPreferences(this).
+                registerOnSharedPreferenceChangeListener(this) ;
 
         this.initNewTimerAndUpdateDisplay() ;
     }
@@ -71,6 +78,21 @@ public abstract class BaseTimerActivity extends AppCompatActivity implements Tim
      * callback issued when timer is finished running
      */
     public void onTimerFinish() { this.updateTimerDisplay(0) ; }
+
+    /**
+     * callback implemented to listen for changes to session duration preference. That
+     * way we can update timer countdown display as soon as duration preference is changed.
+     *
+     * @param prefs
+     * @param key
+     */
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        // if session duration changes and we haven't started timer yet, update timer & display
+        if ( key.equals(getResources().getString(R.string.pomodoro_session_millisec)) &&
+                _timer.state() == TimerState.READY) {
+            initNewTimerAndUpdateDisplay() ;
+        }
+    }
 
     /****************************** UI UPDATING ******************************/
 
