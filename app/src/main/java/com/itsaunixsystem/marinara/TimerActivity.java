@@ -2,21 +2,16 @@ package com.itsaunixsystem.marinara;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.itsaunixsystem.marinara.orm.Task;
-import com.itsaunixsystem.marinara.timer.PomodoroTimer;
-import com.itsaunixsystem.marinara.timer.TimerCallback;
 import com.itsaunixsystem.marinara.timer.TimerState;
 import com.itsaunixsystem.marinara.util.AndroidHelper;
 import com.itsaunixsystem.marinara.util.MarinaraPreferences;
-import static com.itsaunixsystem.marinara.util.TimeConversionHelper.millisecToTimeString ;
 
 
 public class TimerActivity extends BaseTimerActivity
@@ -109,7 +104,7 @@ public class TimerActivity extends BaseTimerActivity
      */
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if ( key.equals(getResources().getString(R.string.pomodoro_session_millisec)) ) {
-            super.resetTimerAndUpdateDisplay() ;
+            super.initNewTimerAndUpdateDisplay() ;
         }
     }
 

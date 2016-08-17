@@ -21,7 +21,6 @@ public abstract class BaseTimerActivity extends AppCompatActivity implements Tim
 
     private PomodoroTimer _timer = null ;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +28,7 @@ public abstract class BaseTimerActivity extends AppCompatActivity implements Tim
         // to create a new one, and android doesn't have any sort of 'layout inheritance'
         setContentView(R.layout.activity_timer) ;
 
-        this.initTimer() ;
+        this.initNewTimerAndUpdateDisplay() ;
     }
 
     /****************************** TIMER AND UI CALLBACKS ******************************/
@@ -52,7 +51,7 @@ public abstract class BaseTimerActivity extends AppCompatActivity implements Tim
                 _timer.resume() ;
                 break ;
             case DONE:
-                resetTimerAndUpdateDisplay();
+                initNewTimerAndUpdateDisplay();
                 break ;
         }
 
@@ -117,27 +116,23 @@ public abstract class BaseTimerActivity extends AppCompatActivity implements Tim
      * call getTimerDuration() to get the latest duration value (preferences may have changed),
      * reset the timer with this (possibly) new duration and update the display to show the new duration
      */
-    protected void resetTimerAndUpdateDisplay() {
-        long new_duration = this.getTimerDuration() ;
-        _timer.reset(new_duration) ;
-        updateTimerDisplay(new_duration) ;
-    }
+    protected void initNewTimerAndUpdateDisplay() {
+        // new timer
+        long duration   = this.getTimerDuration() ;
+        _timer          = new PomodoroTimer(this, duration, this.getTimerCallbackInterval()) ;
 
-    /****************************** HELPERS ******************************/
-
-    /**
-     * Should only be called from onCreate(). Sets initial timer state and instantiates timer.
-     */
-    public void initTimer() {
-        _timer = new PomodoroTimer(this, this.getTimerDuration(), this.getTimerCallbackInterval()) ;
-
-        // NOTE: if display not updated here, timer will appear to countdown one second less than
-        // desired duration
-        this.updateTimerDisplay(this.getTimerDuration()) ;
+        // display
+        updateTimerDisplay(duration) ;
 
         // check if timer is to be initialized in running state and start it if so
         if (this.initialState() == TimerState.RUNNING)
             _timer.start() ;
+    }
+
+    /****************************** HELPERS ******************************/
+
+    public long getCurrentSessionDuration() {
+        return _timer.duration() ;
     }
 
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
