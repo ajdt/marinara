@@ -10,16 +10,18 @@ import java.util.Date;
  */
 public class PomodoroSession extends SugarRecord {
 
-    private Date start_time ;
+    // NOTE: all fields are made public b/c I am not doing any error checking on values assigned
+    // to fields so setters/getters seemed redundant
+    public Date completion_date ;
 
-    private long duration ;
+    public long duration ;
 
-    private Task task ;
+    public Task task ;
 
     public PomodoroSession() {}
 
     public PomodoroSession(Date started_at, long duration) {
-        this.start_time = new Date(started_at.getTime()) ;
-        this.duration = duration ;
+        this.completion_date    = new Date(started_at.getTime()) ;
+        this.duration           = duration ;
     }
 }
