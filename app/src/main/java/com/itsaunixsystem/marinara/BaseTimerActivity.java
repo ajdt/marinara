@@ -110,11 +110,14 @@ public abstract class BaseTimerActivity extends AppCompatActivity implements Tim
         }
     }
 
+    // TODO: below method is protected b/c TimerActivity uses it to update the timer display when
+    // The pomodoro session duration changes (see TimerActivity.onSharedPreferenceChanged()
+    // Can we do something better than exposing the method to the entire package?
     /**
      * call getTimerDuration() to get the latest duration value (preferences may have changed),
      * reset the timer with this (possibly) new duration and update the display to show the new duration
      */
-    private void resetTimerAndUpdateDisplay() {
+    protected void resetTimerAndUpdateDisplay() {
         long new_duration = this.getTimerDuration() ;
         _timer.reset(new_duration) ;
         updateTimerDisplay(new_duration) ;

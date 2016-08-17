@@ -19,20 +19,15 @@ import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 import static com.itsaunixsystem.marinara.util.TimeConversionHelper.millisecToTimeString ;
 
 
-public class TimerActivity extends AppCompatActivity
-        implements TimerCallback, SharedPreferences.OnSharedPreferenceChangeListener {
-
-    private PomodoroTimer _timer = null ;
-
+public class TimerActivity extends BaseTimerActivity
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timer) ;
-
+        // Note: content view set by BaseTimerActivity
         // load preferences and initialize timer/callbacks
         MarinaraPreferences prefs = MarinaraPreferences.getPrefs(this) ;
-        this.initTimer() ;
         this.initCallbacks() ;
     }
 
@@ -94,44 +89,10 @@ public class TimerActivity extends AppCompatActivity
     }
 
     /**
-     * handle click event from timer image button used to start, pause, resume & restart
-     * @param clicked_view
-     */
-    public void onTimerButtonClicked(View clicked_view) {
-        switch (_timer.state()) {
-            case READY:
-                _timer.start() ;
-                break ;
-            case RUNNING:
-                if (!this.allowPause())
-                    return ;
-                _timer.pause() ;
-                break ;
-            case PAUSED:
-                _timer.resume() ;
-                break ;
-            case DONE:
-                resetTimerAndUpdateDisplay();
-                break ;
-        }
-
-        // update timer image view to reflect changes in state
-        this.updateTimerButtonImage() ;
-    }
-
-    /**
-     * callback that runs every timer tick.
-     * @param millisec_remaining
-     */
-    public void onTimerTick(long millisec_remaining) {
-        this.updateTimerCountdown(millisec_remaining);
-    }
-
-    /**
      * callback updates UI and changes timer_state to done
      */
     public void onTimerFinish() {
-        this.updateTimerDisplay(0) ;
+        super.onTimerFinish() ;
 
         // break time?
         if (!this.skipBreaks()) {
@@ -148,7 +109,7 @@ public class TimerActivity extends AppCompatActivity
      */
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if ( key.equals(getResources().getString(R.string.pomodoro_session_millisec)) ) {
-            this.resetTimerAndUpdateDisplay() ;
+            super.resetTimerAndUpdateDisplay() ;
         }
     }
 
@@ -173,51 +134,6 @@ public class TimerActivity extends AppCompatActivity
 
     /****************************** UI UPDATING ******************************/
 
-    private void updateTimerDisplay(long millisec_remaining) {
-        updateTimerCountdown(millisec_remaining) ;
-        updateTimerButtonImage() ;
-    }
-    /**
-     * update countdown display with remaining time
-     * @param millisec_remaining
-     */
-    private void updateTimerCountdown(long millisec_remaining) {
-        TextView timer_tv = (TextView)findViewById(R.id.timer_tv) ;
-        timer_tv.setText(millisecToTimeString(millisec_remaining));
-    }
-
-    /**
-     * update timer button image depending on timer's state
-     */
-    private void updateTimerButtonImage() {
-        ImageView timer_iv = (ImageView)findViewById(R.id.timer_iv) ;
-
-        switch (_timer.state()) {
-            case READY:
-                timer_iv.setImageResource(R.drawable.ready_600_200) ;
-                break ;
-            case RUNNING:
-                timer_iv.setImageResource(R.drawable.running_600_200) ;
-                break ;
-            case PAUSED:
-                timer_iv.setImageResource(R.drawable.paused_600_200) ;
-                break ;
-            case DONE:
-                timer_iv.setImageResource(R.drawable.done_600_200) ;
-                break ;
-        }
-    }
-
-    /**
-     * call getTimerDuration() to get the latest duration value (preferences may have changed),
-     * reset the timer with this (possibly) new duration and update the display to show the new duration
-     */
-    private void resetTimerAndUpdateDisplay() {
-        long new_duration = this.getTimerDuration() ;
-        _timer.reset(new_duration) ;
-        updateTimerDisplay(new_duration) ;
-    }
-
     /**
      * set the text of task_tv to the currently selected task's name
      */
@@ -232,21 +148,6 @@ public class TimerActivity extends AppCompatActivity
         AndroidHelper.launchActivity(this, BreakActivity.class) ;
     }
 
-
-    /**
-     * Should only be called from onCreate(). Sets initial timer state and instantiates timer.
-     */
-    public void initTimer() {
-        _timer = new PomodoroTimer(this, this.getTimerDuration(), this.getTimerCallbackInterval()) ;
-
-        // NOTE: if display not updated here, timer will appear to countdown one second less than
-        // desired duration
-        this.updateTimerDisplay(this.getTimerDuration()) ;
-
-        // check if timer is to be initialized in running state and start it if so
-        if (this.initialState() == TimerState.RUNNING)
-            _timer.start() ;
-    }
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
     // NOTE: MarinaraPreferences is called every time a preference is needed. This guarantees
     // we are always using the latest value, and saves the trouble of having to save local copies
