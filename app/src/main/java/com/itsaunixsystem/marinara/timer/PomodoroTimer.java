@@ -4,7 +4,7 @@ import android.os.CountDownTimer;
 
 /**
  * @author ajdt on 6/22/16.
- * @description A wrapper for CountDownTimer that allows us to pause/start/reset the timer
+ * @description A wrapper for CountDownTimer that allows us to pause the timer
  */
 public class PomodoroTimer {
 
@@ -13,6 +13,7 @@ public class PomodoroTimer {
     private CountDownTimer _countdown_timer         = null;
 
     private long            _remaining_millisec ;
+    private final long      _SESSION_DURATION ;
     private final long      _CALLBACK_INTERVAL_MILLISEC ;
 
     private TimerState _state ;
@@ -21,6 +22,7 @@ public class PomodoroTimer {
 
     public PomodoroTimer(TimerCallback callback, long duration_millis, long interval_millis) {
         _CALLBACK_INTERVAL_MILLISEC = interval_millis ;
+        _SESSION_DURATION           = duration_millis ;
         _callback_obj               = callback ;
 
         this.initNewCountDownTimer(duration_millis);
@@ -101,17 +103,9 @@ public class PomodoroTimer {
         _state = TimerState.RUNNING ;
     }
 
-    /**
-     *
-     * @param millis time to reset clock to in milliseconds
-     */
-    public void reset(long millis) {
-        this.deleteCountDownTimer() ;
-        this.initNewCountDownTimer(millis) ;
-    }
-
     /****************************** SETTERS/GETTERS ******************************/
 
     public TimerState state() { return _state ; }
+    public long duration() { return _SESSION_DURATION ; }
 
 }

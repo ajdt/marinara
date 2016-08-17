@@ -7,13 +7,7 @@ import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 
 public class BreakActivity extends BaseTimerActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // NOTE: uses same layout as TimerActivity since android doesn't support layout 'inheritance'
-        setContentView(R.layout.activity_timer);
-        this.initTimer() ;
-    }
+    // NOTE: BaseTimerActivity.onCreate() is sufficient. Not overridden
 
     @Override
     public void onTimerFinish() {
@@ -42,12 +36,5 @@ public class BreakActivity extends BaseTimerActivity {
      */
     @Override
     public TimerState initialState() { return TimerState.RUNNING ; }
-
-    @Override
-    public long getTimerCallbackInterval() {
-        return MarinaraPreferences.getPrefs(this)._TIMER_CALLBACK_INTERVAL_DEFAULT ;
-    }
-
-
 
 }

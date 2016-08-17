@@ -2,25 +2,23 @@ package com.itsaunixsystem.marinara;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.itsaunixsystem.marinara.orm.PomodoroSession;
 import com.itsaunixsystem.marinara.orm.Task;
-import com.itsaunixsystem.marinara.timer.PomodoroTimer;
-import com.itsaunixsystem.marinara.timer.TimerCallback;
+import com.itsaunixsystem.marinara.orm.TaskStatus;
 import com.itsaunixsystem.marinara.timer.TimerState;
 import com.itsaunixsystem.marinara.util.AndroidHelper;
 import com.itsaunixsystem.marinara.util.MarinaraPreferences;
-import static com.itsaunixsystem.marinara.util.TimeConversionHelper.millisecToTimeString ;
+
+import java.util.Date;
 
 
-public class TimerActivity extends BaseTimerActivity
-        implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class TimerActivity extends BaseTimerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +61,6 @@ public class TimerActivity extends BaseTimerActivity
     /****************************** TIMER AND UI CALLBACKS ******************************/
 
     private void initCallbacks() {
-        // TimerActivity uses callback to update countdown when duration preference changes
-        PreferenceManager.getDefaultSharedPreferences(this).
-                registerOnSharedPreferenceChangeListener(this) ;
 
         // long-pressing text view displaying task will launch ManageTasksActivity
         this.setLongPressListenerForTaskTextView() ;
@@ -93,23 +88,11 @@ public class TimerActivity extends BaseTimerActivity
      */
     public void onTimerFinish() {
         super.onTimerFinish() ;
+        saveSessionInfoToDatabase() ;
 
         // break time?
         if (!this.skipBreaks()) {
             launchBreak() ;
-        }
-    }
-
-    /**
-     * callback implemented to listen for changes to session duration preference. That
-     * way we can update timer countdown display as soon as duration preference is changed.
-     *
-     * @param prefs
-     * @param key
-     */
-    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        if ( key.equals(getResources().getString(R.string.pomodoro_session_millisec)) ) {
-            super.resetTimerAndUpdateDisplay() ;
         }
     }
 
@@ -148,15 +131,23 @@ public class TimerActivity extends BaseTimerActivity
         AndroidHelper.launchActivity(this, BreakActivity.class) ;
     }
 
+    /**
+     * create database entry for this session. Assign the task currently selected to
+     * the newly created entry in the PomodoroSession table
+     */
+    private void saveSessionInfoToDatabase() {
+        PomodoroSession session = new PomodoroSession(new Date(), this.getCurrentSessionDuration()) ;
+        session.task            = Task.getByName(this.getSelectedTaskName()) ;
+
+        session.save() ;
+    }
+
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
     // NOTE: MarinaraPreferences is called every time a preference is needed. This guarantees
     // we are always using the latest value, and saves the trouble of having to save local copies
     // of the preference values (and implementing onSharedPreferenceChangeListener in this class too).
 
     public long getTimerDuration() { return MarinaraPreferences.getPrefs(this).timerMillisec() ;}
-    public long getTimerCallbackInterval() {
-        return MarinaraPreferences.getPrefs(this)._TIMER_CALLBACK_INTERVAL_DEFAULT;
-    }
     public boolean skipBreaks() { return MarinaraPreferences.getPrefs(this).skipBreak() ; }
     public boolean allowPause() { return MarinaraPreferences.getPrefs(this).allowPauseSessions() ; }
 

@@ -1,6 +1,8 @@
 package com.itsaunixsystem.marinara;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 import com.itsaunixsystem.marinara.timer.PomodoroTimer;
 import com.itsaunixsystem.marinara.timer.TimerCallback;
 import com.itsaunixsystem.marinara.timer.TimerState;
+import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 
 import static com.itsaunixsystem.marinara.util.TimeConversionHelper.millisecToTimeString;
 
@@ -17,10 +20,10 @@ import static com.itsaunixsystem.marinara.util.TimeConversionHelper.millisecToTi
  * @description: abstract class implementing timer functionality used
  * by both BreakActivity and TimerActivity
  */
-public abstract class BaseTimerActivity extends AppCompatActivity implements TimerCallback {
+public abstract class BaseTimerActivity extends AppCompatActivity
+        implements TimerCallback, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private PomodoroTimer _timer = null ;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,11 @@ public abstract class BaseTimerActivity extends AppCompatActivity implements Tim
         // to create a new one, and android doesn't have any sort of 'layout inheritance'
         setContentView(R.layout.activity_timer) ;
 
-        this.initTimer() ;
+        // register callback on shared prefs ( want to update timer display on duration pref change)
+        PreferenceManager.getDefaultSharedPreferences(this).
+                registerOnSharedPreferenceChangeListener(this) ;
+
+        this.initNewTimerAndUpdateDisplay() ;
     }
 
     /****************************** TIMER AND UI CALLBACKS ******************************/
@@ -52,7 +59,7 @@ public abstract class BaseTimerActivity extends AppCompatActivity implements Tim
                 _timer.resume() ;
                 break ;
             case DONE:
-                resetTimerAndUpdateDisplay();
+                initNewTimerAndUpdateDisplay();
                 break ;
         }
 
@@ -72,6 +79,21 @@ public abstract class BaseTimerActivity extends AppCompatActivity implements Tim
      * callback issued when timer is finished running
      */
     public void onTimerFinish() { this.updateTimerDisplay(0) ; }
+
+    /**
+     * callback implemented to listen for changes to session duration preference. That
+     * way we can update timer countdown display as soon as duration preference is changed.
+     *
+     * @param prefs
+     * @param key
+     */
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        // if session duration changes and we haven't started timer yet, update timer & display
+        if ( key.equals(getResources().getString(R.string.pomodoro_session_millisec)) &&
+                _timer.state() == TimerState.READY) {
+            initNewTimerAndUpdateDisplay() ;
+        }
+    }
 
     /****************************** UI UPDATING ******************************/
 
@@ -110,41 +132,36 @@ public abstract class BaseTimerActivity extends AppCompatActivity implements Tim
         }
     }
 
-    // TODO: below method is protected b/c TimerActivity uses it to update the timer display when
-    // The pomodoro session duration changes (see TimerActivity.onSharedPreferenceChanged()
-    // Can we do something better than exposing the method to the entire package?
     /**
      * call getTimerDuration() to get the latest duration value (preferences may have changed),
      * reset the timer with this (possibly) new duration and update the display to show the new duration
      */
-    protected void resetTimerAndUpdateDisplay() {
-        long new_duration = this.getTimerDuration() ;
-        _timer.reset(new_duration) ;
-        updateTimerDisplay(new_duration) ;
-    }
+    private void initNewTimerAndUpdateDisplay() {
+        // new timer
+        long duration   = this.getTimerDuration() ;
+        _timer          = new PomodoroTimer(this, duration, this.getTimerCallbackInterval()) ;
 
-    /****************************** HELPERS ******************************/
-
-    /**
-     * Should only be called from onCreate(). Sets initial timer state and instantiates timer.
-     */
-    public void initTimer() {
-        _timer = new PomodoroTimer(this, this.getTimerDuration(), this.getTimerCallbackInterval()) ;
-
-        // NOTE: if display not updated here, timer will appear to countdown one second less than
-        // desired duration
-        this.updateTimerDisplay(this.getTimerDuration()) ;
+        // display
+        updateTimerDisplay(duration) ;
 
         // check if timer is to be initialized in running state and start it if so
         if (this.initialState() == TimerState.RUNNING)
             _timer.start() ;
     }
 
+    /****************************** HELPERS ******************************/
+
+    public long getCurrentSessionDuration() {
+        return _timer.duration() ;
+    }
+
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
 
-    // TODO: remove unnecessary abstract methods (getTimerCallbackInterval() ?)
+    public long getTimerCallbackInterval() {
+        return MarinaraPreferences.getPrefs(this)._TIMER_CALLBACK_INTERVAL_DEFAULT ;
+    }
+
     public abstract long getTimerDuration() ;
-    public abstract long getTimerCallbackInterval() ;
     public abstract boolean skipBreaks() ;
     public abstract boolean allowPause() ;
     public abstract TimerState initialState() ;
