@@ -148,9 +148,6 @@ public class TimerActivity extends BaseTimerActivity {
     // of the preference values (and implementing onSharedPreferenceChangeListener in this class too).
 
     public long getTimerDuration() { return MarinaraPreferences.getPrefs(this).timerMillisec() ;}
-    public long getTimerCallbackInterval() {
-        return MarinaraPreferences.getPrefs(this)._TIMER_CALLBACK_INTERVAL_DEFAULT;
-    }
     public boolean skipBreaks() { return MarinaraPreferences.getPrefs(this).skipBreak() ; }
     public boolean allowPause() { return MarinaraPreferences.getPrefs(this).allowPauseSessions() ; }
 

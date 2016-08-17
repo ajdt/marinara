@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.itsaunixsystem.marinara.timer.PomodoroTimer;
 import com.itsaunixsystem.marinara.timer.TimerCallback;
 import com.itsaunixsystem.marinara.timer.TimerState;
+import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 
 import static com.itsaunixsystem.marinara.util.TimeConversionHelper.millisecToTimeString;
 
@@ -131,14 +132,11 @@ public abstract class BaseTimerActivity extends AppCompatActivity
         }
     }
 
-    // TODO: below method is protected b/c TimerActivity uses it to update the timer display when
-    // The pomodoro session duration changes (see TimerActivity.onSharedPreferenceChanged()
-    // Can we do something better than exposing the method to the entire package?
     /**
      * call getTimerDuration() to get the latest duration value (preferences may have changed),
      * reset the timer with this (possibly) new duration and update the display to show the new duration
      */
-    protected void initNewTimerAndUpdateDisplay() {
+    private void initNewTimerAndUpdateDisplay() {
         // new timer
         long duration   = this.getTimerDuration() ;
         _timer          = new PomodoroTimer(this, duration, this.getTimerCallbackInterval()) ;
@@ -159,9 +157,11 @@ public abstract class BaseTimerActivity extends AppCompatActivity
 
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
 
-    // TODO: remove unnecessary abstract methods (getTimerCallbackInterval() ?)
+    public long getTimerCallbackInterval() {
+        return MarinaraPreferences.getPrefs(this)._TIMER_CALLBACK_INTERVAL_DEFAULT ;
+    }
+
     public abstract long getTimerDuration() ;
-    public abstract long getTimerCallbackInterval() ;
     public abstract boolean skipBreaks() ;
     public abstract boolean allowPause() ;
     public abstract TimerState initialState() ;

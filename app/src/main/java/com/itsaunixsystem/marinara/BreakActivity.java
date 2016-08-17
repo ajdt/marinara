@@ -37,11 +37,4 @@ public class BreakActivity extends BaseTimerActivity {
     @Override
     public TimerState initialState() { return TimerState.RUNNING ; }
 
-    @Override
-    public long getTimerCallbackInterval() {
-        return MarinaraPreferences.getPrefs(this)._TIMER_CALLBACK_INTERVAL_DEFAULT ;
-    }
-
-
-
 }
