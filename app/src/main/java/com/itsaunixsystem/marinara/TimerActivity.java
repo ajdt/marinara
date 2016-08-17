@@ -8,10 +8,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.itsaunixsystem.marinara.orm.PomodoroSession;
 import com.itsaunixsystem.marinara.orm.Task;
 import com.itsaunixsystem.marinara.timer.TimerState;
 import com.itsaunixsystem.marinara.util.AndroidHelper;
 import com.itsaunixsystem.marinara.util.MarinaraPreferences;
+
+import java.util.Date;
 
 
 public class TimerActivity extends BaseTimerActivity
@@ -88,6 +91,7 @@ public class TimerActivity extends BaseTimerActivity
      */
     public void onTimerFinish() {
         super.onTimerFinish() ;
+        saveSessionInfoToDatabase() ;
 
         // break time?
         if (!this.skipBreaks()) {
@@ -141,6 +145,17 @@ public class TimerActivity extends BaseTimerActivity
 
     private void launchBreak() {
         AndroidHelper.launchActivity(this, BreakActivity.class) ;
+    }
+
+    /**
+     * create database entry for this session. Assign the task currently selected to
+     * the newly created entry in the PomodoroSession table
+     */
+    private void saveSessionInfoToDatabase() {
+        PomodoroSession session = new PomodoroSession(new Date(), this.getTimerDuration()) ;
+        session.task            = Task.getByName(this.getSelectedTaskName()) ;
+
+        session.save() ;
     }
 
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
