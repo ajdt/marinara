@@ -84,6 +84,14 @@ public class TimerActivity extends BaseTimerActivity {
     }
 
     /**
+     * callback for "stats" option in options menu. Launches StatsActivity
+     * @param item
+     */
+    public void onStatsMenuItemClicked(MenuItem item) {
+        AndroidHelper.launchActivity(this, StatsActivity.class) ;
+    }
+
+    /**
      * callback updates UI and changes timer_state to done
      */
     public void onTimerFinish() {
