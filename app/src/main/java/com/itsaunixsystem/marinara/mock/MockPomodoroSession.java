@@ -10,6 +10,10 @@ import java.util.Date;
  * @description: A class used as a mock object for PomodoroSession. Stats are generated
  * from PomodoroSession objects only, so this mock object saves a task name instead of
  * a reference to a Task object (like PomodoroSession does).
+ *
+ * NOTE: this class was created because I didn't want to introduce a mocking framework
+ * and I didn't want to use PomodoroSession objects as mock objects to avoid accidentally
+ * saving to the database.
  */
 public class MockPomodoroSession implements Session {
 

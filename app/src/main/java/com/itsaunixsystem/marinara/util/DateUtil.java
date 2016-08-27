@@ -49,7 +49,7 @@ public class DateUtil {
 
     /**
      * Date(1999, 11, 7, 15, 33, 23), [year, month, day, hour, min, sec] --> "1999:11:15"
-     * 
+     *
      * @param the_date
      * @return string representing calendar date of paramater Date
      */
