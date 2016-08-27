@@ -19,20 +19,33 @@ import java.util.List;
  */
 public class LineChartStats implements SessionStats {
 
-    private ArrayList<Session> all_sessions ;
-    private ArrayList<String> labels ;
-    private ArrayList<Entry> entries ;
+    // data members
+    private ArrayList<Session> _sessions;
+    private ArrayList<String> _labels;
+    private ArrayList<Entry> _entries;
+
 
     public LineChartStats(List<Session> sessions) {
-        all_sessions = new ArrayList<Session>(sessions) ;
-
+        _sessions = new ArrayList<Session>(sessions) ;
         computeEntries(sessions) ;
-
     }
 
-    public ArrayList<Entry> getEntries() { return entries ; }
-    public ArrayList<String> getLabels() { return labels ; }
+    /****************************** GETTERS ******************************/
+    public ArrayList<Entry> getEntries() { return new ArrayList<Entry>(_entries) ; }
+    public ArrayList<String> getLabels() { return new ArrayList<String>(_labels) ; }
+    public ArrayList<Session> getOriginalSessions() { return new ArrayList<Session>(_sessions) ; }
 
+    /****************************** HELPERS ******************************/
+    /**
+     * Group sessions by calendar date, create a list of Entry(date_number, number_of_sessions)
+     * per calendary date
+     *
+     * date_number is the number of days elapsed between the given calendar date and the
+     * chronologically first date. It's a simple way to assign numeric values to the dates
+     * which is required by MPAndroidChart's Entry objects.
+     *
+     * @param sessions
+     */
     private void computeEntries(List<Session> sessions) {
 
         // count the number of sessions for every calendar day
@@ -54,16 +67,16 @@ public class LineChartStats implements SessionStats {
         Date first_date = date_list.get(0) ;
 
 
-        labels = new ArrayList<String>() ;
-        entries = new ArrayList<Entry>() ;
+        _labels = new ArrayList<String>() ;
+        _entries = new ArrayList<Entry>() ;
 
         // for each day: use the calendar date as a label
         // and create an entry using days elapsed (since first day) and number of sessions on
         // that day.
         for (Date date: date_list) {
-            entries.add(new Entry(DateUtil.daysBetween(first_date, date) + 1,
+            _entries.add(new Entry(DateUtil.daysBetween(first_date, date) + 1,
                     day_to_num_sessions.get(date))) ;
-            labels.add(DateUtil.dateObjectToDateString(date)) ;
+            _labels.add(DateUtil.toCalendarDateString(date)) ;
         }
 
     }

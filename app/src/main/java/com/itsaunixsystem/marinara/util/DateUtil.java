@@ -4,7 +4,6 @@ import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -14,30 +13,48 @@ import java.util.Date;
 public class DateUtil {
 
     // static members
-    private static SimpleDateFormat __date_formatter = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss") ;
-    private static SimpleDateFormat __string_formatter = new SimpleDateFormat("yyyy:MM:dd") ;
+    private static SimpleDateFormat __date_time_formatter =
+            new SimpleDateFormat("yyyy:MM:dd HH:mm:ss") ;
+    private static SimpleDateFormat __date_formatter = new SimpleDateFormat("yyyy:MM:dd") ;
 
 
+    /**
+     *
+     * @param to_check
+     * @param start_date
+     * @param end_date
+     * @return true if date is within the inclusive range
+     */
     public static boolean dateWithinRange(Date to_check, Date start_date, Date end_date) {
-        return to_check.compareTo(start_date) >= 0 && to_check.compareTo(end_date) <= 0 ;
+        return !to_check.before(start_date) && !to_check.after(end_date) ;
     }
 
+    /**
+     *
+     * @param date_string a string in the format "yyyy:MM:dd HH:mm:ss"
+     * @return Date object representing parsed date/time or null if cannot parse
+     */
     public static Date parseDateString(String date_string) {
         Date parsed_date ;
 
         try {
-            parsed_date = __date_formatter.parse(date_string) ;
+            parsed_date = __date_time_formatter.parse(date_string) ;
         } catch (ParseException except) {
-            // NOTE: for now, just use current date on failure.
             Log.d(DateUtil.class.getSimpleName(), "invalid date string:" + date_string) ;
-            parsed_date = new Date() ;
+            parsed_date = null ;
         }
 
         return parsed_date ;
     }
 
-    public static String dateObjectToDateString(Date the_date) {
-        return __string_formatter.format(the_date) ;
+    /**
+     * Date(1999, 11, 7, 15, 33, 23), [year, month, day, hour, min, sec] --> "1999:11:15"
+     * 
+     * @param the_date
+     * @return string representing calendar date of paramater Date
+     */
+    public static String toCalendarDateString(Date the_date) {
+        return __date_formatter.format(the_date) ;
     }
 
     /**
@@ -59,7 +76,7 @@ public class DateUtil {
      */
     public static Date canonicalize(Date the_date) {
         try {
-            return __string_formatter.parse(__string_formatter.format(the_date)) ;
+            return __date_formatter.parse(__date_formatter.format(the_date)) ;
         } catch(ParseException except) {
 
             // TODO: uses deprecated methods. java.util.Date is kind of a mess anyway.
