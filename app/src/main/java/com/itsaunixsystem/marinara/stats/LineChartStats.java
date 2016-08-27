@@ -62,7 +62,9 @@ public class LineChartStats implements SessionStats {
         }
 
         // sort the distinct calendar days and find the first day
-        List<Date> date_list = Arrays.asList((Date[]) day_to_num_sessions.keySet().toArray()) ;
+        ArrayList<Date> date_list = new ArrayList<Date>() ;
+        for (Date some_date : day_to_num_sessions.keySet())
+            date_list.add(some_date) ;
         Collections.sort(date_list) ;
         Date first_date = date_list.get(0) ;
 
