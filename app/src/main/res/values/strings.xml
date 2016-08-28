@@ -45,7 +45,16 @@
 
     <!-- SettingsActivity -->
     <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- StatsActivity -->
     <string name="title_activity_stats">StatsActivity</string>
+    <string name="selected_time_interval_text">Time Period:</string>
+    <string-array name="time_intervals_array">
+        <item>Today</item>
+        <item>This Week</item>
+        <item>This Month</item>
+    </string-array>
+
 
 
 
