@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -31,7 +30,7 @@ import java.util.List;
 
 public class StatsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    String[] _time_intervals ;
+    String[] _spinner_time_intervals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,39 +43,14 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
         spinner.setOnItemSelectedListener(this) ;
 
         // load time interval and create graphs
-        _time_intervals = getResources().getStringArray(R.array.time_intervals_array) ;
+        _spinner_time_intervals = getResources().getStringArray(R.array.time_intervals_array) ;
         createGraphs() ;
     }
 
-    // TODO: rewrite this method to use DB data instead of mock data
-    private List<Session> getSessions() {
-        Spinner spinner = (Spinner)findViewById(R.id.selected_time_spinner) ;
-        String selected = _time_intervals[spinner.getSelectedItemPosition()] ;
-
-        // TODO: replace with DateUtil.todayCanonicalized(). Hardcoded date to use mock sessions
-        Date today = DateUtil.parseDateString("2016:08:18 15:11:23") ;
-        MockSessionsLoader session_loader = new MockSessionsLoader() ;
-
-        if (selected.equals(this.getString(R.string.today_string))) {
-            return session_loader.getSessionsInRange(today, today) ;
-        } else if (selected.equals(this.getString(R.string.this_week_string))) {
-            DateRange range = DateUtil.getWeekRangeFromDate(today) ;
-            Log.d("blah", "date range:" + DateUtil.toCalendarDateString(range.start())
-            + " to " + DateUtil.toCalendarDateString(range.stop())) ;
-            return session_loader.getSessionsInRange(range.start(), range.stop()) ;
-        } else if (selected.equals(this.getString(R.string.this_month_string))) {
-            DateRange range = DateUtil.getMonthRangeFromDate(today) ;
-            Log.d("blah", "month date range:" + DateUtil.toCalendarDateString(range.start())
-                    + " to " + DateUtil.toCalendarDateString(range.stop())) ;
-            return session_loader.getSessionsInRange(range.start(), range.stop()) ;
-        } else {
-            return session_loader.getAllSessions() ;
-        }
-    }
-
+    /****************************** GRAPH CREATION ******************************/
     private void createGraphs() {
         // get sessions
-        List<Session> sessions = this.getSessions() ;
+        List<Session> sessions = this.getSessionsForSelectedInterval() ;
 
         createLineChart(sessions) ;
         createPieChart(sessions) ;
@@ -88,12 +62,13 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
         ArrayList<Entry> entries = stats_obj.getEntries() ;
 
         // create data and dataset objects for entries
-        LineDataSet data_set = new LineDataSet(entries, "sessions per day") ; // TODO: strings.xml
+        LineDataSet data_set = new LineDataSet(entries,
+                this.getString(R.string.line_chart_description)) ;
         LineData data = new LineData(data_set) ;
 
-        // set line chart data
+        // set line chart data and display it
         LineChart chart = (LineChart)findViewById(R.id.line_chart) ;
-        chart.setDescription("sessions per day") ;
+        chart.setDescription(this.getString(R.string.line_chart_description)) ;
         chart.setData(data) ;
         chart.invalidate() ;
     }
@@ -104,19 +79,29 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
         ArrayList<PieEntry> entries = pie_stats.getEntries() ;
 
         // make data sets
-        PieDataSet pie_data_set = new PieDataSet(entries, "sessions per task") ;
+        PieDataSet pie_data_set = new PieDataSet(entries,
+                this.getString(R.string.pie_chart_description)) ;
         pie_data_set.setColors(ColorTemplate.MATERIAL_COLORS) ; // set colors
         PieData pie_data = new PieData(pie_data_set) ;
 
         // add data sets to pie chart object
         PieChart pie_chart = (PieChart)findViewById(R.id.pie_chart) ;
         pie_chart.setData(pie_data) ;
-        pie_chart.setDescription("sessions per task") ;
+        pie_chart.setDescription(this.getString(R.string.pie_chart_description)) ;
 
         // draw chart
         pie_chart.invalidate() ;
     }
 
+    /****************************** SPINNER CALLBACKS ******************************/
+
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        createGraphs() ;
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) { }
+
+    /****************************** HELPERS ******************************/
 
     private void initSelectedTimeSpinner() {
         // create adapter and initialize with time interval array
@@ -129,14 +114,35 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
         // add adapter to spinner and set first item to selected
         Spinner spinner = (Spinner)findViewById(R.id.selected_time_spinner) ;
         spinner.setAdapter(adapter) ;
-        spinner.setSelection(0) ; // set first to selected
-
-
+        spinner.setSelection(0) ;
     }
 
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        createGraphs() ;
-    }
+    // TODO: rewrite this method to use DB data instead of mock data
+    private List<Session> getSessionsForSelectedInterval() {
+        // get selected spinner item
+        Spinner spinner = (Spinner)findViewById(R.id.selected_time_spinner) ;
+        String selected = _spinner_time_intervals[spinner.getSelectedItemPosition()] ;
 
-    public void onNothingSelected(AdapterView<?> parent) { }
+        // TODO: replace with DateUtil.todayCanonicalized(). Hardcoded date to use mock sessions
+        // get today's date and sessions loader
+        Date today = DateUtil.canonicalize(DateUtil.parseDateString("2016:08:18 15:11:23")) ;
+        MockSessionsLoader session_loader = new MockSessionsLoader() ;
+
+        // obtain range based on selected time interval
+        DateRange range ;
+        if (selected.equals(this.getString(R.string.today_string)))
+            range = new DateRange(today, today) ;
+        else if (selected.equals(this.getString(R.string.this_week_string)))
+            range = DateUtil.getWeekRangeFromDate(today) ;
+        else if (selected.equals(this.getString(R.string.this_month_string)))
+            range = DateUtil.getMonthRangeFromDate(today) ;
+        else
+            range = null ;
+
+        // return sessions in calculated range, or all sessions
+        if (null == range)
+            return session_loader.getAllSessions() ;
+        else
+            return session_loader.getSessionsInRange(range.start(), range.stop()) ;
+    }
 }

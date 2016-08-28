@@ -23,6 +23,7 @@ public class PieChartStats implements SessionStats{
 
         computeEntries(sessions) ;
     }
+
     /****************************** GETTERS ******************************/
     public ArrayList<PieEntry> getEntries() { return new ArrayList<PieEntry>(_entries) ; }
     public ArrayList<String> getLabels() { return new ArrayList<String>(_labels) ; }
