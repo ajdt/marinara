@@ -75,7 +75,6 @@ public class LineChartStats implements SessionStats {
         Date first_date = date_list.get(0) ;
 
 
-
         // for each day: use the calendar date as a label
         // and create an entry using days elapsed (since first day) and number of sessions on
         // that day.

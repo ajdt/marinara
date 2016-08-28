@@ -87,15 +87,16 @@ public class DateUtil {
      * set to 0 hours, 0 min, 0 seconds (i.e. "YYYY:MM:DD hh:mm:ss" ---> "YYYY:MM:DD 00:00:00"
      */
     public static Date canonicalize(Date the_date) {
-        try {
-            // format with only date info and then parse
-            return __date_formatter.parse(__date_formatter.format(the_date)) ;
-        } catch(ParseException except) {
+        // create calendar object set to parameter time
+        Calendar cal = new GregorianCalendar() ;
+        cal.setTime(the_date) ;
 
-            // TODO: uses deprecated methods. java.util.Date is kind of a mess anyway.
-            // consider using another date/time class instead
-            return new Date(the_date.getYear(), the_date.getMonth(), the_date.getDay()) ;
-        }
+        // create second Calendar obj initialized only with year, month and date
+        Calendar canonical_cal = new GregorianCalendar(cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH), cal.get(Calendar.DATE)) ;
+
+        // return time object from second calendar object
+        return canonical_cal.getTime() ;
     }
 
     /**
