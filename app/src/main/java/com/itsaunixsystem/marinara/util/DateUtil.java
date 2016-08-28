@@ -23,14 +23,23 @@ public class DateUtil {
 
 
     /**
+     * NOTE: this function ignores time of day. "2016:01:01 00:00:00" will be in the range
+     * start_date = "2016:01:01 15:33:00" end_date "2016:01:01 16:33:00"
      *
      * @param to_check
      * @param start_date
      * @param end_date
      * @return true if date is within the inclusive range
      */
-    public static boolean dateWithinRange(Date to_check, Date start_date, Date end_date) {
-        return !to_check.before(start_date) && !to_check.after(end_date) ;
+    public static boolean dateWithinDayRange(Date to_check, Date start_date, Date end_date) {
+        // zero out time values for start/end dates before checking if date falls within range
+        Date canonical_to_check = DateUtil.canonicalize(to_check) ;
+        Date canonical_start = DateUtil.canonicalize(start_date) ;
+        Date canoical_end = DateUtil.canonicalize(end_date) ;
+
+        return !canonical_to_check.before(canonical_start)
+                && !canonical_to_check.after(canoical_end) ;
+
     }
 
     /**
@@ -106,9 +115,6 @@ public class DateUtil {
     }
 
 
-    // TODO: instead of Today use fixed date within mock dates
-
-
     public static DateRange getMonthRangeFromDate(Date the_date) {
         Calendar cal = new GregorianCalendar() ;
         cal.setTime(the_date) ;
@@ -116,22 +122,23 @@ public class DateUtil {
         int days_in_month = cal.getActualMaximum(Calendar.DAY_OF_MONTH) ;
 
         Calendar first_of_month = new GregorianCalendar(cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH), cal.get(Calendar.DATE)) ;
+                cal.get(Calendar.MONTH), 1) ;
         Calendar last_of_month = new GregorianCalendar(cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH), cal.get(Calendar.DATE)) ;
+                cal.get(Calendar.MONTH), days_in_month) ;
 
         return new DateRange(first_of_month.getTime(), last_of_month.getTime()) ;
     }
 
     public static DateRange getWeekRangeFromDate(Date the_date) {
         Date monday = getPreviousMonday(the_date) ;
+
+        // create calendar set to monday and advance to sunday
         Calendar cal = new GregorianCalendar() ;
         cal.setTime(monday) ;
-        cal.add(Calendar.DATE, 6) ; // advance to sunday
+        cal.add(Calendar.DATE, 6) ;
 
         return new DateRange(monday, cal.getTime()) ;
     }
-
 
 
 
