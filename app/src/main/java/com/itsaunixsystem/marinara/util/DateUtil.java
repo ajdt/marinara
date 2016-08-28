@@ -10,11 +10,10 @@ import java.util.GregorianCalendar;
 
 /**
  * @author: ajdt on 8/23/16.
- * @description:
+ * @description: contains static helpers for comparing and manipulating Date objects not provided
+ * in java.util.Date
  */
 public class DateUtil {
-
-
 
     // static members
     private static SimpleDateFormat __date_time_formatter =
@@ -64,7 +63,7 @@ public class DateUtil {
      * Date(1999, 11, 7, 15, 33, 23), [year, month, day, hour, min, sec] --> "1999:11:15"
      *
      * @param the_date
-     * @return string representing calendar date of paramater Date
+     * @return string representing calendar date of paramater Date object
      */
     public static String toCalendarDateString(Date the_date) {
         return __date_formatter.format(the_date) ;
@@ -89,6 +88,7 @@ public class DateUtil {
      */
     public static Date canonicalize(Date the_date) {
         try {
+            // format with only date info and then parse
             return __date_formatter.parse(__date_formatter.format(the_date)) ;
         } catch(ParseException except) {
 
@@ -103,6 +103,10 @@ public class DateUtil {
      */
     public static Date todayCanonicalized() { return canonicalize(new Date()) ; }
 
+    /**
+     * @param the_date
+     * @return Date object representing the last Monday that occurred before the_date
+     */
     public static Date getPreviousMonday(Date the_date) {
         Calendar cal = new GregorianCalendar() ;
         cal.setTime(the_date) ;
@@ -114,21 +118,34 @@ public class DateUtil {
         return cal.getTime() ;
     }
 
-
+    /**
+     * @param the_date
+     * @return DateRange for entire month that the_date takes place. first day of the month as
+     * lower bound and last day of month as upper bound.
+     */
     public static DateRange getMonthRangeFromDate(Date the_date) {
         Calendar cal = new GregorianCalendar() ;
         cal.setTime(the_date) ;
 
+        // find number of days in month
         int days_in_month = cal.getActualMaximum(Calendar.DAY_OF_MONTH) ;
 
+        // create Calendar objects for first and last day of month
         Calendar first_of_month = new GregorianCalendar(cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH), 1) ;
         Calendar last_of_month = new GregorianCalendar(cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH), days_in_month) ;
 
-        return new DateRange(first_of_month.getTime(), last_of_month.getTime()) ;
+        // canonicalize and create range
+        return new DateRange(DateUtil.canonicalize(first_of_month.getTime()),
+                canonicalize(last_of_month.getTime())) ;
     }
 
+    /**
+     * @param the_date
+     * @return DateRange for week that the_date takes place in. last monday before the_date as
+     * lower bound and following sunday as upper bound.
+     */
     public static DateRange getWeekRangeFromDate(Date the_date) {
         Date monday = getPreviousMonday(the_date) ;
 
@@ -137,7 +154,9 @@ public class DateUtil {
         cal.setTime(monday) ;
         cal.add(Calendar.DATE, 6) ;
 
-        return new DateRange(monday, cal.getTime()) ;
+        // canonicalize and create range
+        return new DateRange(DateUtil.canonicalize(monday),
+                DateUtil.canonicalize(cal.getTime())) ;
     }
 
 

@@ -54,7 +54,7 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
         String selected = _time_intervals[spinner.getSelectedItemPosition()] ;
 
         // TODO: replace with DateUtil.todayCanonicalized(). Hardcoded date to use mock sessions
-        Date today = DateUtil.parseDateString("2016:08:18 15:11:23") ;
+        Date today = DateUtil.canonicalize(DateUtil.parseDateString("2016:08:18 15:11:23")) ;
         MockSessionsLoader session_loader = new MockSessionsLoader() ;
 
         if (selected.equals(this.getString(R.string.today_string))) {
