@@ -126,16 +126,21 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
         Date today = DateUtil.canonicalize(DateUtil.parseDateString("2016:08:18 15:11:23")) ;
         MockSessionsLoader session_loader = new MockSessionsLoader() ;
 
-        if (selected.equals(this.getString(R.string.today_string))) {
-            return session_loader.getSessionsInRange(today, today) ;
-        } else if (selected.equals(this.getString(R.string.this_week_string))) {
-            DateRange range = DateUtil.getWeekRangeFromDate(today) ;
-            return session_loader.getSessionsInRange(range.start(), range.stop()) ;
-        } else if (selected.equals(this.getString(R.string.this_month_string))) {
-            DateRange range = DateUtil.getMonthRangeFromDate(today) ;
-            return session_loader.getSessionsInRange(range.start(), range.stop()) ;
-        } else {
+        // obtain range based on selected time interval
+        DateRange range ;
+        if (selected.equals(this.getString(R.string.today_string)))
+            range = new DateRange(today, today) ;
+        else if (selected.equals(this.getString(R.string.this_week_string)))
+            range = DateUtil.getWeekRangeFromDate(today) ;
+        else if (selected.equals(this.getString(R.string.this_month_string)))
+            range = DateUtil.getMonthRangeFromDate(today) ;
+        else
+            range = null ;
+
+        // return sessions in calculated range, or all sessions
+        if (null == range)
             return session_loader.getAllSessions() ;
-        }
+        else
+            return session_loader.getSessionsInRange(range.start(), range.stop()) ;
     }
 }
