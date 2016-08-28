@@ -31,11 +31,9 @@ public class PieChartStats implements SessionStats{
     /****************************** HELPERS ******************************/
     /**
      * Compute number of sessions per task name to generate a list of
-     * PieEntry(task_number, session_count_for_task), where "task_number"
-     * is just the index of the PieEntry in its ArrayList. PieEntry can
-     * only be constructed with numeric values, so we use index numbers
-     * to identify task names. However, when displayed a pie chart will use
-     * task names as labels instead of the given index numbers.
+     * PieEntry(session_count_for_task, task_name). Even though PieEntry
+     * supports labels directly, we still save a separate ArrayList<String>
+     * of labels to observe the SessionStats interface
      *
      * @param sessions
      */
@@ -56,15 +54,10 @@ public class PieChartStats implements SessionStats{
         // create an entry for each task, and save a label for each entry
         _entries = new ArrayList<PieEntry>() ;
         _labels = new ArrayList<String>() ;
-        int task_index_number = 0 ;
         for (String task_name : task_to_session_count.keySet()) {
-            // create entry & label
-            _entries.add(new PieEntry(task_index_number, task_to_session_count.get(task_name))) ;
+            _entries.add(new PieEntry(task_to_session_count.get(task_name), task_name)) ;
             _labels.add(task_name) ;
-
-            task_index_number++ ;
         }
-
     }
 }
 
