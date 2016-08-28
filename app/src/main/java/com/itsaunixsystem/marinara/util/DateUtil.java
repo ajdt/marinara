@@ -4,13 +4,17 @@ import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * @author: ajdt on 8/23/16.
  * @description:
  */
 public class DateUtil {
+
+
 
     // static members
     private static SimpleDateFormat __date_time_formatter =
@@ -84,6 +88,51 @@ public class DateUtil {
             return new Date(the_date.getYear(), the_date.getMonth(), the_date.getDay()) ;
         }
     }
+
+    /**
+     * @return today's date in canonicalized format
+     */
+    public static Date todayCanonicalized() { return canonicalize(new Date()) ; }
+
+    public static Date getPreviousMonday(Date the_date) {
+        Calendar cal = new GregorianCalendar() ;
+        cal.setTime(the_date) ;
+
+        // decrement by one day until we get to the previous monday
+        while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
+            cal.add(Calendar.DATE, -1) ;
+
+        return cal.getTime() ;
+    }
+
+
+    // TODO: instead of Today use fixed date within mock dates
+
+
+    public static DateRange getMonthRangeFromDate(Date the_date) {
+        Calendar cal = new GregorianCalendar() ;
+        cal.setTime(the_date) ;
+
+        int days_in_month = cal.getActualMaximum(Calendar.DAY_OF_MONTH) ;
+
+        Calendar first_of_month = new GregorianCalendar(cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH), cal.get(Calendar.DATE)) ;
+        Calendar last_of_month = new GregorianCalendar(cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH), cal.get(Calendar.DATE)) ;
+
+        return new DateRange(first_of_month.getTime(), last_of_month.getTime()) ;
+    }
+
+    public static DateRange getWeekRangeFromDate(Date the_date) {
+        Date monday = getPreviousMonday(the_date) ;
+        Calendar cal = new GregorianCalendar() ;
+        cal.setTime(monday) ;
+        cal.add(Calendar.DATE, 6) ; // advance to sunday
+
+        return new DateRange(monday, cal.getTime()) ;
+    }
+
+
 
 
 }
