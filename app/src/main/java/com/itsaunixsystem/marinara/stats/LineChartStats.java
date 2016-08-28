@@ -47,6 +47,12 @@ public class LineChartStats implements SessionStats {
      * @param sessions
      */
     private void computeEntries(List<Session> sessions) {
+        _labels = new ArrayList<String>() ;
+        _entries = new ArrayList<Entry>() ;
+
+        // no session data, just leave _labels and _entries as empty lists
+        if (sessions.isEmpty())
+            return ;
 
         // count the number of sessions for every calendar day
         HashMap<Date, Integer> day_to_num_sessions = new HashMap<Date, Integer>() ;
@@ -69,8 +75,6 @@ public class LineChartStats implements SessionStats {
         Date first_date = date_list.get(0) ;
 
 
-        _labels = new ArrayList<String>() ;
-        _entries = new ArrayList<Entry>() ;
 
         // for each day: use the calendar date as a label
         // and create an entry using days elapsed (since first day) and number of sessions on

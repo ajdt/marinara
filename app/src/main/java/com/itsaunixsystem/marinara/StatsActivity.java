@@ -2,8 +2,12 @@ package com.itsaunixsystem.marinara;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -18,24 +22,61 @@ import com.itsaunixsystem.marinara.mock.MockSessionsLoader;
 import com.itsaunixsystem.marinara.mock.Session;
 import com.itsaunixsystem.marinara.stats.LineChartStats;
 import com.itsaunixsystem.marinara.stats.PieChartStats;
+import com.itsaunixsystem.marinara.util.DateRange;
+import com.itsaunixsystem.marinara.util.DateUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class StatsActivity extends AppCompatActivity {
+public class StatsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    String[] _time_intervals ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
-        initSelectedTimeSpinner() ;
 
+        // init spinner and set listener
+        initSelectedTimeSpinner() ;
+        Spinner spinner = (Spinner)findViewById(R.id.selected_time_spinner) ;
+        spinner.setOnItemSelectedListener(this) ;
+
+        // load time interval and create graphs
+        _time_intervals = getResources().getStringArray(R.array.time_intervals_array) ;
         createGraphs() ;
+    }
+
+    // TODO: rewrite this method to use DB data instead of mock data
+    private List<Session> getSessions() {
+        Spinner spinner = (Spinner)findViewById(R.id.selected_time_spinner) ;
+        String selected = _time_intervals[spinner.getSelectedItemPosition()] ;
+
+        // TODO: replace with DateUtil.todayCanonicalized(). Hardcoded date to use mock sessions
+        Date today = DateUtil.parseDateString("2016:08:18 15:11:23") ;
+        MockSessionsLoader session_loader = new MockSessionsLoader() ;
+
+        if (selected.equals(this.getString(R.string.today_string))) {
+            return session_loader.getSessionsInRange(today, today) ;
+        } else if (selected.equals(this.getString(R.string.this_week_string))) {
+            DateRange range = DateUtil.getWeekRangeFromDate(today) ;
+            Log.d("blah", "date range:" + DateUtil.toCalendarDateString(range.start())
+            + " to " + DateUtil.toCalendarDateString(range.stop())) ;
+            return session_loader.getSessionsInRange(range.start(), range.stop()) ;
+        } else if (selected.equals(this.getString(R.string.this_month_string))) {
+            DateRange range = DateUtil.getMonthRangeFromDate(today) ;
+            Log.d("blah", "month date range:" + DateUtil.toCalendarDateString(range.start())
+                    + " to " + DateUtil.toCalendarDateString(range.stop())) ;
+            return session_loader.getSessionsInRange(range.start(), range.stop()) ;
+        } else {
+            return session_loader.getAllSessions() ;
+        }
     }
 
     private void createGraphs() {
         // get sessions
-        List<Session> sessions = (new MockSessionsLoader()).getAllSessions() ;
+        List<Session> sessions = this.getSessions() ;
 
         createLineChart(sessions) ;
         createPieChart(sessions) ;
@@ -89,5 +130,13 @@ public class StatsActivity extends AppCompatActivity {
         Spinner spinner = (Spinner)findViewById(R.id.selected_time_spinner) ;
         spinner.setAdapter(adapter) ;
         spinner.setSelection(0) ; // set first to selected
+
+
     }
+
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        createGraphs() ;
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) { }
 }

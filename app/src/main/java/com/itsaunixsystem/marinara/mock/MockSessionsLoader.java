@@ -16,10 +16,10 @@ public class MockSessionsLoader extends SessionQueryHelper {
         ArrayList<Session> sessions = new ArrayList<Session>() ;
         long duration = 25 * 60 * 1000 ; // 25 min in millisec format
 
-        // 3 sessions in one day Mon aug 15th
-        sessions.add(new MockPomodoroSession("code", duration, "2016:08:15 10:12:12")) ;
-        sessions.add(new MockPomodoroSession("code", duration, "2016:08:15 11:30:15")) ;
-        sessions.add(new MockPomodoroSession("code", duration, "2016:08:15 12:47:33")) ;
+        // 3 sessions in one day Mon aug 1st
+        sessions.add(new MockPomodoroSession("code", duration, "2016:08:01 10:12:12")) ;
+        sessions.add(new MockPomodoroSession("code", duration, "2016:08:01 11:30:15")) ;
+        sessions.add(new MockPomodoroSession("code", duration, "2016:08:01 12:47:33")) ;
 
         // another two sessions on Thurs aug 18th
         sessions.add(new MockPomodoroSession("chores", duration, "2016:08:18 15:11:23")) ;

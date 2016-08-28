@@ -49,10 +49,13 @@
     <!-- StatsActivity -->
     <string name="title_activity_stats">StatsActivity</string>
     <string name="selected_time_interval_text">Time Period:</string>
+    <string name="today_string">Today</string>
+    <string name="this_week_string">This Week</string>
+    <string name="this_month_string">This Month</string>
     <string-array name="time_intervals_array">
-        <item>Today</item>
-        <item>This Week</item>
-        <item>This Month</item>
+        <item>@string/today_string</item>
+        <item>@string/this_week_string</item>
+        <item>@string/this_month_string</item>
     </string-array>
 
 

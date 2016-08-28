@@ -20,7 +20,7 @@ public abstract class SessionQueryHelper {
     public List<Session> getSessionsInRange(Date start_date, Date end_date) {
         ArrayList<Session> filtered_sessions = new ArrayList<Session>() ;
         for (Session session : this.getAllSessions() ) {
-            if (DateUtil.dateWithinRange(session.completionDate(), start_date, end_date))
+            if (DateUtil.dateWithinDayRange(session.completionDate(), start_date, end_date))
                 filtered_sessions.add(session) ;
         }
 
