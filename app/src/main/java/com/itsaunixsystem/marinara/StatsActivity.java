@@ -2,6 +2,8 @@ package com.itsaunixsystem.marinara;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -26,6 +28,7 @@ public class StatsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
+        initSelectedTimeSpinner() ;
 
         createGraphs() ;
     }
@@ -73,8 +76,18 @@ public class StatsActivity extends AppCompatActivity {
         pie_chart.invalidate() ;
     }
 
-    // TODO:
-    // (1) obtain sessions list
-    // (2) initialize pieChart and LineChart with data
-    // (3)
+
+    private void initSelectedTimeSpinner() {
+        // create adapter and initialize with time interval array
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.time_intervals_array, android.R.layout.simple_spinner_item) ;
+
+        // set drop down layout
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) ;
+
+        // add adapter to spinner and set first item to selected
+        Spinner spinner = (Spinner)findViewById(R.id.selected_time_spinner) ;
+        spinner.setAdapter(adapter) ;
+        spinner.setSelection(0) ; // set first to selected
+    }
 }
