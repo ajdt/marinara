@@ -57,6 +57,8 @@
         <item>@string/this_week_string</item>
         <item>@string/this_month_string</item>
     </string-array>
+    <string name="line_chart_description">sessions per day</string>
+    <string name="pie_chart_description">sessions per task</string>
 
 
 

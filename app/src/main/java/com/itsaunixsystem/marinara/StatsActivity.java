@@ -62,12 +62,13 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
         ArrayList<Entry> entries = stats_obj.getEntries() ;
 
         // create data and dataset objects for entries
-        LineDataSet data_set = new LineDataSet(entries, "sessions per day") ; // TODO: strings.xml
+        LineDataSet data_set = new LineDataSet(entries,
+                this.getString(R.string.line_chart_description)) ;
         LineData data = new LineData(data_set) ;
 
         // set line chart data and display it
         LineChart chart = (LineChart)findViewById(R.id.line_chart) ;
-        chart.setDescription("sessions per day") ;
+        chart.setDescription(this.getString(R.string.line_chart_description)) ;
         chart.setData(data) ;
         chart.invalidate() ;
     }
@@ -78,14 +79,15 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
         ArrayList<PieEntry> entries = pie_stats.getEntries() ;
 
         // make data sets
-        PieDataSet pie_data_set = new PieDataSet(entries, "sessions per task") ;
+        PieDataSet pie_data_set = new PieDataSet(entries,
+                this.getString(R.string.pie_chart_description)) ;
         pie_data_set.setColors(ColorTemplate.MATERIAL_COLORS) ; // set colors
         PieData pie_data = new PieData(pie_data_set) ;
 
         // add data sets to pie chart object
         PieChart pie_chart = (PieChart)findViewById(R.id.pie_chart) ;
         pie_chart.setData(pie_data) ;
-        pie_chart.setDescription("sessions per task") ;
+        pie_chart.setDescription(this.getString(R.string.pie_chart_description)) ;
 
         // draw chart
         pie_chart.invalidate() ;
