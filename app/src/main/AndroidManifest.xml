@@ -44,8 +44,11 @@
             android:name=".ManageTasksActivity"
             android:label="@string/title_activity_manage_tasks" >
         </activity>
+
+        <!-- -->
         <activity
             android:name=".NewTaskDialogActivity"
+            android:theme="@style/myDialogStyle"
             android:label="@string/title_activity_new_task_dialog" >
         </activity>
         <activity
