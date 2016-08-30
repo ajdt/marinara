@@ -7,7 +7,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/myAppStyle" >
         <meta-data
             android:name="DATABASE"
             android:value="marinara.db" />
@@ -30,8 +30,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- using default theme for Settings activity, for now -->
         <activity
             android:name=".SettingsActivity"
+            android:theme="@style/AppTheme"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity

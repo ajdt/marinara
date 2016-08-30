@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ NOTE: this styles file determines look/feel of the app and widgets, but not placement.
+ Placement is done in individual layout xml files.
+-->
+<resources>
+    <style name="myAppStyle" parent="Theme.AppCompat">
+        <item name="android:textColor">@color/default_text</item>
+        <item name="android:windowBackground">@color/alternate_background</item>
+    </style>
+    <style name="myViewStyle">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+
+    </style>
+</resources>
