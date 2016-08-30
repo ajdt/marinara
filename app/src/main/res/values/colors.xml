@@ -6,4 +6,9 @@
     <color name="default_text">#ffebee</color>
     <color name="default_background">#b71c1c</color>
     <color name="alternate_background">#962C36</color>
+
+    <!-- listView colors -->
+    <color name="old_listview_background">#ef5350</color>
+    <color name="listview_background">@color/alternate_background</color>
+    <color name="listitem_selected">#e91e63</color>
 </resources>
