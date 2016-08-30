@@ -25,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_below="@id/selected_time_spinner"
+        style="@style/myChartStyle"
         />
 
     <com.github.mikephil.charting.charts.PieChart
@@ -32,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_below="@id/line_chart"
+        style="@style/myChartStyle"
         />
 
 

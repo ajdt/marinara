@@ -24,4 +24,11 @@
         <item name="android:windowBackground">@color/alternate_background</item>
         <item name="android:windowNoTitle">true</item>
     </style>
+    <style name="myChartStyle">
+        <item name="android:background">@color/white</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
 </resources>
