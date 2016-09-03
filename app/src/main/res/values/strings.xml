@@ -32,10 +32,10 @@
 
 
 
-    <string name="title_activity_break">BreakActivity</string>
+    <string name="title_activity_break">Break</string>
 
     <!-- ManageTasksActivity -->
-    <string name="title_activity_manage_tasks">ManageTasksActivity</string>
+    <string name="title_activity_manage_tasks">@string/manage_tasks_menu_item_title</string>
     <string name="add_task_button_text">Add Task </string>
 
     <!-- NewTaskDialogActivity -->
@@ -44,10 +44,10 @@
     <string name="task_dialog_ok_button_text">Ok</string>
 
     <!-- SettingsActivity -->
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Settings</string>
 
     <!-- StatsActivity -->
-    <string name="title_activity_stats">StatsActivity</string>
+    <string name="title_activity_stats">Stats</string>
     <string name="selected_time_interval_text">Time Period:</string>
     <string name="today_string">Today</string>
     <string name="this_week_string">This Week</string>
