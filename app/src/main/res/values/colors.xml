@@ -11,6 +11,8 @@
     <!-- listView colors -->
     <color name="old_listview_background">#ef5350</color>
     <color name="listview_background">@color/alternate_background</color>
-    <color name="listitem_selected">#e91e63</color>
+    <color name="listitem_selected">#ef5350</color>
+    <color name="old_listitem_selected">#e91e63</color>
+    <color name="listitem_not_selected">@color/alternate_background</color>
     <color name="listview_divider">@color/default_text</color>
 </resources>
