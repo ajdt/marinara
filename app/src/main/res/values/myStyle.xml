@@ -3,10 +3,12 @@
  NOTE: this styles file determines look/feel of the app and widgets, but not placement.
  Placement is done in individual layout xml files.
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
     <style name="myAppStyle" parent="Theme.AppCompat">
         <item name="android:textColor">@color/default_text</item>
         <item name="android:windowBackground">@color/alternate_background</item>
+        <item name="android:actionBarStyle">@style/myActionBarStyle</item>
+        <item name="actionBarStyle">@style/myActionBarStyle</item>
     </style>
     <style name="myViewStyle">
         <item name="android:layout_width">fill_parent</item>
@@ -14,9 +16,9 @@
 
     </style>
 
-    <style name="myListViewStyle" parent="myAppStyle">
-        <item name="android:background">@color/listview_background</item>
-
+    <style name="mySpinnerStyle" parent="Widget.AppCompat.Spinner">
+        <item name="android:background">@color/old_listview_background</item>
+        <item name="android:popupBackground">@drawable/list_item_background</item>
     </style>
 
     <style name="myDialogStyle" parent="Theme.AppCompat.Dialog">
@@ -31,4 +33,10 @@
         <item name="android:paddingTop">5dp</item>
         <item name="android:paddingBottom">5dp</item>
     </style>
+
+    <style name="myActionBarStyle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/alternate_background</item>
+        <item name="background">@color/alternate_background</item>
+    </style>
+
 </resources>

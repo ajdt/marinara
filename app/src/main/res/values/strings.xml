@@ -39,7 +39,7 @@
     <string name="add_task_button_text">Add Task </string>
 
     <!-- NewTaskDialogActivity -->
-    <string name="title_activity_new_task_dialog">NewTaskDialogActivity</string>
+    <string name="title_activity_new_task_dialog">Create New Task</string>
     <string name="task_dialog_edit_text_hint">task name</string>
     <string name="task_dialog_ok_button_text">Ok</string>
 
