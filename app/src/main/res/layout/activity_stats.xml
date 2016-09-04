@@ -22,19 +22,38 @@
         android:layout_marginLeft="5dp"
         />
 
+    <TextView
+        android:id="@+id/line_chart_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/selected_time_spinner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="@string/line_chart_description"
+        />
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/line_chart"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_below="@id/selected_time_spinner"
+        android:layout_below="@id/line_chart_title"
         style="@style/myChartStyle"
         />
 
+
+    <TextView
+        android:id="@+id/pie_chart_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line_chart"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="@string/pie_chart_description"
+        />
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pie_chart"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_below="@id/line_chart"
+        android:layout_below="@id/pie_chart_title"
         style="@style/myChartStyle"
         />
 
