@@ -75,6 +75,10 @@
     <string name="trash_icon_author"><a href="https://www.iconfinder.com/setu">W3 Creative Lab</a></string>
     <string name="trash_icon_license"><a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons (Attribution 3.0 Unported)</a></string>
 
+    <!-- licensing list item fields -->
+    <string name="description_label_text">Description:</string>
+    <string name="author_label_text">Author:</string>
+    <string name="license_label_text">License:</string>
 
 
 
