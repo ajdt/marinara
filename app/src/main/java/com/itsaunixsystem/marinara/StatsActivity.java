@@ -1,5 +1,6 @@
 package com.itsaunixsystem.marinara;
 
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,8 +9,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -62,13 +65,13 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
         ArrayList<Entry> entries = stats_obj.getEntries() ;
 
         // create data and dataset objects for entries
-        LineDataSet data_set = new LineDataSet(entries,
-                this.getString(R.string.line_chart_description)) ;
+        LineDataSet data_set = new LineDataSet(entries, "") ; /* entries, string description */
+        data_set.setColors(getGreenGraphColors()) ;
         LineData data = new LineData(data_set) ;
 
         // set line chart data and display it
         LineChart chart = (LineChart)findViewById(R.id.line_chart) ;
-        chart.setDescription(this.getString(R.string.line_chart_description)) ;
+        setChartStyling(chart) ;
         chart.setData(data) ;
         chart.invalidate() ;
     }
@@ -79,15 +82,14 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
         ArrayList<PieEntry> entries = pie_stats.getEntries() ;
 
         // make data sets
-        PieDataSet pie_data_set = new PieDataSet(entries,
-                this.getString(R.string.pie_chart_description)) ;
-        pie_data_set.setColors(ColorTemplate.MATERIAL_COLORS) ; // set colors
+        PieDataSet pie_data_set = new PieDataSet(entries, "") ; /* entries, string description */
+        pie_data_set.setColors(this.getGreenGraphColors()) ;
         PieData pie_data = new PieData(pie_data_set) ;
 
         // add data sets to pie chart object
         PieChart pie_chart = (PieChart)findViewById(R.id.pie_chart) ;
+        this.setChartStyling(pie_chart) ;
         pie_chart.setData(pie_data) ;
-        pie_chart.setDescription(this.getString(R.string.pie_chart_description)) ;
 
         // draw chart
         pie_chart.invalidate() ;
@@ -144,5 +146,20 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
             return session_loader.getAllSessions() ;
         else
             return session_loader.getSessionsInRange(range.start(), range.stop()) ;
+    }
+
+    private int[] getGreenGraphColors() {
+        Resources res = this.getResources() ;
+        return new int[]{   res.getColor(R.color.graph_green1),
+                res.getColor(R.color.graph_green2),
+                res.getColor(R.color.graph_green3),
+                res.getColor(R.color.graph_green4)};
+    }
+
+    private void setChartStyling(Chart chart) {
+        Legend legend = chart.getLegend() ;
+        legend.setEnabled(false) ;
+
+        chart.setDescription("") ;
     }
 }
