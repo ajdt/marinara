@@ -3,7 +3,6 @@ package com.itsaunixsystem.marinara;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,7 +18,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.itsaunixsystem.marinara.mock.MockSessionsLoader;
 import com.itsaunixsystem.marinara.mock.Session;
 import com.itsaunixsystem.marinara.stats.LineChartStats;
@@ -59,6 +57,10 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
         createPieChart(sessions) ;
     }
 
+    // NOTE: createLineChart() and createPieChart() should be DRYed up.
+    // maybe refactor common setup operations into generic method like:
+    // <T extends Chart, E extends Entries> createChart(T chart, ArrayList<E> entries)
+    //
     private void createLineChart(List<Session> sessions) {
         // get computed entries
         LineChartStats stats_obj = new LineChartStats(sessions) ;
@@ -67,11 +69,12 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
         // create data and dataset objects for entries
         LineDataSet data_set = new LineDataSet(entries, "") ; /* entries, string description */
         data_set.setColors(getGreenGraphColors()) ;
+        data_set.setCircleColor(this.getResources().getColor(R.color.graph_green4));
         LineData data = new LineData(data_set) ;
 
         // set line chart data and display it
         LineChart chart = (LineChart)findViewById(R.id.line_chart) ;
-        setChartStyling(chart) ;
+        setBasicChartStyling(chart) ;
         chart.setData(data) ;
         chart.invalidate() ;
     }
@@ -88,7 +91,7 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
 
         // add data sets to pie chart object
         PieChart pie_chart = (PieChart)findViewById(R.id.pie_chart) ;
-        this.setChartStyling(pie_chart) ;
+        this.setBasicChartStyling(pie_chart) ;
         pie_chart.setData(pie_data) ;
 
         // draw chart
@@ -148,6 +151,11 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
             return session_loader.getSessionsInRange(range.start(), range.stop()) ;
     }
 
+    /**
+     * NOTE: version of MPAndroidChart(3.0.0-beta1) I use doesn't take R.color.color_name and convert it
+     * to RGB color. This method also handles the conversion.
+     * @return array of green colors defined in colors.xml
+     */
     private int[] getGreenGraphColors() {
         Resources res = this.getResources() ;
         return new int[]{   res.getColor(R.color.graph_green1),
@@ -156,10 +164,14 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
                 res.getColor(R.color.graph_green4)};
     }
 
-    private void setChartStyling(Chart chart) {
+    /**
+     * set styling options common to all chart types
+     * @param chart
+     */
+    private void setBasicChartStyling(Chart chart) {
         Legend legend = chart.getLegend() ;
         legend.setEnabled(false) ;
 
-        chart.setDescription("") ;
+        chart.setDescription("") ; // app uses textViews for chart titles
     }
 }
