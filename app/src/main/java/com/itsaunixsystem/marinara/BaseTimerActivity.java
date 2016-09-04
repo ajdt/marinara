@@ -118,16 +118,16 @@ public abstract class BaseTimerActivity extends AppCompatActivity
 
         switch (_timer.state()) {
             case READY:
-                timer_iv.setImageResource(R.drawable.ready_600_200) ;
+                timer_iv.setImageResource(R.drawable.play_white_256_256) ;
                 break ;
             case RUNNING:
-                timer_iv.setImageResource(R.drawable.running_600_200) ;
+                timer_iv.setImageResource(R.drawable.pause_white_256_256) ;
                 break ;
             case PAUSED:
-                timer_iv.setImageResource(R.drawable.paused_600_200) ;
+                timer_iv.setImageResource(R.drawable.play_white_256_256) ;
                 break ;
             case DONE:
-                timer_iv.setImageResource(R.drawable.done_600_200) ;
+                timer_iv.setImageResource(R.drawable.done_white_256_256) ;
                 break ;
         }
     }

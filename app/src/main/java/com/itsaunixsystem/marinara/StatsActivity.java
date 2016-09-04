@@ -1,22 +1,23 @@
 package com.itsaunixsystem.marinara;
 
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.itsaunixsystem.marinara.mock.MockSessionsLoader;
 import com.itsaunixsystem.marinara.mock.Session;
 import com.itsaunixsystem.marinara.stats.LineChartStats;
@@ -56,19 +57,24 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
         createPieChart(sessions) ;
     }
 
+    // NOTE: createLineChart() and createPieChart() should be DRYed up.
+    // maybe refactor common setup operations into generic method like:
+    // <T extends Chart, E extends Entries> createChart(T chart, ArrayList<E> entries)
+    //
     private void createLineChart(List<Session> sessions) {
         // get computed entries
         LineChartStats stats_obj = new LineChartStats(sessions) ;
         ArrayList<Entry> entries = stats_obj.getEntries() ;
 
         // create data and dataset objects for entries
-        LineDataSet data_set = new LineDataSet(entries,
-                this.getString(R.string.line_chart_description)) ;
+        LineDataSet data_set = new LineDataSet(entries, "") ; /* entries, string description */
+        data_set.setColors(getGreenGraphColors()) ;
+        data_set.setCircleColor(this.getResources().getColor(R.color.graph_green4));
         LineData data = new LineData(data_set) ;
 
         // set line chart data and display it
         LineChart chart = (LineChart)findViewById(R.id.line_chart) ;
-        chart.setDescription(this.getString(R.string.line_chart_description)) ;
+        setBasicChartStyling(chart) ;
         chart.setData(data) ;
         chart.invalidate() ;
     }
@@ -79,15 +85,14 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
         ArrayList<PieEntry> entries = pie_stats.getEntries() ;
 
         // make data sets
-        PieDataSet pie_data_set = new PieDataSet(entries,
-                this.getString(R.string.pie_chart_description)) ;
-        pie_data_set.setColors(ColorTemplate.MATERIAL_COLORS) ; // set colors
+        PieDataSet pie_data_set = new PieDataSet(entries, "") ; /* entries, string description */
+        pie_data_set.setColors(this.getGreenGraphColors()) ;
         PieData pie_data = new PieData(pie_data_set) ;
 
         // add data sets to pie chart object
         PieChart pie_chart = (PieChart)findViewById(R.id.pie_chart) ;
+        this.setBasicChartStyling(pie_chart) ;
         pie_chart.setData(pie_data) ;
-        pie_chart.setDescription(this.getString(R.string.pie_chart_description)) ;
 
         // draw chart
         pie_chart.invalidate() ;
@@ -144,5 +149,29 @@ public class StatsActivity extends AppCompatActivity implements AdapterView.OnIt
             return session_loader.getAllSessions() ;
         else
             return session_loader.getSessionsInRange(range.start(), range.stop()) ;
+    }
+
+    /**
+     * NOTE: version of MPAndroidChart(3.0.0-beta1) I use doesn't take R.color.color_name and convert it
+     * to RGB color. This method also handles the conversion.
+     * @return array of green colors defined in colors.xml
+     */
+    private int[] getGreenGraphColors() {
+        Resources res = this.getResources() ;
+        return new int[]{   res.getColor(R.color.graph_green1),
+                res.getColor(R.color.graph_green2),
+                res.getColor(R.color.graph_green3),
+                res.getColor(R.color.graph_green4)};
+    }
+
+    /**
+     * set styling options common to all chart types
+     * @param chart
+     */
+    private void setBasicChartStyling(Chart chart) {
+        Legend legend = chart.getLegend() ;
+        legend.setEnabled(false) ;
+
+        chart.setDescription("") ; // app uses textViews for chart titles
     }
 }

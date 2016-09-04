@@ -7,7 +7,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/myAppStyle" >
         <meta-data
             android:name="DATABASE"
             android:value="marinara.db" />
@@ -23,15 +23,18 @@
 
         <activity
             android:name=".TimerActivity"
-            android:label="@string/app_name" >
+            android:label=""
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- using default theme for Settings activity, for now -->
         <activity
             android:name=".SettingsActivity"
+            android:theme="@style/AppTheme"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
@@ -42,8 +45,11 @@
             android:name=".ManageTasksActivity"
             android:label="@string/title_activity_manage_tasks" >
         </activity>
+
+        <!-- -->
         <activity
             android:name=".NewTaskDialogActivity"
+            android:theme="@style/myDialogStyle"
             android:label="@string/title_activity_new_task_dialog" >
         </activity>
         <activity

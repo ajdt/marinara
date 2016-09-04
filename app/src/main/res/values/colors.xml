@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="red">#962C36</color>
     <color name="purple">#3F226A</color>
+    <color name="white">#ffffff</color>
+
+    <!-- theme colors -->
+    <color name="default_text">#ffebee</color>
+    <color name="default_background">#b71c1c</color>
+    <color name="alternate_background">#962C36</color>
+
+    <!-- listView colors -->
+    <color name="old_listview_background">#ef5350</color>
+    <color name="listview_background">@color/alternate_background</color>
+    <color name="listitem_selected">#ef5350</color>
+    <color name="old_listitem_selected">#e91e63</color>
+    <color name="listitem_not_selected">@color/alternate_background</color>
+    <color name="listview_divider">@color/default_text</color>
+
+    <!-- graph colors -->
+    <color name="graph_red1">#ef5350</color>
+    <color name="graph_red2">#962C36</color>
+    <color name="graph_red3">#b71c1c</color>
+    <color name="graph_red4">#e91e63</color>
+    <color name="graph_green1">#a2ce65</color>
+    <color name="graph_green2">#7aae32</color>
+    <color name="graph_green3">#5b8f12</color>
+    <color name="graph_green4">#3f6D00</color>
 </resources>
