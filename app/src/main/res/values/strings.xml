@@ -71,7 +71,7 @@
     <string name="add_task_author"><![CDATA[<a href="https://www.iconfinder.com/tintin099">Rawnly</a>]]></string>
     <string name="add_task_license"><![CDATA[<a href="http://creativecommons.org/licenses/by/2.5/">Creative Commons (Attribution 2.5 Generic)</a>]]></string>
 
-    <string name="trash_icon_desc"><![CDATA[]<div>trash icon is part of the <a href="https://www.iconfinder.com/iconsets/linecon">Linecon</a> icon set</div>]]></string>
+    <string name="trash_icon_desc"><![CDATA[<div>trash icon is part of the <a href="https://www.iconfinder.com/iconsets/linecon">Linecon</a> icon set</div>]]></string>
     <string name="trash_icon_author"><![CDATA[<a href="https://www.iconfinder.com/setu">W3 Creative Lab</a>]]></string>
     <string name="trash_icon_license"><![CDATA[<a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons (Attribution 3.0 Unported)</a>]]></string>
 
