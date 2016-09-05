@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageLicenses xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageLicense
+        icon="@drawable/play_24_24"
+        desc="@string/timer_images_desc"
+        author="@string/timer_images_author"
+        license="@string/timer_images_license"
+        />
+    <ImageLicense
+        icon="@drawable/plus_24_24"
+        desc="@string/add_task_desc"
+        author="@string/add_task_author"
+        license="@string/add_task_license"
+        />
+    <ImageLicense
+        icon="@drawable/delete_24_24"
+        desc="@string/trash_icon_desc"
+        author="@string/trash_icon_author"
+        license="@string/trash_icon_license"
+        />
+</ImageLicenses>

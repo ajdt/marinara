@@ -15,4 +15,8 @@
         android:id="@+id/stats_menu_item"
         android:title="Statistics"
         android:onClick="onStatsMenuItemClicked"/>
+    <item
+        android:id="@+id/about_menu_item"
+        android:title="About"
+        android:onClick="onAboutMenuItemClicked"/>
 </menu>

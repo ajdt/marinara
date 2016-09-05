@@ -91,6 +91,10 @@ public class TimerActivity extends BaseTimerActivity {
         AndroidHelper.launchActivity(this, StatsActivity.class) ;
     }
 
+    public void onAboutMenuItemClicked(MenuItem item) {
+        AndroidHelper.launchActivity(this, AboutInfoActivity.class) ;
+    }
+
     /**
      * callback updates UI and changes timer_state to done
      */

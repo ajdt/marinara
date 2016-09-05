@@ -60,6 +60,37 @@
     <string name="line_chart_description">sessions per day</string>
     <string name="pie_chart_description">sessions per task</string>
 
+    <!-- Image licensing strings -->
+    <string name="timer_images_desc"><![CDATA[<div>timer button images are modified version of the
+        <a href="https://www.iconfinder.com/iconsets/audio-sound-and-video">Audio, sound and video</a> icon set</div>]]></string>
+    <string name="timer_images_author"><![CDATA[<a href="https://www.iconfinder.com/danieledesantis"> Daniele De Santis </a>]]></string>
+    <string name="timer_images_license"><![CDATA[<a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons (Attribution 3.0 Unported)</a>]]></string>
+
+    <string name="add_task_desc"><![CDATA[<div>the add task icon is part of the
+        <a href="https://www.iconfinder.com/iconsets/ui-navigation-1"> UI Navigation </a> icon set</div>]]></string>
+    <string name="add_task_author"><![CDATA[<a href="https://www.iconfinder.com/tintin099">Rawnly</a>]]></string>
+    <string name="add_task_license"><![CDATA[<a href="http://creativecommons.org/licenses/by/2.5/">Creative Commons (Attribution 2.5 Generic)</a>]]></string>
+
+    <string name="trash_icon_desc"><![CDATA[<div>trash icon is part of the <a href="https://www.iconfinder.com/iconsets/linecon">Linecon</a> icon set</div>]]></string>
+    <string name="trash_icon_author"><![CDATA[<a href="https://www.iconfinder.com/setu">W3 Creative Lab</a>]]></string>
+    <string name="trash_icon_license"><![CDATA[<a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons (Attribution 3.0 Unported)</a>]]></string>
+
+    <!-- licensing list item fields -->
+    <string name="description_label_text">Description:</string>
+    <string name="author_label_text">Author:</string>
+    <string name="license_label_text">License:</string>
+
+    <!-- ImageLicensesActivity -->
+    <string name="title_activity_image_licenses">Image Licenses</string>
+
+    <!-- AboutInfoActivity strings -->
+    <string name="title_activity_about_info">AboutInfoActivity</string>
+    <string name="version_text">Version</string>
+    <string name="image_license_text">Image Licenses</string>
+    <string-array name="about_array">
+        <item>@string/image_license_text</item>
+    </string-array>
+
 
 
 
