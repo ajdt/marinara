@@ -5,55 +5,86 @@
     <ImageView
         android:id="@+id/list_item_image_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="10dp"
+        />
 
     <!-- description -->
-    <TextView
-        android:id="@+id/description_label"
+    <LinearLayout
+        android:id="@+id/description_layout"
+        android:layout_below="@id/list_item_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/list_item_image_view"
-        android:text="@string/description_label_text"
-        />
-    <TextView
-        android:id="@+id/description_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/description_label"
-        android:layout_below="@id/list_item_image_view"
-        />
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/description_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/description_label_text"
+            />
+        <TextView
+            android:id="@+id/description_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            />
+    </LinearLayout>
 
     <!-- author -->
-    <TextView
-        android:id="@+id/author_label"
+    <LinearLayout
+        android:id="@+id/author_layout"
+        android:layout_below="@id/description_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/description_label"
-        android:text="@string/author_label_text"
-        />
-    <TextView
-        android:id="@+id/author_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/author_label"
-        android:layout_below="@id/description_tv"
-        />
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/author_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/author_label_text"
+            />
+        <TextView
+            android:id="@+id/author_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            />
+    </LinearLayout>
 
     <!-- license -->
-    <TextView
-        android:id="@+id/license_label"
+    <LinearLayout
+        android:id="@+id/license_layout"
+        android:layout_below="@id/author_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/author_label"
-        android:text="@string/license_label_text"
-        />
-    <TextView
-        android:id="@+id/license_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/license_label"
-        android:layout_below="@id/author_tv"
-        />
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        >
+        <TextView
+            android:id="@+id/license_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/license_label_text"
+            />
+        <TextView
+            android:id="@+id/license_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            />
+    </LinearLayout>
+
+
+
+
+
 
 
 </RelativeLayout>

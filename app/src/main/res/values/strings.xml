@@ -83,6 +83,15 @@
     <!-- ImageLicensesActivity -->
     <string name="title_activity_image_licenses">Image Licenses</string>
 
+    <!-- AboutInfoActivity strings -->
+    <string name="title_activity_about_info">AboutInfoActivity</string>
+    <string name="version_text">Version</string>
+    <string name="image_license_text">Image Licenses</string>
+    <string-array name="about_array">
+        <item>@string/image_license_text</item>
+    </string-array>
+
+
 
 
 

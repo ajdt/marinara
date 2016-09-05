@@ -91,8 +91,8 @@ public class TimerActivity extends BaseTimerActivity {
         AndroidHelper.launchActivity(this, StatsActivity.class) ;
     }
 
-    public void onImageCreditsMenuItemClicked(MenuItem item) {
-        AndroidHelper.launchActivity(this, ImageLicensesActivity.class) ;
+    public void onAboutMenuItemClicked(MenuItem item) {
+        AndroidHelper.launchActivity(this, AboutInfoActivity.class) ;
     }
 
     /**

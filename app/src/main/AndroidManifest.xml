@@ -59,6 +59,10 @@
             android:name=".ImageLicensesActivity"
             android:label="@string/title_activity_image_licenses" >
         </activity>
+        <activity
+            android:name=".AboutInfoActivity"
+            android:label="@string/title_activity_about_info" >
+        </activity>
     </application>
 
 </manifest>
