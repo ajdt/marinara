@@ -91,6 +91,10 @@ public class TimerActivity extends BaseTimerActivity {
         AndroidHelper.launchActivity(this, StatsActivity.class) ;
     }
 
+    public void onImageCreditsMenuItemClicked(MenuItem item) {
+        AndroidHelper.launchActivity(this, ImageLicensesActivity.class) ;
+    }
+
     /**
      * callback updates UI and changes timer_state to done
      */

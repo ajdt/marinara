@@ -3,6 +3,7 @@ package com.itsaunixsystem.marinara.util;
 import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.itsaunixsystem.marinara.R;
 
@@ -66,7 +67,8 @@ public class ImageLicense {
             while (current_token != XmlPullParser.END_DOCUMENT) {
                 switch (current_token) {
                     case XmlPullParser.START_TAG:
-                        license_entries.add(new ImageLicense(context, parser));
+                        if (parser.getName().equals(ImageLicense.class.getSimpleName()))
+                            license_entries.add(new ImageLicense(context, parser));
                         break;
                 }
                 current_token = parser.next();

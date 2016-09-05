@@ -20,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/description_label"
+        android:layout_below="@id/list_item_image_view"
         />
 
     <!-- author -->
@@ -35,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/author_label"
+        android:layout_below="@id/description_tv"
         />
 
     <!-- license -->
@@ -50,6 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/license_label"
+        android:layout_below="@id/author_tv"
         />
 
 
