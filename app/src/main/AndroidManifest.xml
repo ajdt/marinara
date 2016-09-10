@@ -63,6 +63,12 @@
             android:name=".AboutInfoActivity"
             android:label="@string/title_activity_about_info" >
         </activity>
+
+        <service
+            android:name=".timer.PomodoroTimer"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>
