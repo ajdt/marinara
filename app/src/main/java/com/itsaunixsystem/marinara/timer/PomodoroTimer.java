@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 
@@ -24,10 +25,17 @@ public class PomodoroTimer extends Service {
 
     @Nullable
     @Override
-    public IBinder onBind(Intent intent) { return new TimerBinder(this) ; }
+    public IBinder onBind(Intent intent) {
+        return new TimerBinder(this) ;
+    }
 
     @Override
-    public void onCreate() { _callbacks = new ArrayList<TimerCallback>() ; }
+    public void onCreate() {
+        // initialize member vars. CountDownTimer() will be initialized on call to reset(millisec)
+        _callbacks = new ArrayList<TimerCallback>() ;
+        _state = TimerState.DONE ;
+        _remaining_millisec = _duration = 0 ;
+    }
 
     /****************************** CountDownTimer CREATION/DESTRUCTION ******************************/
 
@@ -63,7 +71,11 @@ public class PomodoroTimer extends Service {
 
     /****************************** CALLBACKS ******************************/
 
-    public void registerCallback(TimerCallback callback_obj ) { _callbacks.add(callback_obj) ; }
+    public void registerCallback(TimerCallback callback_obj ) {
+        if (_callbacks.contains(callback_obj))
+            return ; // allow registering only once
+        _callbacks.add(callback_obj) ;
+    }
 
     public void unregisterCallback(TimerCallback callback_obj) {
         if (_callbacks.contains(callback_obj))
