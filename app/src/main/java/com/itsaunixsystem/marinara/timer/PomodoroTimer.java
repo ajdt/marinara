@@ -137,5 +137,6 @@ public class PomodoroTimer extends Service {
 
     public TimerState state() { return _state ; }
     public long getDuration() { return _duration ; }
+    public long getRemainingMillisec() { return _remaining_millisec ; }
 
 }

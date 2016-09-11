@@ -19,6 +19,7 @@ import com.itsaunixsystem.marinara.timer.TimerBinder;
 import com.itsaunixsystem.marinara.timer.TimerCallback;
 import com.itsaunixsystem.marinara.timer.TimerState;
 
+
 import static com.itsaunixsystem.marinara.util.TimeConversionHelper.millisecToTimeString;
 
 /**
@@ -76,15 +77,20 @@ public abstract class BaseTimerActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume() ;
-        if (_timer != null)
-            _timer.registerCallback(this) ;
+        if (_timer != null) {
+            _timer.registerCallback(this);
+            // NOTE: this call is needed to update UI after activity regains focus
+            this.updateTimerDisplay(_timer.getRemainingMillisec()) ;
+
+        }
+
     }
 
     @Override
     protected void onPause() {
         super.onPause() ;
         if (_timer != null) {
-            _timer.unregisterCallback(this) ; 
+            _timer.unregisterCallback(this) ;
         }
 
     }

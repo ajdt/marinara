@@ -32,6 +32,7 @@ public class TimerActivity extends BaseTimerActivity {
     @Override
     protected void onResume() {
         super.onResume() ;
+
         // set task name again, in case a new task was selected
         this.setTaskNameInTaskTextView() ;
     }
@@ -98,6 +99,7 @@ public class TimerActivity extends BaseTimerActivity {
     /**
      * callback updates UI and changes timer_state to done
      */
+    @Override
     public void onTimerFinish() {
         super.onTimerFinish() ;
         saveSessionInfoToDatabase() ;
