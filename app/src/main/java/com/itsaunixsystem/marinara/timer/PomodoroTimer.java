@@ -99,8 +99,26 @@ public class PomodoroTimer extends Service {
     public void onFinish() {
         _remaining_millisec = 0 ;
         _state              = TimerState.DONE ;
-        for (TimerCallback callback : _callbacks)
-            callback.onTimerFinish() ;
+
+        // if no callback is registered, wait until one is then issue onTimerFinish() callback
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (_callbacks.size() == 0 ) {
+                    try {
+                        Thread.sleep(100, 0) ;
+                    } catch (InterruptedException except) {
+
+                    }
+                }
+
+                // make the callback
+                for (TimerCallback callback: _callbacks)
+                    callback.onTimerFinish() ;
+            }
+        }).start() ;
+
+
     }
 
     /****************************** TIME KEEPING METHODS ******************************/

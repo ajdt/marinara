@@ -154,9 +154,17 @@ public abstract class BaseTimerActivity extends AppCompatActivity
 
     /****************************** UI UPDATING ******************************/
 
-    private void updateTimerDisplay(long millisec_remaining) {
-        updateTimerCountdown(millisec_remaining) ;
-        updateTimerButtonImage() ;
+    private void updateTimerDisplay(final long millisec_remaining) {
+        // explicitly run on UI thread because onTimerTick() and onTimerDisplay()
+        // may be called from separate thread in PomodoroTimer service
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                updateTimerCountdown(millisec_remaining) ;
+                updateTimerButtonImage() ;
+            }
+        });
+
     }
     /**
      * update countdown display with remaining time
