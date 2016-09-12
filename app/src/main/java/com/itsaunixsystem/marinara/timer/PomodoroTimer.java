@@ -7,6 +7,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.itsaunixsystem.marinara.TimerActivity;
+import com.itsaunixsystem.marinara.util.AndroidHelper;
 import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 
 import java.util.ArrayList;
@@ -99,6 +101,14 @@ public class PomodoroTimer extends Service {
     public void onFinish() {
         _remaining_millisec = 0 ;
         _state              = TimerState.DONE ;
+
+        // issue notification if screen doesn't have focus. Otherwise just play sound/vibrate
+        // TODO: improve way we check if app is visible on-screen
+        if (_callbacks.size() == 0)
+            AndroidHelper.issueNotification(this, TimerActivity.class,
+                    "Session Ended", "Would you like to continue?") ;
+        else
+            AndroidHelper.playNotificationSound(this) ;
 
         // if no callback is registered, wait until one is then issue onTimerFinish() callback
         new Thread(new Runnable() {
