@@ -1,17 +1,24 @@
 package com.itsaunixsystem.marinara;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.itsaunixsystem.marinara.timer.PomodoroTimer;
+import com.itsaunixsystem.marinara.timer.TimerBinder;
 import com.itsaunixsystem.marinara.timer.TimerCallback;
 import com.itsaunixsystem.marinara.timer.TimerState;
-import com.itsaunixsystem.marinara.util.MarinaraPreferences;
+
 
 import static com.itsaunixsystem.marinara.util.TimeConversionHelper.millisecToTimeString;
 
@@ -23,7 +30,28 @@ import static com.itsaunixsystem.marinara.util.TimeConversionHelper.millisecToTi
 public abstract class BaseTimerActivity extends AppCompatActivity
         implements TimerCallback, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private PomodoroTimer _timer = null ;
+    private PomodoroTimer _timer = null;
+    private ServiceConnection _connection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+
+            // save reference to timer service
+            BaseTimerActivity.this._timer = ((TimerBinder) service).getService() ;
+
+            // register callback, reset timer and start it if necessary
+            BaseTimerActivity.this._timer.registerCallback(BaseTimerActivity.this) ;
+            BaseTimerActivity.this.resetTimerAndUpdateDisplay() ;
+            if (BaseTimerActivity.this.initialState() == TimerState.RUNNING)
+                BaseTimerActivity.this._timer.start() ;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            BaseTimerActivity.this._timer = null ;
+            // TODO: safeguard against using _timer when it equals null
+        }
+    } ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +64,37 @@ public abstract class BaseTimerActivity extends AppCompatActivity
         PreferenceManager.getDefaultSharedPreferences(this).
                 registerOnSharedPreferenceChangeListener(this) ;
 
-        this.initNewTimerAndUpdateDisplay() ;
+        this.bindService(new Intent(this, PomodoroTimer.class), _connection, Context.BIND_AUTO_CREATE) ;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy() ;
+        this.unbindService(_connection) ;
+        this._timer = null ;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume() ;
+        if (_timer != null) {
+            _timer.registerCallback(this);
+            // NOTE: this call is needed to update UI after activity regains focus
+            this.updateTimerDisplay(_timer.getRemainingMillisec()) ;
+
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause() ;
+        if (_timer != null) {
+            _timer.unregisterCallback(this) ;
+        }
+
+    }
+
 
     /****************************** TIMER AND UI CALLBACKS ******************************/
 
@@ -59,7 +116,7 @@ public abstract class BaseTimerActivity extends AppCompatActivity
                 _timer.resume() ;
                 break ;
             case DONE:
-                initNewTimerAndUpdateDisplay();
+                resetTimerAndUpdateDisplay();
                 break ;
         }
 
@@ -91,15 +148,23 @@ public abstract class BaseTimerActivity extends AppCompatActivity
         // if session duration changes and we haven't started timer yet, update timer & display
         if ( key.equals(getResources().getString(R.string.pomodoro_session_millisec)) &&
                 _timer.state() == TimerState.READY) {
-            initNewTimerAndUpdateDisplay() ;
+            resetTimerAndUpdateDisplay() ;
         }
     }
 
     /****************************** UI UPDATING ******************************/
 
-    private void updateTimerDisplay(long millisec_remaining) {
-        updateTimerCountdown(millisec_remaining) ;
-        updateTimerButtonImage() ;
+    private void updateTimerDisplay(final long millisec_remaining) {
+        // explicitly run on UI thread because onTimerTick() and onTimerDisplay()
+        // may be called from separate thread in PomodoroTimer service
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                updateTimerCountdown(millisec_remaining) ;
+                updateTimerButtonImage() ;
+            }
+        });
+
     }
     /**
      * update countdown display with remaining time
@@ -132,34 +197,24 @@ public abstract class BaseTimerActivity extends AppCompatActivity
         }
     }
 
+
+
     /**
      * call getTimerDuration() to get the latest duration value (preferences may have changed),
      * reset the timer with this (possibly) new duration and update the display to show the new duration
      */
-    private void initNewTimerAndUpdateDisplay() {
-        // new timer
+    private void resetTimerAndUpdateDisplay() {
+        // NOTE: important to reset timer first update display or display will be incorrect
         long duration   = this.getTimerDuration() ;
-        _timer          = new PomodoroTimer(this, duration, this.getTimerCallbackInterval()) ;
-
-        // display
+        _timer.reset(duration);
         updateTimerDisplay(duration) ;
 
-        // check if timer is to be initialized in running state and start it if so
-        if (this.initialState() == TimerState.RUNNING)
-            _timer.start() ;
     }
 
     /****************************** HELPERS ******************************/
-
-    public long getCurrentSessionDuration() {
-        return _timer.duration() ;
-    }
+    public long getCurrentSessionDuration() { return _timer.getDuration() ; }
 
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
-
-    public long getTimerCallbackInterval() {
-        return MarinaraPreferences.getPrefs(this)._TIMER_CALLBACK_INTERVAL_DEFAULT ;
-    }
 
     public abstract long getTimerDuration() ;
     public abstract boolean skipBreaks() ;

@@ -1,31 +1,42 @@
 package com.itsaunixsystem.marinara.timer;
 
+import android.app.Service;
+import android.content.Intent;
 import android.os.CountDownTimer;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
+import android.util.Log;
+
+import com.itsaunixsystem.marinara.TimerActivity;
+import com.itsaunixsystem.marinara.util.AndroidHelper;
+import com.itsaunixsystem.marinara.util.MarinaraPreferences;
+
+import java.util.ArrayList;
 
 /**
  * @author ajdt on 6/22/16.
  * @description A wrapper for CountDownTimer that allows us to pause the timer
  */
-public class PomodoroTimer {
+public class PomodoroTimer extends Service {
 
 
-    private TimerCallback _callback_obj             = null;
-    private CountDownTimer _countdown_timer         = null;
+    private ArrayList<TimerCallback>    _callbacks                  = null;
+    private CountDownTimer              _countdown_timer            = null;
+    private long                        _remaining_millisec, _duration ;
+    private TimerState                  _state ;
 
-    private long            _remaining_millisec ;
-    private final long      _SESSION_DURATION ;
-    private final long      _CALLBACK_INTERVAL_MILLISEC ;
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return new TimerBinder(this) ;
+    }
 
-    private TimerState _state ;
-
-
-
-    public PomodoroTimer(TimerCallback callback, long duration_millis, long interval_millis) {
-        _CALLBACK_INTERVAL_MILLISEC = interval_millis ;
-        _SESSION_DURATION           = duration_millis ;
-        _callback_obj               = callback ;
-
-        this.initNewCountDownTimer(duration_millis);
+    @Override
+    public void onCreate() {
+        // initialize member vars. CountDownTimer() will be initialized on call to reset(millisec)
+        _callbacks = new ArrayList<TimerCallback>() ;
+        _state = TimerState.DONE ;
+        _remaining_millisec = _duration = 0 ;
     }
 
     /****************************** CountDownTimer CREATION/DESTRUCTION ******************************/
@@ -37,7 +48,8 @@ public class PomodoroTimer {
     private void initNewCountDownTimer(long duration_millisec) {
         // set time remaining, create new countdown object and set state to READY
         _remaining_millisec = duration_millisec ;
-        _countdown_timer    = new CountDownTimer(duration_millisec, _CALLBACK_INTERVAL_MILLISEC) {
+        long callback_interval = MarinaraPreferences.getPrefs(this)._TIMER_CALLBACK_INTERVAL_DEFAULT ;
+        _countdown_timer    = new CountDownTimer(duration_millisec, callback_interval)  {
             @Override
             public void onTick(long millis_until_finished) { PomodoroTimer.this.onTick(millis_until_finished) ; }
 
@@ -61,13 +73,25 @@ public class PomodoroTimer {
 
     /****************************** CALLBACKS ******************************/
 
+    public void registerCallback(TimerCallback callback_obj ) {
+        if (_callbacks.contains(callback_obj))
+            return ; // allow registering only once
+        _callbacks.add(callback_obj) ;
+    }
+
+    public void unregisterCallback(TimerCallback callback_obj) {
+        if (_callbacks.contains(callback_obj))
+            _callbacks.remove(callback_obj) ;
+    }
     /**
      * update remaining millisec and execute our callback's onTimerTick()
      * @param millisec_remaining
      */
     public void onTick(long millisec_remaining) {
         _remaining_millisec = millisec_remaining ;
-        _callback_obj.onTimerTick(millisec_remaining) ;
+
+        for (TimerCallback callback : _callbacks)
+            callback.onTimerTick(millisec_remaining) ;
     }
 
     /**
@@ -77,7 +101,34 @@ public class PomodoroTimer {
     public void onFinish() {
         _remaining_millisec = 0 ;
         _state              = TimerState.DONE ;
-        _callback_obj.onTimerFinish() ;
+
+        // issue notification if screen doesn't have focus. Otherwise just play sound/vibrate
+        // TODO: improve way we check if app is visible on-screen
+        if (_callbacks.size() == 0)
+            AndroidHelper.issueNotification(this, TimerActivity.class,
+                    "Session Ended", "Would you like to continue?") ;
+        else
+            AndroidHelper.playNotificationSound(this) ;
+
+        // if no callback is registered, wait until one is then issue onTimerFinish() callback
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (_callbacks.size() == 0 ) {
+                    try {
+                        Thread.sleep(100, 0) ;
+                    } catch (InterruptedException except) {
+
+                    }
+                }
+
+                // make the callback
+                for (TimerCallback callback: _callbacks)
+                    callback.onTimerFinish() ;
+            }
+        }).start() ;
+
+
     }
 
     /****************************** TIME KEEPING METHODS ******************************/
@@ -103,9 +154,17 @@ public class PomodoroTimer {
         _state = TimerState.RUNNING ;
     }
 
+    public void reset(long millisec) {
+        _duration = millisec ;
+        this.deleteCountDownTimer() ;
+        this.initNewCountDownTimer(millisec) ;
+        _state = TimerState.READY ;
+    }
+
     /****************************** SETTERS/GETTERS ******************************/
 
     public TimerState state() { return _state ; }
-    public long duration() { return _SESSION_DURATION ; }
+    public long getDuration() { return _duration ; }
+    public long getRemainingMillisec() { return _remaining_millisec ; }
 
 }
