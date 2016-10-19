@@ -44,21 +44,6 @@ public class TimerActivity extends BaseTimerActivity {
         return true ;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId() ;
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true ;
-        }
-
-        return super.onOptionsItemSelected(item) ;
-    }
-
     /****************************** TIMER AND UI CALLBACKS ******************************/
 
     private void initCallbacks() {
@@ -68,32 +53,24 @@ public class TimerActivity extends BaseTimerActivity {
 
         // NOTE: remaining callbacks are registered via xml layouts
     }
-    /**
-     * callback for "Settings" option in options menu. Launches SettingsActivity
-     * @param item
-     */
-    public void onSettingsMenuClicked(MenuItem item) {
-        AndroidHelper.launchActivity(this, SettingsActivity.class) ;
-    }
 
-    /**
-     * callback for "Manage Tasks" option in options menu. Launches ManageTasksActivity
-     * @param item
-     */
-    public void onManageTasksClicked(MenuItem item) {
-        AndroidHelper.launchActivity(this, ManageTasksActivity.class) ;
-    }
-
-    /**
-     * callback for "stats" option in options menu. Launches StatsActivity
-     * @param item
-     */
-    public void onStatsMenuItemClicked(MenuItem item) {
-        AndroidHelper.launchActivity(this, StatsActivity.class) ;
-    }
-
-    public void onAboutMenuItemClicked(MenuItem item) {
-        AndroidHelper.launchActivity(this, AboutInfoActivity.class) ;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                AndroidHelper.launchActivity(this, SettingsActivity.class) ;
+                break ;
+            case R.id.add_task_menu_item:
+                AndroidHelper.launchActivity(this, ManageTasksActivity.class) ;
+                break ;
+            case R.id.stats_menu_item:
+                AndroidHelper.launchActivity(this, StatsActivity.class) ;
+                break ;
+            case R.id.about_menu_item:
+                AndroidHelper.launchActivity(this, AboutInfoActivity.class) ;
+                break ;
+        }
+        return true ; // consume UI event
     }
 
     /**
