@@ -3,13 +3,15 @@
     <!-- default values -->
     <integer name="default_timer_millisec">900000</integer> <!-- equiv to 15 minutes -->
     <integer name="default_break_millisec">300000</integer> <!-- equiv to 5 minutes -->
+    <integer name="default_long_break_millisec">900000</integer> <!-- equiv to 15 minutes -->
+    <integer name="timer_callback_interval">200</integer> <!-- callback every 200 millisec -->
 
     <!-- default boolean settings -->
-    <bool name="default_auto_start_break">false</bool>
-    <bool name="default_skip_break">false</bool>
-    <bool name="default_pause_pomodoro">false</bool>
     <bool name="default_allow_pause_sessions">false</bool>
+    <bool name="default_auto_start_break">false</bool>
+    <bool name="default_auto_start_next_session">false</bool>
+    <bool name="default_pause_pomodoro">false</bool>
+    <bool name="default_skip_break">false</bool>
 
-    <integer name="timer_callback_interval">200</integer> <!-- callback every 200 millisec -->
 
 </resources>

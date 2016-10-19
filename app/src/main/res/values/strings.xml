@@ -20,6 +20,8 @@
     <string name="pausing_pomodoro_session_title">Allow Pausing Pomodoro Sessions </string>
     <string name="pomodoro_duration_title">Pomodoro Session Duration</string>
     <string name="pausing_pomodoro_session_summary">pause current pomodoro session indefinitely</string>
+    <string name="auto_start_next_session_title">Auto Start Next Pomodoro Session</string>
+    <string name="auto_start_next_session_summary">next session countdown starts right after current session/break</string>
 
     <!-- preference key names -->
     <string name="break_session_millisec">break_session_millisec</string>
@@ -28,6 +30,7 @@
     <string name="pomodoro_session_millisec">pomodoro_session_millisec</string>
     <string name="allow_pause_session">pause_pomodoro_session</string>
     <string name="selected_task_id">selected_task_id</string>
+    <string name="auto_start_next_session">auto_start_pomodoro_session</string>
 
 
 

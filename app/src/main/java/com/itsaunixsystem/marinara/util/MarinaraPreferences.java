@@ -23,15 +23,17 @@ public class MarinaraPreferences {
     public final String _AUTO_START_BREAK_PREF_KEY ;
     public final String _ALLOW_PAUSE_SESSIONS_PREF_KEY ;
     public final String _SELECTED_TASK_ID_KEY ;
+    public final String _AUTO_START_NEXT_SESSION_KEY ;
 
     // constants to reference default values
     public final boolean _SKIP_BREAK_DEFAULT ;
     public final boolean _AUTO_START_BREAK_DEFAULT ;
     public final boolean _ALLOW_PAUSE_SESSIONS_DEFAULT ;
+    public final boolean _AUTO_START_NEXT_SESSION_DEFAULT ;
     public final int _TIMER_CALLBACK_INTERVAL_DEFAULT;
     public final int _SESSION_DURATION_MILLISEC_DEFAULT ;
     public final int _BREAK_DURATION_MILLISEC_DEFAULT ;
-    public final long _SELECTED_TASK_ID_DEFAULT = Task.INVALID_TASK_ID_FLAG ; 
+    public final long _SELECTED_TASK_ID_DEFAULT = Task.INVALID_TASK_ID_FLAG ;
 
     // class is just a layer of indirection to using sharedPreferences, so it
     // requires a handle to default shared preferences
@@ -62,10 +64,12 @@ public class MarinaraPreferences {
         _AUTO_START_BREAK_PREF_KEY      = resources.getString(R.string.auto_start_break) ;
         _ALLOW_PAUSE_SESSIONS_PREF_KEY  = resources.getString(R.string.allow_pause_session) ;
         _SELECTED_TASK_ID_KEY           = resources.getString(R.string.selected_task_id) ;
+        _AUTO_START_NEXT_SESSION_KEY    = resources.getString(R.string.auto_start_next_session) ;
 
         _SKIP_BREAK_DEFAULT             = resources.getBoolean(R.bool.default_skip_break) ;
         _AUTO_START_BREAK_DEFAULT       = resources.getBoolean(R.bool.default_auto_start_break) ;
         _ALLOW_PAUSE_SESSIONS_DEFAULT   = resources.getBoolean(R.bool.default_allow_pause_sessions) ;
+        _AUTO_START_NEXT_SESSION_DEFAULT = resources.getBoolean(R.bool.default_auto_start_next_session) ;
 
         _SESSION_DURATION_MILLISEC_DEFAULT = resources.getInteger(R.integer.default_timer_millisec) ;
         _BREAK_DURATION_MILLISEC_DEFAULT   = resources.getInteger(R.integer.default_break_millisec) ;
@@ -94,6 +98,9 @@ public class MarinaraPreferences {
     }
     public long selectedTaskId() {
         return _shared_prefs.getLong(_SELECTED_TASK_ID_KEY, _SELECTED_TASK_ID_DEFAULT) ;
+    }
+    public boolean autoStartNextSession() {
+        return _shared_prefs.getBoolean(_AUTO_START_NEXT_SESSION_KEY, _AUTO_START_NEXT_SESSION_DEFAULT) ;
     }
 
     /****************************** PREFERENCE SETTERS ******************************/

@@ -39,6 +39,12 @@
             android:summary="@string/pausing_pomodoro_session_summary"
             android:defaultValue="@bool/default_pause_pomodoro"
             />
+        <CheckBoxPreference
+            android:key="@string/auto_start_next_session"
+            android:title="@string/auto_start_next_session_title"
+            android:summary="@string/auto_start_next_session_summary"
+            android:defaultValue="@bool/default_auto_start_next_session"
+            />
 
     </PreferenceCategory>
 
