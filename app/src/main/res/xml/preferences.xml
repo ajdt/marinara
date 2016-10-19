@@ -23,6 +23,23 @@
             />
 
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/long_break_preferences_title"
+        >
+        <com.itsaunixsystem.marinara.MinuteSecondPreferenceDialog
+            android:key="@string/long_break_millisec"
+            android:title="@string/long_break_duration_title"
+            android:defaultValue="@integer/default_long_break_millisec"
+            />
+        <EditTextPreference
+            android:key="@string/sessions_to_long_break"
+            android:title="@string/sessions_to_long_break_title"
+            android:summary="@string/sessions_to_long_break_summary"
+            android:defaultValue="@integer/default_sessions_to_long_break"
+            android:inputType="number"
+            android:numeric="integer" />
+    </PreferenceCategory>
+
 
     <PreferenceCategory
         android:title="@string/pomodoro_session_preferences_title">

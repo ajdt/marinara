@@ -15,6 +15,11 @@
     <string name="auto_start_break_summary">initiate break countdown as soon as pomodoro session ends</string>
     <string name="skip_break_summary">reset pomodoro session when current session ends </string>
 
+    <string name="long_break_preferences_title">Long Breaks</string>
+    <string name="long_break_duration_title">Long Break Duration</string>
+    <string name="sessions_to_long_break_title">Sessions To Long Break</string>
+    <string name="sessions_to_long_break_summary">number of pomodoro sessiosn before long break</string>
+
 
     <string name="pomodoro_session_preferences_title">Pomodoro Sessions</string>
     <string name="pausing_pomodoro_session_title">Allow Pausing Pomodoro Sessions </string>
@@ -31,6 +36,8 @@
     <string name="allow_pause_session">pause_pomodoro_session</string>
     <string name="selected_task_id">selected_task_id</string>
     <string name="auto_start_next_session">auto_start_pomodoro_session</string>
+    <string name="long_break_millisec">long_break_session_millisec</string>
+    <string name="sessions_to_long_break">sessions_to_long_break</string>
 
 
 

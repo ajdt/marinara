@@ -24,6 +24,8 @@ public class MarinaraPreferences {
     public final String _ALLOW_PAUSE_SESSIONS_PREF_KEY ;
     public final String _SELECTED_TASK_ID_KEY ;
     public final String _AUTO_START_NEXT_SESSION_KEY ;
+    public final String _LONG_BREAK_MILLISEC_PREF_KEY ;
+    public final String _SESSIONS_TO_LONG_BREAK_PREF_KEY ;
 
     // constants to reference default values
     public final boolean _SKIP_BREAK_DEFAULT ;
@@ -33,6 +35,8 @@ public class MarinaraPreferences {
     public final int _TIMER_CALLBACK_INTERVAL_DEFAULT;
     public final int _SESSION_DURATION_MILLISEC_DEFAULT ;
     public final int _BREAK_DURATION_MILLISEC_DEFAULT ;
+    public final int _LONG_BREAK_DURATION_MILLISEC_DEFAULT ;
+    public final int _SESSIONS_TO_LONG_BREAK_DEFAULT ;
     public final long _SELECTED_TASK_ID_DEFAULT = Task.INVALID_TASK_ID_FLAG ;
 
     // class is just a layer of indirection to using sharedPreferences, so it
@@ -65,6 +69,8 @@ public class MarinaraPreferences {
         _ALLOW_PAUSE_SESSIONS_PREF_KEY  = resources.getString(R.string.allow_pause_session) ;
         _SELECTED_TASK_ID_KEY           = resources.getString(R.string.selected_task_id) ;
         _AUTO_START_NEXT_SESSION_KEY    = resources.getString(R.string.auto_start_next_session) ;
+        _LONG_BREAK_MILLISEC_PREF_KEY   = resources.getString(R.string.long_break_millisec) ;
+        _SESSIONS_TO_LONG_BREAK_PREF_KEY = resources.getString(R.string.sessions_to_long_break) ;
 
         _SKIP_BREAK_DEFAULT             = resources.getBoolean(R.bool.default_skip_break) ;
         _AUTO_START_BREAK_DEFAULT       = resources.getBoolean(R.bool.default_auto_start_break) ;
@@ -74,6 +80,8 @@ public class MarinaraPreferences {
         _SESSION_DURATION_MILLISEC_DEFAULT = resources.getInteger(R.integer.default_timer_millisec) ;
         _BREAK_DURATION_MILLISEC_DEFAULT   = resources.getInteger(R.integer.default_break_millisec) ;
         _TIMER_CALLBACK_INTERVAL_DEFAULT   = resources.getInteger(R.integer.timer_callback_interval) ;
+        _LONG_BREAK_DURATION_MILLISEC_DEFAULT = resources.getInteger(R.integer.default_long_break_millisec) ;
+        _SESSIONS_TO_LONG_BREAK_DEFAULT    = resources.getInteger(R.integer.default_sessions_to_long_break) ;
 
         _shared_prefs                   = PreferenceManager.getDefaultSharedPreferences(ctx) ;
 
@@ -101,6 +109,15 @@ public class MarinaraPreferences {
     }
     public boolean autoStartNextSession() {
         return _shared_prefs.getBoolean(_AUTO_START_NEXT_SESSION_KEY, _AUTO_START_NEXT_SESSION_DEFAULT) ;
+    }
+    public long longBreakMillisec() {
+        return _shared_prefs.getLong(_LONG_BREAK_MILLISEC_PREF_KEY, _LONG_BREAK_DURATION_MILLISEC_DEFAULT) ;
+    }
+
+    public int sessionsToLongBreak() {
+        String pref_value = _shared_prefs.getString(_SESSIONS_TO_LONG_BREAK_PREF_KEY,
+                Integer.toString(_SESSIONS_TO_LONG_BREAK_DEFAULT)) ;
+        return Integer.parseInt(pref_value) ;
     }
 
     /****************************** PREFERENCE SETTERS ******************************/

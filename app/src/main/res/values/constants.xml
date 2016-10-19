@@ -4,6 +4,7 @@
     <integer name="default_timer_millisec">900000</integer> <!-- equiv to 15 minutes -->
     <integer name="default_break_millisec">300000</integer> <!-- equiv to 5 minutes -->
     <integer name="default_long_break_millisec">900000</integer> <!-- equiv to 15 minutes -->
+    <integer name="default_sessions_to_long_break">4</integer>
     <integer name="timer_callback_interval">200</integer> <!-- callback every 200 millisec -->
 
     <!-- default boolean settings -->
