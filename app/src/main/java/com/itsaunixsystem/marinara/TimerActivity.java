@@ -17,11 +17,11 @@ public class TimerActivity extends BaseTimerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Note: content view is set by BaseTimerActivity
         super.onCreate(savedInstanceState);
-        // Note: content view set by BaseTimerActivity
-        // load preferences and initialize timer/callbacks
-        MarinaraPreferences prefs = MarinaraPreferences.getPrefs(this) ;
-        this.initCallbacks() ;
+
+        // set listener so long-pressing task name text view will launch ManageTasksActivity
+        this.setLongPressListenerForTaskTextView() ;
     }
 
     @Override
@@ -37,16 +37,6 @@ public class TimerActivity extends BaseTimerActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_timer, menu) ;
         return true ;
-    }
-
-    /****************************** TIMER AND UI CALLBACKS ******************************/
-
-    private void initCallbacks() {
-
-        // long-pressing text view displaying task will launch ManageTasksActivity
-        this.setLongPressListenerForTaskTextView() ;
-
-        // NOTE: remaining callbacks are registered via xml layouts
     }
 
     @Override
@@ -82,6 +72,8 @@ public class TimerActivity extends BaseTimerActivity {
         }
     }
 
+    /****************************** UI UPDATING ******************************/
+
     /**
      * enable long-clicking and set a listener on text view that displays current active task name
      */
@@ -91,17 +83,13 @@ public class TimerActivity extends BaseTimerActivity {
         TextView text_view = (TextView)findViewById(R.id.task_tv) ;
         text_view.setLongClickable(true) ;
         text_view.setOnLongClickListener(new View.OnLongClickListener() {
-
             @Override
             public boolean onLongClick(View v) {
                 AndroidHelper.launchActivity(TimerActivity.this, ManageTasksActivity.class) ;
                 return true ; // return true to indicate long click is consumed
             }
-
         });
     }
-
-    /****************************** UI UPDATING ******************************/
 
     /**
      * set the text of task_tv to the currently selected task's name

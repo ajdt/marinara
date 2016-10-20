@@ -197,8 +197,6 @@ public abstract class BaseTimerActivity extends AppCompatActivity
         }
     }
 
-
-
     /**
      * call timerDurationPreference() to get the latest duration value (preferences may have changed),
      * reset the timer with this (possibly) new duration and update the display to show the new duration
@@ -208,7 +206,6 @@ public abstract class BaseTimerActivity extends AppCompatActivity
         long duration   = this.timerDurationPreference() ;
         _timer.reset(duration);
         updateTimerDisplay(duration) ;
-
     }
 
     /****************************** HELPERS ******************************/
@@ -217,7 +214,6 @@ public abstract class BaseTimerActivity extends AppCompatActivity
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
 
     public abstract long timerDurationPreference() ;
-    public abstract boolean skipBreaksPreference() ;
     public abstract boolean allowPausePreference() ;
     public abstract TimerState initialState() ;
 
