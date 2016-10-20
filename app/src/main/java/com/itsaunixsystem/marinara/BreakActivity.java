@@ -9,6 +9,8 @@ public class BreakActivity extends BaseTimerActivity {
 
     // NOTE: BaseTimerActivity.onCreate() is sufficient. Not overridden
 
+    public final static String __RUN_LONG_BREAK = "long break" ;
+
     @Override
     public void onTimerFinish() {
         super.onTimerFinish() ;
@@ -17,7 +19,17 @@ public class BreakActivity extends BaseTimerActivity {
     }
 
     @Override
-    public long timerDurationPreference() { return MarinaraPreferences.getPrefs(this).breakMillisec() ;}
+    public long timerDurationPreference() {
+        Bundle extras               = getIntent().getExtras() ;
+        MarinaraPreferences prefs   = MarinaraPreferences.getPrefs(this) ;
+
+        // if long break requested, return long break duration preference...
+        if (extras != null && extras.getBoolean(__RUN_LONG_BREAK))
+            return prefs.longBreakMillisec() ;
+
+        // ...otherwise return duration of regular break
+        return prefs.breakMillisec() ;
+    }
 
     // NOTE: App should not allow breaks to be paused. After break ends,
     // next pomodoro session won't start automatically anyway, so there's

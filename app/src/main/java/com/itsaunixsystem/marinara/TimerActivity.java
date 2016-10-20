@@ -1,5 +1,6 @@
 package com.itsaunixsystem.marinara;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,8 @@ import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 
 public class TimerActivity extends BaseTimerActivity {
 
+    private int _sessions_count = 0;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Note: content view is set by BaseTimerActivity
@@ -64,11 +67,25 @@ public class TimerActivity extends BaseTimerActivity {
     @Override
     public void onTimerFinish() {
         super.onTimerFinish() ;
-        PomodoroSession.saveNewSession(this.getCurrentSessionDuration(), this.getSelectedTaskName()) ;
 
-        // break time?
+        // save session & increment session count
+        PomodoroSession.saveNewSession(this.getCurrentSessionDuration(),
+                this.getSelectedTaskName()) ;
+        _sessions_count++ ;
+
+        // decide what happens next
         if (!this.skipBreaksPreference()) {
-            AndroidHelper.launchActivity(this, BreakActivity.class) ;
+            // launch a break (either short or long)
+            if (_sessions_count == MarinaraPreferences.getPrefs(this).sessionsToLongBreak()) {
+                // launch long break and reset session counter
+                Intent intent = new Intent(this, BreakActivity.class) ;
+                intent.putExtra(BreakActivity.__RUN_LONG_BREAK, true) ;
+                this.startActivity(intent) ;
+
+                _sessions_count = 0 ;
+            }
+            else
+                AndroidHelper.launchActivity(this, BreakActivity.class) ;
         }
     }
 
