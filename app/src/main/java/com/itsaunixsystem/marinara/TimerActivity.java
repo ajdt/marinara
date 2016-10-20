@@ -1,7 +1,5 @@
 package com.itsaunixsystem.marinara;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,12 +8,9 @@ import android.widget.TextView;
 
 import com.itsaunixsystem.marinara.orm.PomodoroSession;
 import com.itsaunixsystem.marinara.orm.Task;
-import com.itsaunixsystem.marinara.orm.TaskStatus;
 import com.itsaunixsystem.marinara.timer.TimerState;
 import com.itsaunixsystem.marinara.util.AndroidHelper;
 import com.itsaunixsystem.marinara.util.MarinaraPreferences;
-
-import java.util.Date;
 
 
 public class TimerActivity extends BaseTimerActivity {
@@ -82,7 +77,7 @@ public class TimerActivity extends BaseTimerActivity {
         PomodoroSession.saveNewSession(this.getCurrentSessionDuration(), this.getSelectedTaskName()) ;
 
         // break time?
-        if (!this.skipBreaks()) {
+        if (!this.skipBreaksPreference()) {
             AndroidHelper.launchActivity(this, BreakActivity.class) ;
         }
     }
@@ -121,9 +116,9 @@ public class TimerActivity extends BaseTimerActivity {
     // we are always using the latest value, and saves the trouble of having to save local copies
     // of the preference values (and implementing onSharedPreferenceChangeListener in this class too).
 
-    public long getTimerDuration() { return MarinaraPreferences.getPrefs(this).timerMillisec() ;}
-    public boolean skipBreaks() { return MarinaraPreferences.getPrefs(this).skipBreak() ; }
-    public boolean allowPause() { return MarinaraPreferences.getPrefs(this).allowPauseSessions() ; }
+    public long timerDurationPreference() { return MarinaraPreferences.getPrefs(this).timerMillisec() ;}
+    public boolean skipBreaksPreference() { return MarinaraPreferences.getPrefs(this).skipBreak() ; }
+    public boolean allowPausePreference() { return MarinaraPreferences.getPrefs(this).allowPauseSessions() ; }
 
 
     public TimerState initialState() { return TimerState.READY ; }

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -108,7 +107,7 @@ public abstract class BaseTimerActivity extends AppCompatActivity
                 _timer.start() ;
                 break ;
             case RUNNING:
-                if (!this.allowPause())
+                if (!this.allowPausePreference())
                     return ;
                 _timer.pause() ;
                 break ;
@@ -166,6 +165,7 @@ public abstract class BaseTimerActivity extends AppCompatActivity
         });
 
     }
+    
     /**
      * update countdown display with remaining time
      * @param millisec_remaining
@@ -200,12 +200,12 @@ public abstract class BaseTimerActivity extends AppCompatActivity
 
 
     /**
-     * call getTimerDuration() to get the latest duration value (preferences may have changed),
+     * call timerDurationPreference() to get the latest duration value (preferences may have changed),
      * reset the timer with this (possibly) new duration and update the display to show the new duration
      */
     private void resetTimerAndUpdateDisplay() {
         // NOTE: important to reset timer first update display or display will be incorrect
-        long duration   = this.getTimerDuration() ;
+        long duration   = this.timerDurationPreference() ;
         _timer.reset(duration);
         updateTimerDisplay(duration) ;
 
@@ -216,9 +216,9 @@ public abstract class BaseTimerActivity extends AppCompatActivity
 
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
 
-    public abstract long getTimerDuration() ;
-    public abstract boolean skipBreaks() ;
-    public abstract boolean allowPause() ;
+    public abstract long timerDurationPreference() ;
+    public abstract boolean skipBreaksPreference() ;
+    public abstract boolean allowPausePreference() ;
     public abstract TimerState initialState() ;
 
 }

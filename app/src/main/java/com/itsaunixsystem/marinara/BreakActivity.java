@@ -17,17 +17,17 @@ public class BreakActivity extends BaseTimerActivity {
     }
 
     @Override
-    public long getTimerDuration() { return MarinaraPreferences.getPrefs(this).breakMillisec() ;}
+    public long timerDurationPreference() { return MarinaraPreferences.getPrefs(this).breakMillisec() ;}
 
     // NOTE: this is a break, don't need another
     @Override
-    public boolean skipBreaks() { return true ; }
+    public boolean skipBreaksPreference() { return true ; }
 
     // NOTE: App should not allow breaks to be paused. After break ends,
     // next pomodoro session won't start automatically anyway, so there's
     // no reason to pause.
     @Override
-    public boolean allowPause() { return false ; }
+    public boolean allowPausePreference() { return false ; }
 
     /**
      * Dialog occuring before BreakActivity is started will ask user if break should be launched,
