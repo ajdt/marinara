@@ -79,11 +79,11 @@ public class TimerActivity extends BaseTimerActivity {
     @Override
     public void onTimerFinish() {
         super.onTimerFinish() ;
-        saveSessionInfoToDatabase() ;
+        PomodoroSession.saveNewSession(this.getCurrentSessionDuration(), this.getSelectedTaskName()) ;
 
         // break time?
         if (!this.skipBreaks()) {
-            launchBreak() ;
+            AndroidHelper.launchActivity(this, BreakActivity.class) ;
         }
     }
 
@@ -114,23 +114,6 @@ public class TimerActivity extends BaseTimerActivity {
     public void setTaskNameInTaskTextView() {
         TextView task_text_view = (TextView)findViewById(R.id.task_tv) ;
         task_text_view.setText(this.getSelectedTaskName()) ;
-    }
-
-    /****************************** HELPERS ******************************/
-
-    private void launchBreak() {
-        AndroidHelper.launchActivity(this, BreakActivity.class) ;
-    }
-
-    /**
-     * create database entry for this session. Assign the task currently selected to
-     * the newly created entry in the PomodoroSession table
-     */
-    private void saveSessionInfoToDatabase() {
-        PomodoroSession session = new PomodoroSession(new Date(), this.getCurrentSessionDuration()) ;
-        session.task            = Task.getByName(this.getSelectedTaskName()) ;
-
-        session.save() ;
     }
 
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/

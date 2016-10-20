@@ -24,4 +24,11 @@ public class PomodoroSession extends SugarRecord {
         this.completion_date    = new Date(started_at.getTime()) ;
         this.duration           = duration ;
     }
+
+    public static long saveNewSession(long duration, String task_name) {
+        PomodoroSession session = new PomodoroSession(new Date(), duration) ;
+        session.task            = Task.getByName(task_name) ;
+
+        return session.save() ; // returns id of saved session
+    }
 }
