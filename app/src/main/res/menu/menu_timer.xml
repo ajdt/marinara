@@ -6,17 +6,17 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never"
-        android:onClick="onSettingsMenuClicked"/>
+        android:onClick="onOptionsItemSelected"/>
     <item
         android:id="@+id/add_task_menu_item"
         android:title="@string/manage_tasks_menu_item_title"
-        android:onClick="onManageTasksClicked" />
+        android:onClick="onOptionsItemSelected" />
     <item
         android:id="@+id/stats_menu_item"
         android:title="Statistics"
-        android:onClick="onStatsMenuItemClicked"/>
+        android:onClick="onOptionsItemSelected"/>
     <item
         android:id="@+id/about_menu_item"
         android:title="About"
-        android:onClick="onAboutMenuItemClicked"/>
+        android:onClick="onOptionsItemSelected"/>
 </menu>

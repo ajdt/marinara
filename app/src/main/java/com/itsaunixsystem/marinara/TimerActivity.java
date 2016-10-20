@@ -1,7 +1,6 @@
 package com.itsaunixsystem.marinara;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,23 +9,22 @@ import android.widget.TextView;
 
 import com.itsaunixsystem.marinara.orm.PomodoroSession;
 import com.itsaunixsystem.marinara.orm.Task;
-import com.itsaunixsystem.marinara.orm.TaskStatus;
 import com.itsaunixsystem.marinara.timer.TimerState;
 import com.itsaunixsystem.marinara.util.AndroidHelper;
 import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 
-import java.util.Date;
-
 
 public class TimerActivity extends BaseTimerActivity {
 
+    private int _sessions_count = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Note: content view is set by BaseTimerActivity
         super.onCreate(savedInstanceState);
-        // Note: content view set by BaseTimerActivity
-        // load preferences and initialize timer/callbacks
-        MarinaraPreferences prefs = MarinaraPreferences.getPrefs(this) ;
-        this.initCallbacks() ;
+
+        // set listener so long-pressing task name text view will launch ManageTasksActivity
+        this.setLongPressListenerForTaskTextView() ;
     }
 
     @Override
@@ -46,54 +44,21 @@ public class TimerActivity extends BaseTimerActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId() ;
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true ;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                AndroidHelper.launchActivity(this, SettingsActivity.class) ;
+                break ;
+            case R.id.add_task_menu_item:
+                AndroidHelper.launchActivity(this, ManageTasksActivity.class) ;
+                break ;
+            case R.id.stats_menu_item:
+                AndroidHelper.launchActivity(this, StatsActivity.class) ;
+                break ;
+            case R.id.about_menu_item:
+                AndroidHelper.launchActivity(this, AboutInfoActivity.class) ;
+                break ;
         }
-
-        return super.onOptionsItemSelected(item) ;
-    }
-
-    /****************************** TIMER AND UI CALLBACKS ******************************/
-
-    private void initCallbacks() {
-
-        // long-pressing text view displaying task will launch ManageTasksActivity
-        this.setLongPressListenerForTaskTextView() ;
-
-        // NOTE: remaining callbacks are registered via xml layouts
-    }
-    /**
-     * callback for "Settings" option in options menu. Launches SettingsActivity
-     * @param item
-     */
-    public void onSettingsMenuClicked(MenuItem item) {
-        AndroidHelper.launchActivity(this, SettingsActivity.class) ;
-    }
-
-    /**
-     * callback for "Manage Tasks" option in options menu. Launches ManageTasksActivity
-     * @param item
-     */
-    public void onManageTasksClicked(MenuItem item) {
-        AndroidHelper.launchActivity(this, ManageTasksActivity.class) ;
-    }
-
-    /**
-     * callback for "stats" option in options menu. Launches StatsActivity
-     * @param item
-     */
-    public void onStatsMenuItemClicked(MenuItem item) {
-        AndroidHelper.launchActivity(this, StatsActivity.class) ;
-    }
-
-    public void onAboutMenuItemClicked(MenuItem item) {
-        AndroidHelper.launchActivity(this, AboutInfoActivity.class) ;
+        return true ; // consume UI event
     }
 
     /**
@@ -102,13 +67,31 @@ public class TimerActivity extends BaseTimerActivity {
     @Override
     public void onTimerFinish() {
         super.onTimerFinish() ;
-        saveSessionInfoToDatabase() ;
 
-        // break time?
-        if (!this.skipBreaks()) {
-            launchBreak() ;
+        // save session & increment session count
+        PomodoroSession.saveNewSession(this.getCurrentSessionDuration(),
+                this.getSelectedTaskName()) ;
+        _sessions_count++ ;
+
+        // decide what happens next
+        if (!this.skipBreaksPreference()) {
+            // launch a break (either short or long)
+            if (_sessions_count == MarinaraPreferences.getPrefs(this).sessionsToLongBreak()) {
+                // launch long break and reset session counter
+                Intent intent = new Intent(this, BreakActivity.class) ;
+                intent.putExtra(BreakActivity.__RUN_LONG_BREAK, true) ;
+                this.startActivity(intent) ;
+
+                _sessions_count = 0 ;
+            }
+            else
+                AndroidHelper.launchActivity(this, BreakActivity.class) ;
         }
+        if (MarinaraPreferences.getPrefs(this).autoStartNextSession())
+            this.restartTimer() ;
     }
+
+    /****************************** UI UPDATING ******************************/
 
     /**
      * enable long-clicking and set a listener on text view that displays current active task name
@@ -119,17 +102,13 @@ public class TimerActivity extends BaseTimerActivity {
         TextView text_view = (TextView)findViewById(R.id.task_tv) ;
         text_view.setLongClickable(true) ;
         text_view.setOnLongClickListener(new View.OnLongClickListener() {
-
             @Override
             public boolean onLongClick(View v) {
                 AndroidHelper.launchActivity(TimerActivity.this, ManageTasksActivity.class) ;
                 return true ; // return true to indicate long click is consumed
             }
-
         });
     }
-
-    /****************************** UI UPDATING ******************************/
 
     /**
      * set the text of task_tv to the currently selected task's name
@@ -139,31 +118,14 @@ public class TimerActivity extends BaseTimerActivity {
         task_text_view.setText(this.getSelectedTaskName()) ;
     }
 
-    /****************************** HELPERS ******************************/
-
-    private void launchBreak() {
-        AndroidHelper.launchActivity(this, BreakActivity.class) ;
-    }
-
-    /**
-     * create database entry for this session. Assign the task currently selected to
-     * the newly created entry in the PomodoroSession table
-     */
-    private void saveSessionInfoToDatabase() {
-        PomodoroSession session = new PomodoroSession(new Date(), this.getCurrentSessionDuration()) ;
-        session.task            = Task.getByName(this.getSelectedTaskName()) ;
-
-        session.save() ;
-    }
-
     /****************************** SUBCLASSES MUST OVERRIDE THESE TO CHANGE BEHAVIOR ******************************/
     // NOTE: MarinaraPreferences is called every time a preference is needed. This guarantees
     // we are always using the latest value, and saves the trouble of having to save local copies
     // of the preference values (and implementing onSharedPreferenceChangeListener in this class too).
 
-    public long getTimerDuration() { return MarinaraPreferences.getPrefs(this).timerMillisec() ;}
-    public boolean skipBreaks() { return MarinaraPreferences.getPrefs(this).skipBreak() ; }
-    public boolean allowPause() { return MarinaraPreferences.getPrefs(this).allowPauseSessions() ; }
+    public long timerDurationPreference() { return MarinaraPreferences.getPrefs(this).timerMillisec() ;}
+    public boolean skipBreaksPreference() { return MarinaraPreferences.getPrefs(this).skipBreak() ; }
+    public boolean allowPausePreference() { return MarinaraPreferences.getPrefs(this).allowPauseSessions() ; }
 
 
     public TimerState initialState() { return TimerState.READY ; }

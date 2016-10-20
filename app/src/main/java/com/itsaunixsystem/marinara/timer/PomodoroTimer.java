@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.itsaunixsystem.marinara.TimerActivity;
 import com.itsaunixsystem.marinara.util.AndroidHelper;
@@ -48,7 +47,7 @@ public class PomodoroTimer extends Service {
     private void initNewCountDownTimer(long duration_millisec) {
         // set time remaining, create new countdown object and set state to READY
         _remaining_millisec = duration_millisec ;
-        long callback_interval = MarinaraPreferences.getPrefs(this)._TIMER_CALLBACK_INTERVAL_DEFAULT ;
+        long callback_interval = MarinaraPreferences.getPrefs(this).callbackIntervalMillisec() ;
         _countdown_timer    = new CountDownTimer(duration_millisec, callback_interval)  {
             @Override
             public void onTick(long millis_until_finished) { PomodoroTimer.this.onTick(millis_until_finished) ; }
@@ -110,23 +109,8 @@ public class PomodoroTimer extends Service {
         else
             AndroidHelper.playNotificationSound(this) ;
 
-        // if no callback is registered, wait until one is then issue onTimerFinish() callback
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (_callbacks.size() == 0 ) {
-                    try {
-                        Thread.sleep(100, 0) ;
-                    } catch (InterruptedException except) {
-
-                    }
-                }
-
-                // make the callback
-                for (TimerCallback callback: _callbacks)
-                    callback.onTimerFinish() ;
-            }
-        }).start() ;
+        for (TimerCallback callback: _callbacks)
+            callback.onTimerFinish() ;
 
 
     }
