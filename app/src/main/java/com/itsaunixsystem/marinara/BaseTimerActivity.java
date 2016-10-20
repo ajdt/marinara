@@ -81,11 +81,7 @@ public abstract class BaseTimerActivity extends AppCompatActivity
 
             // NOTE: this call is needed to update UI after activity regains focus
             // since callbacks were disabled while activity didn't have focus
-            long remaining_millis = _timer.getRemainingMillisec() ;
-            if (remaining_millis == 0)
-                onTimerFinish() ;
-            else
-                updateTimerDisplay(remaining_millis) ;
+            updateTimerDisplay(_timer.getRemainingMillisec()) ;
 
         }
 
