@@ -115,7 +115,7 @@ public abstract class BaseTimerActivity extends AppCompatActivity
                 _timer.resume() ;
                 break ;
             case DONE:
-                resetTimerAndUpdateDisplay();
+                restartTimer() ;
                 break ;
         }
 
@@ -208,6 +208,10 @@ public abstract class BaseTimerActivity extends AppCompatActivity
         updateTimerDisplay(duration) ;
     }
 
+    public void restartTimer() {
+        resetTimerAndUpdateDisplay() ;
+        _timer.start() ;
+    }
     /****************************** HELPERS ******************************/
     public long getCurrentSessionDuration() { return _timer.getDuration() ; }
 

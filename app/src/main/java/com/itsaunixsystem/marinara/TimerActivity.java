@@ -17,7 +17,7 @@ import com.itsaunixsystem.marinara.util.MarinaraPreferences;
 public class TimerActivity extends BaseTimerActivity {
 
     private int _sessions_count = 0;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Note: content view is set by BaseTimerActivity
@@ -87,6 +87,8 @@ public class TimerActivity extends BaseTimerActivity {
             else
                 AndroidHelper.launchActivity(this, BreakActivity.class) ;
         }
+        if (MarinaraPreferences.getPrefs(this).autoStartNextSession())
+            this.restartTimer() ;
     }
 
     /****************************** UI UPDATING ******************************/
