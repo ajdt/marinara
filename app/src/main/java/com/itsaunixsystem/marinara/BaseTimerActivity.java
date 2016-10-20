@@ -152,7 +152,7 @@ public abstract class BaseTimerActivity extends AppCompatActivity
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         // if session duration changes and we haven't started timer yet, update timer & display
         if ( key.equals(getResources().getString(R.string.pomodoro_session_millisec)) &&
-                _timer.state() == TimerState.READY) {
+                (_timer.state() == TimerState.READY || _timer.state() == TimerState.DONE) ) {
             resetTimerAndUpdateDisplay() ;
         }
     }
