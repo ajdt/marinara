@@ -47,7 +47,7 @@ public class PomodoroTimer extends Service {
     private void initNewCountDownTimer(long duration_millisec) {
         // set time remaining, create new countdown object and set state to READY
         _remaining_millisec = duration_millisec ;
-        long callback_interval = MarinaraPreferences.getPrefs(this)._TIMER_CALLBACK_INTERVAL_DEFAULT ;
+        long callback_interval = MarinaraPreferences.getPrefs(this).callbackIntervalMillisec() ;
         _countdown_timer    = new CountDownTimer(duration_millisec, callback_interval)  {
             @Override
             public void onTick(long millis_until_finished) { PomodoroTimer.this.onTick(millis_until_finished) ; }
